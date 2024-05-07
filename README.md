@@ -1,2 +1,4 @@
-# administracion-de-inventario
-Administrador de inventario con base node + typeORM
+# Proyecto inventory management
+
+## version
+v1.0.0

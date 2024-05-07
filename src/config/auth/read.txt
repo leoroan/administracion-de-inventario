@@ -1,0 +1,1 @@
+configruaciones de autenticaciones externas como github. y pasport

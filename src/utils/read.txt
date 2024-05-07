@@ -1,0 +1,6 @@
+utilidades tales como:
+- bycrypt
+- servicios mailing
+- jwt
+- logger
+- etc...
