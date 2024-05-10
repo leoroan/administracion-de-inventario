@@ -36,15 +36,14 @@ const environment = options.mode.toUpperCase();
 
 // Configuración de las variables de entorno según el modo
 dotenv.config({
-  path: environment === "DEV" ? "./src/utils/.env.development" : "./src/utils/.env.production"
+  path: environment === "DEV" ? "./src/config/envs/.env.dev" : "./src/config/envs/.env.prod"
 });
 
-// Exportar la configuración del servidor
 export default {
   port: options.port,
   db: {
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE

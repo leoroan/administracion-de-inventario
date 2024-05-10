@@ -52,6 +52,9 @@ export default class CustomRouter {
 
   // Policies for public, premium, admin
   handlePolicies = (policies) => (req, res, next) => {
+    //Validar si tiene acceso publico:
+    if (policies[0] === "PUBLIC") return next();
+
     // Verificar si el usuario es público o administrador
     const userRole = req.headers.user_role; // Suponiendo que el rol del usuario se envía en los encabezados como user_role
 
@@ -86,18 +89,16 @@ export default class CustomRouter {
   };
 
   generateCustomResponses = (req, res, next) => {
-    //Custom responses 
-    res.sendSuccess = payload => res.status(200).send({ status: "Success", payload });
-    res.sendInternalServerError = error => res.status(500).send({ status: "Error", error });
-    res.sendClientError = error => res.status(400).send({ status: "Client Error, Bad request from client.", error });
-    res.sendUnauthorizedError = error => res.status(401).send({ error: "User not authenticated or missing token." });
-    res.sendForbiddenError = error => res.status(403).send({ error: "Token invalid or user with no access, Unauthorized please check your roles!" });
+    res.sendSuccess = payload => { req.logger.info(payload), res.status(200).send({ status: "Success", payload }) };
+    res.sendInternalServerError = (error) => { req.logger.fatal(error), res.status(500).send({ status: "Error", error }) };
+    res.sendClientError = error => { req.logger.error(error), res.status(400).send({ status: "Client Error, Bad request from client.", error }) };
+    res.sendUnauthorizedError = error => { req.logger.fatal(error), res.status(401).send({ error: "User not authenticated or missing token." }) };
+    res.sendForbiddenError = error => { req.logger.fatal(error), res.status(403).send({ error: "Token invalid or user with no access, Unauthorized please check your roles!" }) };
     next()
   }
 
 
   // función que procese todas las funciones internas del router (middlewares y el callback principal)
-  // Se explica en el slice 28
   #applyCallbacks(callbacks) {
     return callbacks.map((callback) => async (...item) => {
       try {
