@@ -12,16 +12,16 @@ configureExpress(app);
 const connectWithRetry = () => {
   return sequelize.authenticate()
     .then(() => {
-      devLogger.info('DataBase connection success');
+      devLogger.debug('Sequelize db connection success');
       // return sequelize.sync({ force: true, alter: true });
       return sequelize.sync();
     })
     .then(() => {
-      devLogger.info('Syncing models, done connection');
+      devLogger.debug('Syncing models, done connection');
       console.log("seqs.models: ", sequelize.models);
       app.listen(SERVER_PORT, () => {
-        devLogger.info(`Server listen at ${SERVER_PORT}`);
-        // checkConnection; // nodemailer
+        devLogger.info(`Server listening at ${SERVER_PORT}`);
+        checkConnection; // nodemailer
       });
     })
     .catch((error) => {

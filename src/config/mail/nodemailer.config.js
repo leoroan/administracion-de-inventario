@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { devLogger } from "../logs/logger.config.js";
 const transporter = nodemailer.createTransport({
   host: 'mail.transporte.gba.gob.ar',
   port: 587,
@@ -14,10 +15,9 @@ const transporter = nodemailer.createTransport({
 
 const checkConnection = transporter.verify(function (error, success) {
   if (error) {
-    console.log(error);
-    console.log("No se ha podido establecer la conexión con el servidor de correo");
+    devLogger.error("cannot stablish connection to mail server");
   } else {
-    console.log('El servicio está disponible para enviar correos..');
+    devLogger.debug('nodemailer ready to send');
   }
 })
 
