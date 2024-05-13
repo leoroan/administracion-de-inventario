@@ -1,4 +1,4 @@
-import { Router } from "express";
+import CustomRouter from "./custom/custom.router.js";
 import {
   crearEmpleado,
   obtenerEmpleado,
@@ -8,13 +8,33 @@ import {
   obtenerEmpleados
 } from '../controllers/empleado.controller.js';
 
-const router = Router();
+export default class empleadoExtendRouter extends CustomRouter {
+  init() {
 
-router.post('/', crearEmpleado);
-router.post('/add/:empId/:eqId', asignarEquipoAempleado);
-router.get('/:id', obtenerEmpleado);
-router.get('/', obtenerEmpleados);
-router.put('/:id', actualizarEmpleado);
-router.delete('/:id', eliminarEmpleado);
+    this.post('/', ["PUBLIC"], async (req, res) => {
+      crearEmpleado(req, res);
+    });
 
-export default router;
+    this.post('/add/:empId/:eqId', ["PUBLIC"], async (req, res) => {
+      asignarEquipoAempleado(req, res);
+    });
+
+    this.get('/:id', ["PUBLIC"], async (req, res) => {
+      obtenerEmpleado(req, res);
+    });
+
+    this.get('/', ["PUBLIC"], async (req, res) => {
+      obtenerEmpleados(req, res);
+    });
+
+    this.put('/:id', ["PUBLIC"], async (req, res) => {
+      actualizarEmpleado(req, res);
+    });
+    
+    this.delete('/:id', ["PUBLIC"], async (req, res) => {
+      eliminarEmpleado(req, res);
+    });
+  }
+}
+
+

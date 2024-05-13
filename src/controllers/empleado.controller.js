@@ -1,3 +1,4 @@
+import { devLogger } from '../config/logs/logger.config.js';
 import { createEmpleado, getEmpleadoById, updateEmpleado, deleteEmpleado, getAllEmpleados } from '../services/db/dao/empleado.dao.js';
 import { getEquipoInformaticoById } from '../services/db/dao/equipoInformatico.dao.js';
 import { EmpleadoDTO } from '../services/db/dto/empleado.dto.js';
@@ -7,12 +8,10 @@ async function crearEmpleado(req, res) {
 
   try {
     const empleado = await createEmpleado(nombre, apellido, telefono, dni, rol, email);
-    // Estructurar los datos del empleado utilizando el DTO
     return res.status(201).json(empleado);
   } catch (error) {
-    console.log(error, error.name);
-    console.error('Error creating employee:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    devLogger.error(error);
+    return res.status(500).json({ error: 'Internal server error', detalle: error.detalle});
   }
 }
 

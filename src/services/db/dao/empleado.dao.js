@@ -1,11 +1,12 @@
+import CustomError from '../../../utils/custom.error.js';
 import { Empleado } from '../models/Empleado.model.js';
 
-async function createEmpleado(nombre, apellido, dni, rol, email) {
+async function createEmpleado(nombre, apellido, telefono, dni, rol, email) {
   try {
-    const empleado = await Empleado.create({ nombre, apellido, dni, rol, email });
+    const empleado = await Empleado.create({ nombre, apellido, telefono, dni, rol, email });
     return empleado;
   } catch (error) {
-    throw new Error('Error al crear empleado: ' + error.message);
+    throw new CustomError('Error al crear empleado', error.original.detail);
   }
 }
 

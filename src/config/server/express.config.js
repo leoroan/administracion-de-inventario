@@ -6,6 +6,7 @@ import cors from 'cors';
 import __dirname from "../../utils.js";
 import { addLogger } from "../../middlewares/logger.middleware.js";
 import equiposInformaticosExtendRouter from '../../routes/equiposInformaticos.router.js';
+import empleadoExtendRouter from '../../routes/empleado.router.js';
 
 export default function configureExpress(app) {
   app.use(cors());
@@ -50,7 +51,9 @@ export default function configureExpress(app) {
   })
 
   const equiposInformaticos = new equiposInformaticosExtendRouter();
-  app.use("/api/equiposInformaticos", equiposInformaticos.getRouter());
+  const empleados = new empleadoExtendRouter();
+  app.use("/api/equipos", equiposInformaticos.getRouter());
+  app.use("/api/empleados", empleados.getRouter());
 
   //routes here, before *
   app.get('/', (req, res) => {

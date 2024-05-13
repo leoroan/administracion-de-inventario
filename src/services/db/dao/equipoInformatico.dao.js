@@ -1,17 +1,10 @@
 import { EquipoInformatico } from "../models/EquipoInformatico.model.js"
-import { sequelize } from "../../../connection.js";
 
 async function createEquipoInformatico(marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio) {
-  const t = await sequelize.transaction();
   try {
-    // Inicia una transacción
     const equipoInformatico = await EquipoInformatico.create({ marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio }, { transaction: t });
-    // Confirma la transacción si todo fue exitoso
-    await t.commit();
     return equipoInformatico;
   } catch (error) {
-    // Revierte la transacción en caso de error
-    await t.rollback();
     throw new Error('Error creating hardware: ' + error.message);
   }
 }
