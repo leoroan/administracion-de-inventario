@@ -1,4 +1,5 @@
 import CustomRouter from "./custom/custom.router.js";
+import {} from "../controllers/equipoInformatico.controller.js";
 
 
 export default class equiposInformaticosExtendRouter extends CustomRouter {
