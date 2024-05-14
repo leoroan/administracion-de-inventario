@@ -18,7 +18,7 @@ const connectWithRetry = () => {
     })
     .then(() => {
       devLogger.debug('Syncing models, done connection');
-      console.log("seqs.models: ", sequelize.models);
+      // console.log("seqs.models: ", sequelize.models);
       app.listen(SERVER_PORT, () => {
         devLogger.info(`Server listening at ${SERVER_PORT}`);
         checkConnection; // nodemailer

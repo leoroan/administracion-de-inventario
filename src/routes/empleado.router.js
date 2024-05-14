@@ -15,10 +15,6 @@ export default class empleadoExtendRouter extends CustomRouter {
       crearEmpleado(req, res);
     });
 
-    this.post('/add/:empId/:eqId', ["PUBLIC"], async (req, res) => {
-      asignarEquipoAempleado(req, res);
-    });
-
     this.get('/:id', ["PUBLIC"], async (req, res) => {
       obtenerEmpleado(req, res);
     });
@@ -30,9 +26,13 @@ export default class empleadoExtendRouter extends CustomRouter {
     this.put('/:id', ["PUBLIC"], async (req, res) => {
       actualizarEmpleado(req, res);
     });
-    
+
     this.delete('/:id', ["PUBLIC"], async (req, res) => {
       eliminarEmpleado(req, res);
+    });
+
+    this.post('/add/:empId/:eqId', ["PUBLIC"], async (req, res) => {
+      asignarEquipoAempleado(req, res);
     });
   }
 }

@@ -14,11 +14,12 @@ async function getEmpleadoById(id) {
   try {
     const empleado = await Empleado.findByPk(id, { include: { all: true } });
     if (!empleado) {
-      throw new Error('No se encontró ningún empleado con el ID ' + id);
+      throw new CustomError('Empleado no encontrado');
     }
     return empleado;
   } catch (error) {
-    throw new Error('Error al obtener empleado por ID: ' + error.message);
+    console.log(error);
+    throw new CustomError(error, `No se encontró ningún empleado con el ID ${id}`);
   }
 }
 
@@ -27,7 +28,7 @@ async function getAllEmpleados() {
     const empleados = await Empleado.findAll({ include: { all: true } });
     return empleados;
   } catch (error) {
-    throw new Error('Error al obtener todos los empleados: ' + error.message);
+    throw new CustomError('Error al obtener todos los empleados: ' + error.message, error);
   }
 }
 
@@ -35,12 +36,16 @@ async function updateEmpleado(id, updatedData) {
   try {
     const empleado = await Empleado.findByPk(id);
     if (!empleado) {
-      throw new Error('No se encontró ningún empleado con el ID ' + id);
+      throw new CustomError('Empleado no encontrado para actualizar, ID:' + id);
     }
     await empleado.update(updatedData);
     return empleado;
   } catch (error) {
-    throw new Error('Error al actualizar empleado: ' + error.message);
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      throw new CustomError(error, error.original.detail);
+    } else {
+      throw new CustomError(error);
+    }
   }
 }
 
@@ -48,12 +53,12 @@ async function deleteEmpleado(id) {
   try {
     const empleado = await Empleado.findByPk(id);
     if (!empleado) {
-      throw new Error('No se encontró ningún empleado con el ID ' + id);
+      throw new CustomError('No se encontró ningún empleado con el ID ' + id);
     }
     await empleado.destroy();
     return true;
   } catch (error) {
-    throw new Error('Error al eliminar empleado: ' + error.message);
+    throw new CustomError(error);
   }
 }
 
