@@ -1,7 +1,15 @@
 import { devLogger } from '../config/logs/logger.config.js';
-import { createEmpleado, getEmpleadoById, updateEmpleado, deleteEmpleado, getAllEmpleados } from '../services/db/dao/empleado.dao.js';
 import { getEquipoInformaticoById } from '../services/db/dao/equipoInformatico.dao.js';
 import { EmpleadoDTO } from '../services/db/dto/empleado.dto.js';
+import {
+  createEmpleado,
+  getEmpleadoById,
+  updateEmpleado,
+  deleteEmpleado,
+  getAllEmpleados,
+  findDeletedEmpleadoByDni,
+  getAllDeletedEmpleados
+} from '../services/db/dao/empleado.dao.js';
 
 async function crearEmpleado(req, res) {
   const { nombre, apellido, telefono, dni, rol, email } = req.body;
@@ -9,7 +17,7 @@ async function crearEmpleado(req, res) {
     const empleado = await createEmpleado(nombre, apellido, telefono, dni, rol, email);
     return res.sendSuccess(empleado);
   } catch (error) {
-    devLogger.error('Error creating employee:', error);
+    devLogger.error(error);
     return res.sendInternalServerError(error);
   }
 }
@@ -19,7 +27,17 @@ async function obtenerEmpleados(req, res) {
     const empleados = await getAllEmpleados();
     return res.sendSuccess(empleados);
   } catch (error) {
-    devLogger.error('Error fetching employees:', error);
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
+async function obtenerEmpleadosBorrados(req, res) {
+  try {
+    const empleados = await getAllDeletedEmpleados();
+    return res.sendSuccess(empleados);
+  } catch (error) {
+    devLogger.error(error);
     return res.sendInternalServerError(error);
   }
 }
@@ -34,7 +52,22 @@ async function obtenerEmpleado(req, res) {
     const empleadoDTO = new EmpleadoDTO(empleado.id, empleado.nombre, empleado.apellido, empleado.telefono, empleado.dni, empleado.rol, empleado.email, empleado.EquipoInformaticos);
     return res.sendSuccess(empleadoDTO);
   } catch (error) {
-    devLogger.error('Error fetching employee:', error);
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
+async function obtenerEmpleadoBorradoPorDni(req, res) {
+  const empleadoDni = req.params.dni
+  try {
+    const empleado = await findDeletedEmpleadoByDni(empleadoDni);
+    if (!empleado) {
+      return res.sendClientError('Ex-Employee not found by dni');
+    }
+    const empleadoDTO = new EmpleadoDTO(empleado.id, empleado.nombre, empleado.apellido, empleado.telefono, empleado.dni, empleado.rol, empleado.email, empleado.EquipoInformaticos);
+    return res.sendSuccess(empleadoDTO);
+  } catch (error) {
+    devLogger.error(error);
     return res.sendInternalServerError(error);
   }
 }
@@ -46,7 +79,7 @@ async function actualizarEmpleado(req, res) {
     const empleado = await updateEmpleado(empleadoId, updatedData);
     return res.sendSuccess(empleado);
   } catch (error) {
-    devLogger.error('Error updating employee:', error);
+    devLogger.error(error);
     return res.sendInternalServerError(error);
   }
 }
@@ -55,9 +88,9 @@ async function eliminarEmpleado(req, res) {
   const empleadoId = req.params.id;
   try {
     await deleteEmpleado(empleadoId);
-    return res.sendSuccess({ state: "deleted" });
+    return res.sendSuccess({ state: "Employee deleted" });
   } catch (error) {
-    devLogger.error('Error deleting employee:', error);
+    devLogger.error(error);
     return res.sendInternalServerError(error);
   }
 }
@@ -86,4 +119,13 @@ async function asignarEquipoAempleado(req, res) {
   }
 };
 
-export { crearEmpleado, obtenerEmpleados, obtenerEmpleado, actualizarEmpleado, eliminarEmpleado, asignarEquipoAempleado };
+export {
+  crearEmpleado,
+  obtenerEmpleados,
+  obtenerEmpleado,
+  actualizarEmpleado,
+  eliminarEmpleado,
+  asignarEquipoAempleado,
+  obtenerEmpleadoBorradoPorDni,
+  obtenerEmpleadosBorrados
+};

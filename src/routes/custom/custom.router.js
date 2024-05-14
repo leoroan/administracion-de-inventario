@@ -89,19 +89,18 @@ export default class CustomRouter {
   };
 
   generateCustomResponses = (req, res, next) => {
-
+    
     function obtenerIds(payload) {
       if (Array.isArray(payload)) {
-        return payload.map(objeto => "ID: " + objeto.id);
+        return "Cantidad encontrada: " + payload.length;
       } else if (typeof payload === 'object' && payload !== null) {
-        return "ID: " + payload.id;
+        return "Cantidad encontrada: 1";
       } else {
-        return null; 
+        return null;
       }
-    }
+    }    
 
-    res.sendSuccess = payload => { req.logger.info(obtenerIds(payload)), res.status(200).send({ status: "Success", payload }) };
-    // res.sendSuccessDelete = payload => { req.logger.info(obtenerIds(payload)), res.status(204).end() };
+    res.sendSuccess = payload => { req.logger.info(obtenerIds(payload)), res.status(200).send(payload) };
     res.sendInternalServerError = (error) => { req.logger.fatal(error), res.status(500).send({ status: "Internal server error", error }) };
     res.sendClientError = (error) => { req.logger.error(error), res.status(400).send({ status: "Client Error, Bad request from client.", error }) };
     res.sendUnauthorizedError = error => { req.logger.fatal(error), res.status(401).send({ error: "User not authenticated or missing token." }) };
