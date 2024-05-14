@@ -8,7 +8,8 @@ import {
   deleteEmpleado,
   getAllEmpleados,
   findDeletedEmpleadoByDni,
-  getAllDeletedEmpleados
+  getAllDeletedEmpleados,
+  restoreEmpleadoById
 } from '../services/db/dao/empleado.dao.js';
 
 async function crearEmpleado(req, res) {
@@ -119,6 +120,17 @@ async function asignarEquipoAempleado(req, res) {
   }
 };
 
+async function restaurarEmpleado(req, res) {
+  const empleadoId = req.params.id;
+  try {
+    const empleado = await restoreEmpleadoById(empleadoId)
+    return res.sendSuccess(empleado);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
 export {
   crearEmpleado,
   obtenerEmpleados,
@@ -127,5 +139,6 @@ export {
   eliminarEmpleado,
   asignarEquipoAempleado,
   obtenerEmpleadoBorradoPorDni,
-  obtenerEmpleadosBorrados
+  obtenerEmpleadosBorrados,
+  restaurarEmpleado
 };

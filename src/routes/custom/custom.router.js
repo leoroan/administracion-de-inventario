@@ -1,8 +1,6 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { PRIVATE_KEY } from "../../utils/jwt.js";
-
-
 export default class CustomRouter {
   constructor() {
     this.router = Router();
@@ -32,7 +30,6 @@ export default class CustomRouter {
       this.#applyCallbacks(callbacks));
   };
 
-
   // PUT
   put(path, policies, ...callbacks) {
     this.router.put(path,
@@ -40,7 +37,6 @@ export default class CustomRouter {
       this.generateCustomResponses,
       this.#applyCallbacks(callbacks));
   };
-
 
   // DELETE
   delete(path, policies, ...callbacks) {
@@ -89,7 +85,7 @@ export default class CustomRouter {
   };
 
   generateCustomResponses = (req, res, next) => {
-    
+
     function obtenerIds(payload) {
       if (Array.isArray(payload)) {
         return "Cantidad encontrada: " + payload.length;
@@ -98,7 +94,7 @@ export default class CustomRouter {
       } else {
         return null;
       }
-    }    
+    }
 
     res.sendSuccess = payload => { req.logger.info(obtenerIds(payload)), res.status(200).send(payload) };
     res.sendInternalServerError = (error) => { req.logger.fatal(error), res.status(500).send({ status: "Internal server error", error }) };

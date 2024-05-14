@@ -60,13 +60,16 @@ async function deleteEmpleado(id) {
 
 async function findDeletedEmpleadoByDni(dni) {
   try {
-    const empleado = await Empleado.findOne({ where: { dni: dni }, paranoid: false });
+    const empleado = await Empleado.findOne({ where: { dni: dni }, include: { all: true }, paranoid: false });
     if (!empleado) {
       throw new CustomError(404, 'Empleado eliminado no encontrado con ese DNI');
     }
+    if (!empleado.deletedAt) {
+      throw new CustomError(401, 'El empleado no está eliminado');
+    }
     return empleado;
   } catch (error) {
-    throw CustomError.handleSequelizeError(error, 'Error al buscar empleado eliminado por DNI ${id}');
+    throw CustomError.handleSequelizeError(error, `Error al buscar empleado eliminado por DNI ${dni}`);
   }
 }
 
@@ -83,6 +86,22 @@ async function getAllDeletedEmpleados() {
   }
 }
 
+async function restoreEmpleadoById(id) {
+  try {
+    const empleado = await Empleado.findByPk(id, { paranoid: false });
+    if (!empleado) {
+      throw new CustomError(401, 'Empleado no encontrado');
+    }
+    if (!empleado.deletedAt) {
+      throw new CustomError(401, 'El empleado no está eliminado');
+    }
+    await empleado.restore();
+    return empleado;
+  } catch (error) {
+    throw CustomError.handleSequelizeError(error, `No se encontró ningún empleado borrado con el ID ${id}`);
+  }
+}
+
 
 export {
   getAllEmpleados,
@@ -91,5 +110,6 @@ export {
   updateEmpleado,
   deleteEmpleado,
   findDeletedEmpleadoByDni,
-  getAllDeletedEmpleados
+  getAllDeletedEmpleados,
+  restoreEmpleadoById
 };

@@ -7,7 +7,8 @@ import {
   asignarEquipoAempleado,
   obtenerEmpleados,
   obtenerEmpleadoBorradoPorDni,
-  obtenerEmpleadosBorrados
+  obtenerEmpleadosBorrados,
+  restaurarEmpleado
 } from '../controllers/empleado.controller.js';
 
 export default class empleadoExtendRouter extends CustomRouter {
@@ -20,19 +21,23 @@ export default class empleadoExtendRouter extends CustomRouter {
     this.get('/:id', ["PUBLIC"], async (req, res) => {
       obtenerEmpleado(req, res);
     });
-
+    
     this.get('/erased/:dni', ["PUBLIC"], async (req, res) => {
       obtenerEmpleadoBorradoPorDni(req, res);
     });
-
+    
     this.get('/', ["PUBLIC"], async (req, res) => {
       obtenerEmpleados(req, res);
     });
-
+    
     this.get('/erased/all/employees', ["PUBLIC"], async (req, res) => {
       obtenerEmpleadosBorrados(req, res);
     });
 
+    this.get('/restore/:id', ["PUBLIC"], async (req, res) => {
+      restaurarEmpleado(req, res);
+    });
+    
     this.put('/:id', ["PUBLIC"], async (req, res) => {
       actualizarEmpleado(req, res);
     });
