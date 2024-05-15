@@ -1,7 +1,7 @@
 import express from 'express';
 import config from './config/config.js';
 import configureExpress from './config/server/express.config.js';
-import { sequelize } from './services/db/models/setup.db.js';
+import { sequelize } from './services/db/models/models.setup.db.js';
 import { devLogger } from './config/logs/logger.config.js';
 import { checkConnection } from "./config/mail/nodemailer.config.js";
 const SERVER_PORT = config.port;

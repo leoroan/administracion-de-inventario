@@ -13,7 +13,7 @@ const establecerRelaciones = () => {
   Empleado.belongsTo(Oficina); //Cada Empleado pertenece a una Oficina
   Empleado.hasMany(EquipoInformatico); // Un empleado puede tener cero o varios equipos informáticos
   TipoEquipo.hasMany(EquipoInformatico); //un tipo de equipo tiene muchos equipos informáticos
-  Lugar.hasMany(Oficina); // Un empleado puede tener cero o varios equipos informáticos
+  Lugar.hasMany(Oficina); 
   EquipoInformatico.belongsTo(TipoEquipo); //un equipo informático pertenece a un tipo de equipo
   EquipoInformatico.belongsTo(Empleado, { unique: true }); //un equipo informático pertenece a un empleado
   EquipoInformatico.belongsToMany(Oficina, { through: 'EquipoOficina' }); //un equipo informático puede estar relacionado con una o varias oficinas
