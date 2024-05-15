@@ -12,7 +12,7 @@ const Empleado = sequelize.define('Empleado', {
   },
   telefono: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
     defaultValue: 'sin registrar'    
   },
   dni: {
@@ -26,7 +26,7 @@ const Empleado = sequelize.define('Empleado', {
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
     unique: true,
     validate: {
       isEmail: true
