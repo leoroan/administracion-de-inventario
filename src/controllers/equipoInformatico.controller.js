@@ -3,9 +3,9 @@ import { EquipoInformaticoDTO } from '../services/db/dto/equipoInformatico.dto.j
 import { equipoInformaticoService } from '../services/repository/services.js';
 
 export async function crearEquipoInformatico(req, res) {
-  const { mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero } = req.body;
+  const { mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero, tipo } = req.body;
   try {
-    const equipoInformatico = await equipoInformaticoService.createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero);
+    const equipoInformatico = await equipoInformaticoService.createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero, tipo);
     return res.sendSuccess(equipoInformatico);
   } catch (error) {
     devLogger.error(error);

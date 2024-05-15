@@ -51,6 +51,10 @@ const EquipoInformatico = sequelize.define('EquipoInformatico', {
     type: DataTypes.TEXT,
     allowNull: true
   },
+  tipo: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
 }, { timestamps: true, paranoid: true });
 
 

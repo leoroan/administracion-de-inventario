@@ -3,38 +3,30 @@ import DaoService from "./helper/DAO.service.js";
 
 const daoService = new DaoService(EquipoInformatico);
 export default class EquipoInformaticoDao {
-  async createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero) {
-    return await daoService.create({ mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero });
+  async createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero, tipo) {
+    return await daoService.create({ mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero, tipo });
   }
-
   async getAllEquipoInformaticos() {
     return await daoService.getAll();
   }
-
   async getEquipoInformaticoById(id) {
     return await daoService.getById(id);
   }
-
   async updateEquipoInformatico(id, updatedData) {
     return await daoService.update(id, updatedData);
   }
-
   async deleteEquipoInformatico(id) {
     return await daoService.delete(id);
   }
-
   async findDeletedEquipoInformaticoByID(id) {
     return await daoService.findDeletedBy("id", id);
   }
-
   async getAllDeletedEquipoInformaticos() {
     return await daoService.getAllDeleted();
   }
-
   async restoreEquipoInformaticoById(id) {
     return await daoService.restoreById(id);
   }
-
 }
 
 // async createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero) {
