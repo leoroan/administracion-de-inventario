@@ -22,7 +22,7 @@ export async function obtenerlugares(req, res) {
   }
 }
 
-export async function obtenerlugarsBorrados(req, res) {
+export async function obtenerlugaresBorrados(req, res) {
   try {
     const lugars = await lugarService.getAllDeletedLugares();
     return res.sendSuccess(lugars);
@@ -46,7 +46,7 @@ export async function obtenerlugar(req, res) {
   }
 }
 
-export async function obtenerLugarBorradoPorDni(req, res) {
+export async function obtenerLugarBorradoPorId(req, res) {
   const lugarId = req.params.id
   try {
     const lugar = await lugarService.findDeletedLugarByID(lugarId);
