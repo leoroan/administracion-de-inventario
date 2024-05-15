@@ -1,6 +1,6 @@
 import { devLogger } from '../config/logs/logger.config.js';
 import { EmpleadoDTO } from '../services/db/dto/empleado.dto.js';
-import { getEquipoInformaticoById } from '../services/db/dao/equipoInformatico.dao.js';
+import { equipoInformaticoService } from '../services/repository/services.js';
 import { empleadoService } from '../services/repository/services.js';
 
 export async function crearEmpleado(req, res) {
@@ -96,7 +96,7 @@ export async function asignarEquipoAempleado(req, res) {
     if (!empleado) {
       return res.status(404).json({ error: 'Employee not found' });
     }
-    const equipoInformatico = await getEquipoInformaticoById(equipoInformaticoId);
+    const equipoInformatico = await equipoInformaticoService.getEquipoInformaticoById(equipoInformaticoId);
     if (!equipoInformatico) {
       return res.status(404).json({ error: 'hardware not found' });
     }
