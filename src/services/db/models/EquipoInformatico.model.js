@@ -2,14 +2,15 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/db/sequelize.config.js";
 
 const EquipoInformatico = sequelize.define('EquipoInformatico', {
-  mt: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
+
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
+  },
+  mt: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
   },
   marca: {
     type: DataTypes.STRING,

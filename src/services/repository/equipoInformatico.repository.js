@@ -3,8 +3,8 @@ export default class EquipoInformaticoRepository {
     this.dao = dao
   }
 
-  createEquipoInformatico = async (marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio) => {
-    return await this.dao.createEquipoInformatico(marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio);
+  createEquipoInformatico = async (mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero) => {
+    return await this.dao.createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero);
   }
 
   getAllEquipoInformaticos = async () => {
@@ -22,8 +22,8 @@ export default class EquipoInformaticoRepository {
   deleteEquipoInformatico = async (id) => {
     return await this.dao.deleteEquipoInformatico(id);
   }
-  findDeletedEquipoInformaticoByNumeroDeSerie = async (numeroDeSerie) => {
-    return await this.dao.findDeletedEquipoInformaticoByNumeroDeSerie(numeroDeSerie);
+  findDeletedEquipoInformaticoByID = async (id) => {
+    return await this.dao.findDeletedEquipoInformaticoByID(id);
   }
   getAllDeletedEquipoInformaticos = async () => {
     return await this.dao.getAllDeletedEquipoInformaticos();

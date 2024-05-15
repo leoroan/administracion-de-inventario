@@ -3,9 +3,9 @@ import { EquipoInformaticoDTO } from '../services/db/dto/equipoInformatico.dto.j
 import { equipoInformaticoService } from '../services/repository/services.js';
 
 export async function crearEquipoInformatico(req, res) {
-  const { mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio } = req.body;
+  const { mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero } = req.body;
   try {
-    const equipoInformatico = await equipoInformaticoService.createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio);
+    const equipoInformatico = await equipoInformaticoService.createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero);
     return res.sendSuccess(equipoInformatico);
   } catch (error) {
     devLogger.error(error);
@@ -24,6 +24,16 @@ export async function obtenerEquiposInformaticos(req, res) {
   }
 }
 
+export async function obtenerEquiposInformaticosBorrados(req, res) {
+  try {
+    const equiposInformaticos = await equipoInformaticoService.getAllDeletedEquipoInformaticos();
+    return res.sendSuccess(equiposInformaticos);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
 export async function obtenerEquipoInformatico(req, res) {
   const equipoInformaticoId = req.params.id;
   try {
@@ -31,6 +41,21 @@ export async function obtenerEquipoInformatico(req, res) {
     if (!equipoInformatico) {
       return res.sendClientError('hardware not found');
     }
+    return res.sendSuccess(equipoInformatico);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
+export async function obtenerEquipoInformaticoBorradoPorID(req, res) {
+  const equipoInformaticoId = req.params.id
+  try {
+    const equipoInformatico = await equipoInformaticoService.findDeletedEquipoInformaticoByID(equipoInformaticoId);
+    if (!equipoInformatico) {
+      return res.sendClientError('Ex-Hardware not found by id');
+    }
+    // const empleadoDTO = new EmpleadoDTO(empleado.id, empleado.nombre, empleado.apellido, empleado.telefono, empleado.dni, empleado.rol, empleado.email, empleado.EquipoInformaticos);
     return res.sendSuccess(equipoInformatico);
   } catch (error) {
     devLogger.error(error);
@@ -61,6 +86,17 @@ export async function eliminarEquipoInformatico(req, res) {
   }
 }
 
+export async function restaurarEquipoInformatico(req, res) {
+  const equipoInformaticoId = req.params.id;
+  try {
+    const equipoInformatico = await equipoInformaticoService.restoreEquipoInformaticoById(equipoInformaticoId);
+    return res.sendSuccess(equipoInformatico);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
 export async function asignarTipoEquipoAequipo(req, res) {
   const equipoInformaticoId = req.params.eid;
   const tipoEquipoId = req.params.tid;
@@ -80,5 +116,4 @@ export async function asignarTipoEquipoAequipo(req, res) {
     return res.sendInternalServerError(error);
   }
 }
-
 
