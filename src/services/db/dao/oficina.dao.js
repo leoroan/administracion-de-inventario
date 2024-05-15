@@ -1,56 +1,33 @@
 import { Oficina } from "../models/Oficina.model.js"
+import DaoService from './helper/DAO.service.js';
 
-async function createOficina(nombre, descripcion, telefono, email) {
-  try {
-    const oficina = await Oficina.create({ nombre, descripcion, telefono, email });
-    return oficina;
-  } catch (error) {
-    throw new Error('Error creating office: ' + error.message);
+const daoService = new DaoService(Oficina);
+export default class OficinaDao {
+  async createOficina(nombre, descripcion, telefono, email) {
+    return await daoService.create({ nombre, descripcion, telefono, email });
+  }
+  async getOficinaById(id) {
+    return await daoService.getById(id);
+  }
+  async getAllOficinas() {
+    return await daoService.getAll();
+  }
+  async updateOficina(id, updatedData) {
+    return await daoService.update(id, updatedData);
+  }
+  async deleteOficina(id) {
+    return await daoService.delete(id);
+  }
+  async findDeletedOficinaByID(id) {
+    return await daoService.findDeletedBy("id", id);
+  }
+  async getAllDeletedOficinas() {
+    return await daoService.getAllDeleted();
+  }
+  async restoreOficinaById(id) {
+    return await daoService.restoreById(id);
   }
 }
 
-async function getAllOficinas() {
-  try {
-    const oficinas = await Oficina.findAll({ include: { all: true } });
-    return oficinas;
-  } catch (error) {
-    throw new Error('Error fetching offices: ' + error.message);
-  }
-}
 
-async function getOficinaById(id) {
-  try {
-    const oficina = await Oficina.findByPk(id, { include: { all: true } });
-    return oficina;
-  } catch (error) {
-    throw new Error('Error fetching office: ' + error.message);
-  }
-}
 
-async function updateOficina(id, updatedData) {
-  try {
-    const oficina = await Oficina.findByPk(id);
-    if (!oficina) {
-      throw new Error('office not found');
-    }
-    await oficina.update(updatedData);
-    return oficina;
-  } catch (error) {
-    throw new Error('Error updating office: ' + error.message);
-  }
-}
-
-async function deleteOficina(id) {
-  try {
-    const oficina = await Oficina.findByPk(id);
-    if (!oficina) {
-      throw new Error('office not found');
-    }
-    await oficina.destroy();
-    return true;
-  } catch (error) {
-    throw new Error('Error deleting office: ' + error.message);
-  }
-}
-
-export { createOficina, getAllOficinas, getOficinaById, updateOficina, deleteOficina };
