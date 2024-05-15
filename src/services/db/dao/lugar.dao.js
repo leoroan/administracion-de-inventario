@@ -7,35 +7,27 @@ export default class LugarDao {
   async createLugar(nombre, calle, altura, comentario) {
     return await daoService.create({ nombre, calle, altura, comentario });
   }
-
   async getAllLugares() {
     return await daoService.getAll();
   }
-  
   async getLugarById(id) {
     return await daoService.getById(id);
   }
-
   async updateLugar(id, updatedData) {
     return await daoService.updateById(id, updatedData);
   }
-
   async deleteLugar(id) {
     return await daoService.deleteById(id);
   }
-
   async findDeletedLugarByID(id) {
     return await daoService.findDeletedBy("id", id);
   }
-
   async getAllDeletedLugares() {
     return await daoService.getAllDeleted();
   }
-
   async restoreLugarById(id) {
     return await daoService.restoreById(id);
   }
-
 }
 
 

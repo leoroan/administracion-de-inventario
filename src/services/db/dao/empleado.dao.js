@@ -8,23 +8,18 @@ export default class EmpleadoDao {
   async createEmpleado(nombre, apellido, telefono, dni, rol, email) {
     return await daoService.create({ nombre, apellido, telefono, dni, rol, email });
   }
-
   async getEmpleadoById(id) {
     return await daoService.getById(id);
   }
-
   async getAllEmpleados() {
     return await daoService.getAll();
   }
-
   async updateEmpleado(id, updatedData) {
     return await daoService.update(id, updatedData);
   }
-
   async deleteEmpleado(id) {
     return await daoService.delete(id);
   }
-
   async findDeletedEmpleadoByDni(dni) {
     return await daoService.findDeletedBy("dni", dni);
   }
