@@ -5,11 +5,20 @@ export default class CustomError extends createError {
     this.originalError = originalError;
   }
 
+  // to be improved by gaby.g
   static handleSequelizeError(error, reason) {
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return new CustomError(500, error.name, error.original.detail); //SequelizeUniqueConstraintError {"originalError":"Ya existe la llave (email)=(gguas@transporte.gba.gob.ar)."}
+      return new CustomError(500, error.original.detail);
+    } else if (error.name === 'SequelizeValidationError') {
+      const validationErrors = error.errors.map(err => {
+        return `${err.message}`;
+      });
+      const validationErrorsString = validationErrors.join(' || ');
+      return new CustomError(400, validationErrorsString);
     } else {
-      return new CustomError(500, reason, error.message); //Error al actualizar el empleado {"originalError":"Error al actualizar, el ID: 55 no es correcto o no se encuentra"}
+      return new CustomError(500, reason, error.message);
     }
   }
+
 }
+
