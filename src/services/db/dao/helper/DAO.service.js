@@ -6,10 +6,22 @@ export default class DaoService {
   }
 
   async create(obj) {
+    let transaction;
     try {
-      const crudService = await this.model.create(obj);
+      // Iniciamos la transacción
+      transaction = await this.model.sequelize.transaction();
+
+      // Creamos el objeto dentro de la transacción
+      const crudService = await this.model.create(obj, { transaction });
+
+      // Confirmamos la transacción
+      await transaction.commit();
+
       return crudService;
     } catch (error) {
+      // Si hay algún error, revertimos la transacción
+      if (transaction) await transaction.rollback();
+
       throw CustomError.handleSequelizeError(error, 'Error al crear');
     }
   }
@@ -19,7 +31,6 @@ export default class DaoService {
       const crudServices = await this.model.findAll({ include: { all: true, nested: true } });
       return crudServices;
     } catch (error) {
-      console.log(error);
       throw new CustomError(500, 'Error al obtener todos');
     }
   }

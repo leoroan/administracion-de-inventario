@@ -53,7 +53,7 @@ export async function obtenerEmpleadoBorradoPorDni(req, res) {
   try {
     const empleado = await empleadoService.findDeletedEmpleadoByDni(empleadoDni);
     if (!empleado) {
-      return res.sendClientError('Ex-Employee not found by dni');
+      return res.sendClientError('Employee not found by dni');
     }
     const empleadoDTO = new EmpleadoDTO(empleado.id, empleado.nombre, empleado.apellido, empleado.telefono, empleado.dni, empleado.rol, empleado.email, empleado.EquipoInformaticos);
     return res.sendSuccess(empleadoDTO);

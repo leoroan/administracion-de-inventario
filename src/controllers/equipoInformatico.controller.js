@@ -53,7 +53,7 @@ export async function obtenerEquipoInformaticoBorradoPorID(req, res) {
   try {
     const equipoInformatico = await equipoInformaticoService.findDeletedEquipoInformaticoByID(equipoInformaticoId);
     if (!equipoInformatico) {
-      return res.sendClientError('Ex-Hardware not found by id');
+      return res.sendClientError('Hardware not found by id');
     }
     // const empleadoDTO = new EmpleadoDTO(empleado.id, empleado.nombre, empleado.apellido, empleado.telefono, empleado.dni, empleado.rol, empleado.email, empleado.EquipoInformaticos);
     return res.sendSuccess(equipoInformatico);

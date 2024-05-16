@@ -37,7 +37,7 @@ export async function obtenerTipoEquipo(req, res) {
   try {
     const TipoEquipo = await tipoEquipoService.getTipoEquipoById(TipoEquipoId);
     if (!TipoEquipo) {
-      return res.sendClientError('Place not found');
+      return res.sendClientError('type not found');
     }
     return res.sendSuccess(TipoEquipo);
   } catch (error) {
@@ -51,7 +51,7 @@ export async function obtenerTipoEquipoBorradoPorId(req, res) {
   try {
     const TipoEquipo = await tipoEquipoService.findDeletedTipoEquipoByID(TipoEquipoId);
     if (!TipoEquipo) {
-      return res.sendClientError('Place not found by id');
+      return res.sendClientError('type not found by id');
     }
     return res.sendSuccess(TipoEquipo);
   } catch (error) {

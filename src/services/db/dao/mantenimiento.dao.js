@@ -1,55 +1,30 @@
 import { MantenimientoDeEquipo } from '../models/MantenimientoDeEquipo.model.js';
+import DaoService from './helper/DAO.service.js';
 
-async function createMantenimiento(req, res) {
-  try {
-    const mantenimiento = new MantenimientoDeEquipo(req.body);
-    return mantenimiento;
-  } catch (error) {
-    throw new Error('Error creating maintenance history: ' + error.message);
+const daoService = new DaoService(MantenimientoDeEquipo);
+export default class MantenimientoEquipoDao {
+  async createMantenimientoEquipo(obj) {
+    return await daoService.create(obj);
   }
-}
-
-async function getMantenimientoById(id) {
-  try {
-    const mantenimiento = await MantenimientoDeEquipo.findByPk(id);
-    if (!mantenimiento) {
-      throw new Error('maintenance history not found');
-    }
-    return mantenimiento;
-  } catch (error) {
-    throw new Error('Error getting maintenance history: ' + error.message);
+  async getMantenimientoEquipoById(id) {
+    return await daoService.getById(id);
   }
-}
-
-async function updateMantenimiento(id, updatedData) {
-  try {
-    const mantenimiento = await MantenimientoDeEquipo.findByPk(id);
-    if (!mantenimiento) {
-      throw new Error('maintenance history not found');
-    }
-    await mantenimiento.update(updatedData);
-    return mantenimiento;
-  } catch (error) {
-    throw new Error('Error updating maintenance history: ' + error.message);
+  async getAllMantenimientoEquipos() {
+    return await daoService.getAll();
   }
-}
-
-async function deleteMantenimiento(id) {
-  try {
-    const mantenimiento = await MantenimientoDeEquipo.findByPk(id);
-    if (!mantenimiento) {
-      throw new Error('maintenance history not found');
-    }
-    await mantenimiento.destroy();
-    return true;
-  } catch (error) {
-    throw new Error('Error deleting maintenance history: ' + error.message);
+  async updateMantenimientoEquipo(id, updatedData) {
+    return await daoService.update(id, updatedData);
   }
-}
-
-export {
-  createMantenimiento,
-  updateMantenimiento,
-  deleteMantenimiento,
-  getMantenimientoById
+  async deleteMantenimientoEquipo(id) {
+    return await daoService.delete(id);
+  }
+  async findDeletedMantenimientoEquipoByID(id) {
+    return await daoService.findDeletedBy("id", id);
+  }
+  async getAllDeletedMantenimientoEquipos() {
+    return await daoService.getAllDeleted();
+  }
+  async restoreMantenimientoEquipoById(id) {
+    return await daoService.restoreById(id);
+  }
 }
