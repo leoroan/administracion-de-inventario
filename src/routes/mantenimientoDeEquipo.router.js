@@ -1,4 +1,4 @@
-import CustomRouter from "./custom/custom.router";
+import CustomRouter from "./custom/custom.router.js";
 import {
   crearMantenimientoEquipo,
   obtenerMantenimientoEquipos,
@@ -10,7 +10,7 @@ import {
   restaurarMantenimientoEquipo
 } from '../controllers/MantenimientoEquipo.controller.js'
 
-export default class MantenimientoEquipoRouter extends CustomRouter {
+export default class MantenimientoDeEquipoRouter extends CustomRouter {
   init() {
     this.post('/', ["PUBLIC"], async (req, res) => {
       crearMantenimientoEquipo(req, res);
