@@ -1,56 +1,32 @@
 import { TipoEquipo } from "../models/TipoEquipo.model.js"
+import DaoService from './helper/DAO.service.js';
 
-async function createTipoEquipo(nombre) {
-  try {
-    const tipoEquipo = await TipoEquipo.create({ nombre });
-    return tipoEquipo;
-  } catch (error) {
-    throw new Error('Error creating hardware type: ' + error.message);
+const daoService = new DaoService(TipoEquipo);
+export default class TipoEquipoDao {
+  async createTipoEquipo(obj) {
+    return await daoService.create(obj);
+  }
+  async getTipoEquipoById(id) {
+    return await daoService.getById(id);
+  }
+  async getAllTipoEquipos() {
+    return await daoService.getAll();
+  }
+  async updateTipoEquipo(id, updatedData) {
+    return await daoService.update(id, updatedData);
+  }
+  async deleteTipoEquipo(id) {
+    return await daoService.delete(id);
+  }
+  async findDeletedTipoEquipoByID(id) {
+    return await daoService.findDeletedBy("id", id);
+  }
+  async getAllDeletedTipoEquipos() {
+    return await daoService.getAllDeleted();
+  }
+  async restoreTipoEquipoById(id) {
+    return await daoService.restoreById(id);
   }
 }
 
-async function getAllTipoEquipo() {
-  try {
-    const tipoEquipos = await TipoEquipo.findAll();
-    return tipoEquipos;
-  } catch (error) {
-    throw new Error('Error fetching hardware types: ' + error.message);
-  }
-}
 
-async function getTipoEquipoById(id) {
-  try {
-    const tipoEquipo = await TipoEquipo.findByPk(id);
-    return tipoEquipo;
-  } catch (error) {
-    throw new Error('Error fetching hardware type: ' + error.message);
-  }
-}
-
-async function updateTipoEquipo(id, updatedData) {
-  try {
-    const tipoEquipo = await TipoEquipo.findByPk(id);
-    if (!tipoEquipo) {
-      throw new Error('hardware type not found');
-    }
-    await tipoEquipo.update(updatedData);
-    return tipoEquipo;
-  } catch (error) {
-    throw new Error('Error updating hardware type: ' + error.message);
-  }
-}
-
-async function deleteTipoEquipo(id) {
-  try {
-    const tipoEquipo = await TipoEquipo.findByPk(id);
-    if (!tipoEquipo) {
-      throw new Error('hardware type not found');
-    }
-    await tipoEquipo.destroy();
-    return true;
-  } catch (error) {
-    throw new Error('Error deleting hardware type: ' + error.message);
-  }
-}
-
-export { createTipoEquipo, getTipoEquipoById, updateTipoEquipo, deleteTipoEquipo, getAllTipoEquipo };

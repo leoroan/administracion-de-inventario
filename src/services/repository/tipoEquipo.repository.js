@@ -1,36 +1,29 @@
-export default class LugarRepository {
+export default class TipoEquipoRepository {
   constructor(dao) {
     this.dao = dao
   }
-
-  createLugar = async (obj) => {
+  createTipoEquipo = async (obj) => {
     return await daoService.create(obj);
   }
-
-  getAllLugares = async () => {
+  getAllTipoEquipos = async () => {
     return await daoService.getAll();
   }
-
-  getLugarById = async (id) => {
+  getTipoEquipoById = async (id) => {
     return await daoService.getById(id);
   }
-  updateLugar = async (id, updatedData) => {
+  updateTipoEquipo = async (id, updatedData) => {
     return await daoService.updateById(id, updatedData);
   }
-  deleteLugar = async (id) => {
+  deleteTipoEquipo = async (id) => {
     return await daoService.deleteById(id);
   }
-
-  findDeletedLugarByID = async (id) => {
+  findDeletedTipoEquipoByID = async (id) => {
     return await daoService.findDeletedBy("id", id);
   }
-
-  getAllDeletedLugares = async () => {
+  getAllDeletedTipoEquipos = async () => {
     return await daoService.getAllDeleted();
   }
-
-  restoreLugarById = async (id) => {
+  restoreTipoEquipoById = async (id) => {
     return await daoService.restoreById(id);
   }
-
 }

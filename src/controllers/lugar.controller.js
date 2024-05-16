@@ -1,5 +1,5 @@
 import { devLogger } from '../config/logs/logger.config.js';
-import { lugarService } from '../services/repository/services.js';;
+import { lugarService } from '../services/repository/services.js';
 
 export async function crearLugar(req, res) {
   const obj = req.body;

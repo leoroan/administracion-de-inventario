@@ -40,8 +40,8 @@ export async function obtenerEmpleado(req, res) {
     if (!empleado) {
       return res.sendClientError('Employee not found');
     }
-    const empleadoDTO = new EmpleadoDTO(empleado.id, empleado.nombre, empleado.apellido, empleado.telefono, empleado.dni, empleado.rol, empleado.email, empleado.EquipoInformaticos);
-    return res.sendSuccess(empleadoDTO);
+    // const empleadoDTO = new EmpleadoDTO(empleado.id, empleado.nombre, empleado.apellido, empleado.telefono, empleado.dni, empleado.rol, empleado.email, empleado.EquipoInformaticos);
+    return res.sendSuccess(empleado);
   } catch (error) {
     devLogger.error(error);
     return res.sendInternalServerError(error);
