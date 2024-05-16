@@ -4,7 +4,8 @@ import { sequelize } from "../../../config/db/sequelize.config.js";
 const MarcaEquipo = sequelize.define('MarcaEquipo', {
   nombre: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
 }, { timestamps: true, paranoid: true });
 

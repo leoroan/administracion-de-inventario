@@ -12,7 +12,8 @@ import MantenimientoDeEquipoDao from "../db/dao/mantenimientoDeEquipo.dao.js";
 import MantenimientoDeEquipoRepository from "./mantenimientoDeEquipo.repository.js";
 import MarcaEquipoDao from "../db/dao/marcaEquipo.dao.js";
 import MarcaEquipoRepository from "./marcaEquipo.repository.js";
-
+import ModeloEquipoDao from "../db/dao/modeloEquipo.dao.js";  
+import ModeloEquipoRepository from "./modeloEquipo.repository.js";
 
 const empleadoDao = new EmpleadoDao();
 const equipoInformaticoDao = new EquipoInformaticoDao();
@@ -21,6 +22,7 @@ const oficinaDao = new OficinaDao();
 const tipoEquipoDao = new TipoEquipoDao();
 const mantenimientoEquipoDao = new MantenimientoDeEquipoDao();
 const marcaEquipoDao = new MarcaEquipoDao();
+const modeloEquipoDao = new ModeloEquipoDao();
 
 export const empleadoService = new EmpleadoRepository(empleadoDao);
 export const equipoInformaticoService = new EquipoInformaticoRepository(equipoInformaticoDao);
@@ -29,3 +31,4 @@ export const oficinaService = new OficinaRepository(oficinaDao);
 export const tipoEquipoService = new TipoEquipoRepository(tipoEquipoDao);
 export const mantenimientoDeEquipoService = new MantenimientoDeEquipoRepository(mantenimientoEquipoDao);
 export const marcaEquipoService = new MarcaEquipoRepository(marcaEquipoDao);
+export const modeloEquipoService = new ModeloEquipoRepository(modeloEquipoDao);
