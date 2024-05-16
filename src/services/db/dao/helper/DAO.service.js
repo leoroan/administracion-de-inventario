@@ -48,30 +48,59 @@ export default class DaoService {
   }
 
   async update(id, updatedData) {
+    let transaction;
     try {
-      const crudService = await this.model.findByPk(id);
+      // Iniciamos la transacción
+      transaction = await this.model.sequelize.transaction();
+
+      // Buscamos el registro a actualizar dentro de la transacción
+      const crudService = await this.model.findByPk(id, { transaction });
       if (!crudService) {
         throw new CustomError(404, 'Elemento no encontrado');
       }
-      await crudService.update(updatedData);
+
+      // Actualizamos el registro dentro de la transacción
+      await crudService.update(updatedData, { transaction });
+
+      // Confirmamos la transacción
+      await transaction.commit();
+
       return crudService;
     } catch (error) {
+      // Si hay algún error, revertimos la transacción
+      if (transaction) await transaction.rollback();
+
       throw CustomError.handleSequelizeError(error, 'Error al querer actualizar');
     }
   }
 
   async delete(id) {
+    let transaction;
     try {
-      const crudService = await this.model.findByPk(id);
+      // Iniciamos la transacción
+      transaction = await this.model.sequelize.transaction();
+
+      // Buscamos el registro a eliminar dentro de la transacción
+      const crudService = await this.model.findByPk(id, { transaction });
       if (!crudService) {
         throw new CustomError(404, 'Elemento no encontrado');
       }
-      await crudService.destroy();
+
+      // Eliminamos el registro dentro de la transacción
+      await crudService.destroy({ transaction });
+
+      // Confirmamos la transacción
+      await transaction.commit();
+
       return true;
     } catch (error) {
+      // Si hay algún error, revertimos la transacción
+      if (transaction) await transaction.rollback();
+
       throw CustomError.handleSequelizeError(error, `No se encontró nada con el ID ${id}`);
     }
   }
+
 
   async findDeletedBy(caracteristica, value) {
     try {

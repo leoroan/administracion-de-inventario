@@ -28,7 +28,7 @@ export default class MantenimientoDeEquipoRouter extends CustomRouter {
       obtenerMantenimientoEquipos(req, res);
     });
 
-    this.get('/erased/all/office', ["PUBLIC"], async (req, res) => {
+    this.get('/erased/all/orders', ["PUBLIC"], async (req, res) => {
       obtenerMantenimientoEquiposBorrados(req, res);
     });
 

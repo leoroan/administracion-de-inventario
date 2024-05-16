@@ -76,7 +76,7 @@ export async function eliminarTipoEquipo(req, res) {
   const TipoEquipoId = req.params.id;
   try {
     await tipoEquipoService.deleteTipoEquipo(TipoEquipoId);
-    return res.sendSuccess({ state: "Place deleted" });
+    return res.sendSuccess({ state: "Type deleted" });
   } catch (error) {
     devLogger.error(error);
     return res.sendInternalServerError(error);

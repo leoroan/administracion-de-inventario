@@ -30,7 +30,7 @@ export default class equiposInformaticosExtendRouter extends CustomRouter {
       obtenerEquiposInformaticos(req, res);
     });
 
-    this.get('/erased/all/hardware', ["PUBLIC"], async (req, res) => {
+    this.get('/erased/all/hardwares', ["PUBLIC"], async (req, res) => {
       obtenerEquiposInformaticosBorrados(req, res);
     });
 

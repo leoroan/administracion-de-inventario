@@ -39,7 +39,7 @@ export async function obtenerEquipoInformatico(req, res) {
   try {
     const equipoInformatico = await equipoInformaticoService.getEquipoInformaticoById(equipoInformaticoId);
     if (!equipoInformatico) {
-      return res.sendClientError('hardware not found');
+      return res.sendClientError('Hardware not found');
     }
     return res.sendSuccess(equipoInformatico);
   } catch (error) {

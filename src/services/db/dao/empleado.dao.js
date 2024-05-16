@@ -1,4 +1,3 @@
-// import CustomError from '../../../utils/custom.error.js';
 import { Empleado } from '../models/Empleado.model.js';
 import DaoService from './helper/DAO.service.js';
 

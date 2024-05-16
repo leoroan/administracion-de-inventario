@@ -28,7 +28,7 @@ export default class TipoEquipoRouter extends CustomRouter {
       obtenerTipoEquipos(req, res);
     });
 
-    this.get('/erased/all/office', ["PUBLIC"], async (req, res) => {
+    this.get('/erased/all/types', ["PUBLIC"], async (req, res) => {
       obtenerTipoEquiposBorrados(req, res);
     });
 

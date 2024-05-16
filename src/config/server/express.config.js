@@ -7,6 +7,7 @@ import __dirname from "../../utils.js";
 import { addLogger } from "../../middlewares/logger.middleware.js";
 import equiposInformaticosExtendRouter from '../../routes/equiposInformaticos.router.js';
 import empleadoExtendRouter from '../../routes/empleado.router.js';
+import marcaEquipoExtendRouter from '../../routes/marcaEquipo.router.js';
 
 export default function configureExpress(app) {
   app.use(cors());
@@ -52,15 +53,15 @@ export default function configureExpress(app) {
 
   const equiposInformaticos = new equiposInformaticosExtendRouter();
   const empleados = new empleadoExtendRouter();
+  const marcaEquipo = new marcaEquipoExtendRouter();
   app.use("/api/equipos", equiposInformaticos.getRouter());
+  app.use("/api/marcas/", marcaEquipo.getRouter());
   app.use("/api/empleados", empleados.getRouter());
 
   //routes here, before *
   app.get('/', (req, res) => {
     res.status(200).render("index");
   });
-
-
 
   app.get('*', (req, res) => {
     req.logger.error('error 404 - PAGE NOT FOUND')

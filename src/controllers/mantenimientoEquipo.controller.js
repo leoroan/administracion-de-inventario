@@ -76,7 +76,7 @@ export async function eliminarMantenimientoEquipo(req, res) {
   const MantenimientoEquipoId = req.params.id;
   try {
     await mantenimientoDeEquipoService.deleteMantenimientoEquipo(MantenimientoEquipoId);
-    return res.sendSuccess({ state: "Place deleted" });
+    return res.sendSuccess({ state: "Order deleted" });
   } catch (error) {
     devLogger.error(error);
     return res.sendInternalServerError(error);
