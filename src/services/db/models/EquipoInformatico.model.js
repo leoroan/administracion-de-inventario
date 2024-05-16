@@ -48,10 +48,10 @@ const EquipoInformatico = sequelize.define('EquipoInformatico', {
     defaultValue: 0
   },
   remitoNumero: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: true
   },
-  tipo: {
+  tipoEquipo: {
     type: DataTypes.STRING,
     allowNull: false
   },

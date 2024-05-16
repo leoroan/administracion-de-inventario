@@ -3,9 +3,9 @@ import { EquipoInformaticoDTO } from '../services/db/dto/equipoInformatico.dto.j
 import { equipoInformaticoService } from '../services/repository/services.js';
 
 export async function crearEquipoInformatico(req, res) {
-  const { mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero, tipo } = req.body;
+  const obj = req.body;
   try {
-    const equipoInformatico = await equipoInformaticoService.createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero, tipo);
+    const equipoInformatico = await equipoInformaticoService.createEquipoInformatico(obj);
     return res.sendSuccess(equipoInformatico);
   } catch (error) {
     devLogger.error(error);
@@ -97,23 +97,23 @@ export async function restaurarEquipoInformatico(req, res) {
   }
 }
 
-export async function asignarTipoEquipoAequipo(req, res) {
-  const equipoInformaticoId = req.params.eid;
-  const tipoEquipoId = req.params.tid;
-  try {
-    const equipoInformatico = await equipoInformaticoService.getEquipoInformaticoById(equipoInformaticoId);
-    if (!equipoInformatico) {
-      return res.sendClientError('hardware not found');
-    }
-    const tipoEquipo = await tipoEquipoService.getTipoEquipoById(tipoEquipoId);
-    if (!tipoEquipo) {
-      return res.sendClientError(error);
-    }
-    equipoInformatico.setTipoEquipo(tipoEquipo);
-    return res.sendSuccess(equipoInformatico);
-  } catch (error) {
-    devLogger.error(error);
-    return res.sendInternalServerError(error);
-  }
-}
+// export async function asignarTipoEquipoAequipo(req, res) {
+//   const equipoInformaticoId = req.params.eid;
+//   const tipoEquipoId = req.params.tid;
+//   try {
+//     const equipoInformatico = await equipoInformaticoService.getEquipoInformaticoById(equipoInformaticoId);
+//     if (!equipoInformatico) {
+//       return res.sendClientError('hardware not found');
+//     }
+//     const tipoEquipo = await tipoEquipoService.getTipoEquipoById(tipoEquipoId);
+//     if (!tipoEquipo) {
+//       return res.sendClientError(error);
+//     }
+//     equipoInformatico.setTipoEquipo(tipoEquipo);
+//     return res.sendSuccess(equipoInformatico);
+//   } catch (error) {
+//     devLogger.error(error);
+//     return res.sendInternalServerError(error);
+//   }
+// }
 

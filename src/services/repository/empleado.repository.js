@@ -3,8 +3,8 @@ export default class EmpleadoRepository {
     this.dao = dao
   }
 
-  createEmpleado = async (nombre, apellido, telefono, dni, rol, email) => {
-    return await this.dao.createEmpleado(nombre, apellido, telefono, dni, rol, email);
+  createEmpleado = async (obj) => {
+    return await this.dao.createEmpleado(obj);
   }
 
   getEmpleadoById = async (id) => {

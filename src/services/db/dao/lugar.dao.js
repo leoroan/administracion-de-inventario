@@ -4,8 +4,8 @@ import DaoService from "./helper/DAO.service.js";
 const daoService = new DaoService(Lugar);
 export default class LugarDao {
 
-  async createLugar(nombre, calle, altura, comentario) {
-    return await daoService.create({ nombre, calle, altura, comentario });
+  async createLuga(obj) {
+    return await daoService.create(obj);
   }
   async getAllLugares() {
     return await daoService.getAll();
@@ -31,9 +31,9 @@ export default class LugarDao {
 }
 
 
-// async function createLugar(nombre, calle, altura, comentario) {
+// async function createLuga(obj){
 //   try {
-//     const lugar = await Lugar.create({ nombre, calle, altura, comentario });
+//     const lugar = await Lugar.create( obj );
 //     return lugar;
 //   } catch (error) {
 //     throw new Error('Error creating place: ' + error.message);

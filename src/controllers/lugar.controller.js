@@ -2,9 +2,9 @@ import { devLogger } from '../config/logs/logger.config.js';
 import { lugarService } from '../services/repository/services.js';;
 
 export async function crearLugar(req, res) {
-  const { nombre, calle, altura, comentario } = req.body;
+  const obj = req.body;
   try {
-    const lugar = await lugarService.createLugar(nombre, calle, altura, comentario);
+    const lugar = await lugarService.createLugar(obj);
     return res.sendSuccess(lugar);
   } catch (error) {
     devLogger.error(error);

@@ -3,8 +3,9 @@ import DaoService from "./helper/DAO.service.js";
 
 const daoService = new DaoService(EquipoInformatico);
 export default class EquipoInformaticoDao {
-  async createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero, tipo) {
-    return await daoService.create({ mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero, tipo });
+
+  async createEquipoInformatico(obj) {
+    return await daoService.create(obj);
   }
   async getAllEquipoInformaticos() {
     return await daoService.getAll();

@@ -4,9 +4,8 @@ import { equipoInformaticoService } from '../services/repository/services.js';
 import { empleadoService } from '../services/repository/services.js';
 
 export async function crearEmpleado(req, res) {
-  const { nombre, apellido, telefono, dni, rol, email } = req.body;
-  try {
-    const empleado = await empleadoService.createEmpleado(nombre, apellido, telefono, dni, rol, email);
+  const obj = req.body;  try {
+    const empleado = await empleadoService.createEmpleado(obj);
     return res.sendSuccess(empleado);
   } catch (error) {
     devLogger.error(error);

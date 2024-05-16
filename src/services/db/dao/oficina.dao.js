@@ -3,8 +3,8 @@ import DaoService from './helper/DAO.service.js';
 
 const daoService = new DaoService(Oficina);
 export default class OficinaDao {
-  async createOficina(nombre, descripcion, telefono, email) {
-    return await daoService.create({ nombre, descripcion, telefono, email });
+  async createOficina(obj) {
+    return await daoService.create(obj);
   }
   async getOficinaById(id) {
     return await daoService.getById(id);

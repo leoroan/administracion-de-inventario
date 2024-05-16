@@ -3,8 +3,8 @@ export default class LugarRepository {
     this.dao = dao
   }
 
-  createLugar = async (nombre, calle, altura, comentario) => {
-    return await daoService.create({ nombre, calle, altura, comentario });
+  createLugar = async (obj) => {
+    return await daoService.create(obj);
   }
 
   getAllLugares = async () => {

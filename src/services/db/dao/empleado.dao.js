@@ -5,8 +5,8 @@ import DaoService from './helper/DAO.service.js';
 const daoService = new DaoService(Empleado);
 export default class EmpleadoDao {
 
-  async createEmpleado(nombre, apellido, telefono, dni, rol, email) {
-    return await daoService.create({ nombre, apellido, telefono, dni, rol, email });
+  async createEmpleado(obj) {
+    return await daoService.create(obj);
   }
   async getEmpleadoById(id) {
     return await daoService.getById(id);
@@ -31,9 +31,9 @@ export default class EmpleadoDao {
   }
 }
 
-// async createEmpleado(nombre, apellido, telefono, dni, rol, email) {
+// async createEmpleado(obj) {
 //   try {
-//     const empleado = await Empleado.create({ nombre, apellido, telefono, dni, rol, email });
+//     const empleado = await Empleado.create({ obj });
 //     return empleado;
 //   } catch (error) {
 //     throw CustomError.handleSequelizeError(error, 'Error al crear empleado');

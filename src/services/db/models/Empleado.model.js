@@ -22,7 +22,8 @@ const Empleado = sequelize.define('Empleado', {
   },
   rol: {
     type: DataTypes.ENUM('ministro', 'secretario', 'subsecretario', 'director', 'director_de_linea', 'empleado', 'no_definido'),
-    allowNull: false
+    allowNull: false,
+    defaultValue: 'empleado' 
   },
   email: {
     type: DataTypes.STRING,

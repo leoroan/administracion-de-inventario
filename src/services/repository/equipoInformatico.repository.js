@@ -3,8 +3,8 @@ export default class EquipoInformaticoRepository {
     this.dao = dao
   }
 
-  createEquipoInformatico = async (mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero) => {
-    return await this.dao.createEquipoInformatico(mt, marca, numeroDeSerie, modelo, numeroDePatrimonio, estado, observacion, especificacionesTecnicas, precio, remitoNumero);
+  createEquipoInformatico = async (obj) => {
+    return await this.dao.createEquipoInformatico(obj);
   }
 
   getAllEquipoInformaticos = async () => {

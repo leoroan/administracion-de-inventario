@@ -2,8 +2,8 @@ export default class OficinaRepository {
   constructor(dao) {
     this.dao = dao
   }
-  createOficina = async (nombre, descripcion, telefono, email) => {
-    return await daoService.create({ nombre, descripcion, telefono, email });
+  createOficina = async (obj) => {
+    return await daoService.create(obj);
   }
   getOficinaById = async (id) => {
     return await daoService.getById(id);

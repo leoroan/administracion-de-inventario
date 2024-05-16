@@ -7,7 +7,6 @@ import {
   obtenerEquipoInformaticoBorradoPorID,
   actualizarEquipoInformatico,
   eliminarEquipoInformatico,
-  asignarTipoEquipoAequipo,
   restaurarEquipoInformatico
 } from "../controllers/equipoInformatico.controller.js";
 

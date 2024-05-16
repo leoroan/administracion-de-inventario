@@ -2,9 +2,9 @@ import { devLogger } from '../config/logs/logger.config.js';
 import { oficinaService } from '../services/repository/services.js';
 
 export async function crearOficina(req, res) {
-  const { nombre, descripcion, telefono, email } = req.body;
+  const obj = req.body;
   try {
-    const Oficina = await oficinaService.createOficina(nombre, descripcion, telefono, email);
+    const Oficina = await oficinaService.createOficina(obj);
     return res.sendSuccess(Oficina);
   } catch (error) {
     devLogger.error(error);
