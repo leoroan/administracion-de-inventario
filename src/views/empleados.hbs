@@ -2,10 +2,11 @@
 
   <div class="container">
     <div class="d-flex justify-content-between">
-      <h1>Vista principal del inventario MT</h1>
+      <h1>Empleados del MT</h1>
+      <p>asociados a equipos</p>
     </div>
 
-    <button type="button" class="btn btn-primary btn-sm" id="goToEmpleadosBtn">Empleados</button>
+    <button type="button" class="btn btn-primary btn-sm" id="goToInventoryBtn">Equipos</button>
 
     <ul class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 my-4">
       <table class="table table-striped table-hover ">
@@ -14,22 +15,20 @@
             {{!-- <th scope="col">#</th> --}}
             <th scope="col">Nro. ID</th>
             <th scope="col">ACTUALIZADO</th>
-            <th scope="col">MT</th>
-            <th scope="col">TIPO</th>
-            <th scope="col">USUARIO</th>
+            <th scope="col">EMPLEADO</th>
+            <th scope="col">DNI</th>
             <th scope="col">OFICINA </th>
           </tr>
         </thead>
         <tbody class='table-group-divider' id="tableBody">
-          {{#each equiposInformaticos}}
+          {{#each empleados}}
           <tr data-bs-toggle="collapse" data-bs-target="#collapse{{@index}}" aria-expanded="false"
             aria-controls="collapse{{@index}}">
             {{!-- <th scope="row">{{@index}}</th> --}}
             <td>{{this.dataValues.id}}</td>
             <td>{{formatDate this.dataValues.updatedAt}}</td>
-            <td>{{checkIfDataIsNull this.dataValues.mt}}</td>
-            <td>{{this.dataValues.tipoEquipo}}</td>
-            <td>{{this.dataValues.Empleado.nombre}} {{this.dataValues.Empleado.apellido}}</td>
+            <td>{{this.dataValues.nombre}} {{this.dataValues.apellido}}</td>
+            <td>{{this.dataValues.dni}}</td>
             <td>
               {{#each this.dataValues.Oficinas}}
               <span>{{this.nombre}}</span>
@@ -43,44 +42,38 @@
                   <div class="card-group mb-2">
                     <div class="card w-50 text-center border-info border-3">
                       <div class="card-body">
-                        <h6 class="card-title">Nro de serie</h6>
-                        <p class="card-text">{{this.dataValues.numeroDeSerie}}</p>
+                        <h6 class="card-title">TELEFONO</h6>
+                        <p class="card-text">{{this.dataValues.telefono}}</p>
                       </div>
                     </div>
                     <div class="card w-50 text-center border-info border-3">
                       <div class="card-body">
-                        <h6 class="card-title">Nro de Patrimonio</h6>
-                        <p class="card-text">{{this.dataValues.numeroDePatrimonio}}</p>
+                        <h6 class="card-title">ROL</h6>
+                        <p class="card-text">{{this.dataValues.rol}}</p>
                       </div>
                     </div>
                     <div class="card w-50 text-center border-info border-3">
                       <div class="card-body">
-                        <h6 class="card-title">Observación</h6>
-                        <p class="card-text">{{this.dataValues.observacion}}</p>
+                        <h6 class="card-title">EMAIL</h6>
+                        <p class="card-text">{{this.dataValues.email}}</p>
                       </div>
                     </div>
                   </div>
                   <div class="card-group">
                     <div class="card w-50 text-center border-info border-3">
                       <div class="card-body">
-                        <h6 class="card-title">Especificaciones Técnicas</h6>
-                        <p class="card-text">{{this.dataValues.especificacionesTecnicas}}</p>
+                        <h6 class="card-title">EQUIPOS ASOCIADOS</h6>
+                        <p class="card-text">
+                          {{#each this.dataValues.EquipoInformaticos}}
+                          {{this.id}}
+                          {{/each}}
+                        </p>
                       </div>
                     </div>
                     <div class="card w-50 text-center border-info border-3">
                       <div class="card-body">
                         <h6 class="card-title">Precio</h6>
                         <p class="card-text">{{this.dataValues.precio}}</p>
-                      </div>
-                    </div>
-                    <div class="card w-50 text-center border-info border-3">
-                      <div class="card-body">
-                        <h6 class="card-title">Edificio/Lugar</h6>
-                        <p class="card-text">
-                          {{#each this.dataValues.Oficinas}}
-                          <span>{{this.nombre}}</span>
-                          {{/each}}
-                        </p>
                       </div>
                     </div>
                   </div>

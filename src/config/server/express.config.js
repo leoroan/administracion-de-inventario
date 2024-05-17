@@ -2,6 +2,7 @@
 import express from 'express';
 import session from 'express-session';
 import handlebars from "express-handlebars";
+import handlebarsHelper from '../../utils/handlebars-helpers.js';
 import cors from 'cors';
 import __dirname from "../../utils.js";
 import { addLogger } from "../../middlewares/logger.middleware.js";
@@ -19,6 +20,7 @@ export default function configureExpress(app) {
 
   app.engine("hbs",
     handlebars.engine({
+      handlebars: handlebarsHelper,
       extname: "hbs",
       defaultLayout: "main",
       runtimeOptions: {
