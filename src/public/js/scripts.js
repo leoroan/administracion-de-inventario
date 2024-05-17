@@ -1,1 +1,5 @@
-console.log("hello world!");
+
+//navegacion
+document.getElementById("inventoryBtn").addEventListener("click", function() {
+  window.location.href = "/main/inventory";
+});
