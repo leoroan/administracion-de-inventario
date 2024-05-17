@@ -9,7 +9,8 @@ import { addLogger } from "../../middlewares/logger.middleware.js";
 import equiposInformaticosExtendRouter from '../../routes/equiposInformaticos.router.js';
 import empleadoExtendRouter from '../../routes/empleado.router.js';
 import marcaEquipoExtendRouter from '../../routes/marcaEquipo.router.js';
-import ModeloEquipoRouter from '../../routes/modeloEquipo.router.js';
+import modeloEquipoExtendedRouter from '../../routes/modeloEquipo.router.js';
+import lugarExtendRouter from '../../routes/lugar.router.js';
 import viewsRouter from '../../routes/views.router.js';
 
 export default function configureExpress(app) {
@@ -23,6 +24,8 @@ export default function configureExpress(app) {
       handlebars: handlebarsHelper,
       extname: "hbs",
       defaultLayout: "main",
+      partialsDir: `${__dirname}/views/partials`,
+      layoutsDir: `${__dirname}/views/layouts`,
       runtimeOptions: {
         allowProtoPropertiesByDefault: true,
         allowProtoMethodsByDefault: true
@@ -59,10 +62,12 @@ export default function configureExpress(app) {
   const equiposInformaticos = new equiposInformaticosExtendRouter();
   const empleados = new empleadoExtendRouter();
   const marcaEquipo = new marcaEquipoExtendRouter();
-  const modeloEquipo = new ModeloEquipoRouter();
+  const modeloEquipo = new modeloEquipoExtendedRouter();
+  const lugares = new lugarExtendRouter();
   app.use("/api/equipos", equiposInformaticos.getRouter());
   app.use("/api/marcas/", marcaEquipo.getRouter());
   app.use("/api/modelos/", modeloEquipo.getRouter());
+  app.use("/api/places/", lugares.getRouter());
   app.use("/api/empleados", empleados.getRouter());
 
   //routes here, before *

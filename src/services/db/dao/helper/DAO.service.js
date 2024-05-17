@@ -31,6 +31,7 @@ export default class DaoService {
       const crudServices = await this.model.findAll({ include: { all: true, nested: true } });
       return crudServices;
     } catch (error) {
+      console.log(error);
       throw new CustomError(500, 'Error al obtener todos');
     }
   }

@@ -10,11 +10,9 @@ Handlebars.registerHelper('checkIfDataIsNull', function (data) {
   return data === null ? 'sin datos' : data;
 });
 
-Handlebars.registerHelper('filter', function(array, criteria) {
-  return array.filter(function(item) {
-    // Aquí puedes definir tus criterios de filtrado
-    return item.propiedad === criteria;
-  });
+// Ayudante para verificar si dos valores son iguales
+Handlebars.registerHelper('eq', function (a, b) {
+  return a === b;
 });
 
 export default Handlebars;

@@ -1,4 +1,4 @@
-import { equipoInformaticoService, empleadoService } from "../services/repository/services.js";
+import { equipoInformaticoService, empleadoService, lugarService } from "../services/repository/services.js";
 import CustomRouter from "./custom/custom.router.js";
 
 export default class viewsRouter extends CustomRouter {
@@ -9,11 +9,13 @@ export default class viewsRouter extends CustomRouter {
         fileCss: "styles.css",
         fileJs: "scripts.js",
         title: "Inventario MT",
+        currentPath: req.path
         // user: req.session.user || req.user,
       });
     });
 
     this.get('/main/inventory', ["PUBLIC"], async (req, res) => {
+      const estado = req.query.estado || 'asignado';
       const equiposInformaticos = await equipoInformaticoService.getAllEquipoInformaticos();
       res.render("inventario", {
         fileFavicon: "favicon.ico",
@@ -21,6 +23,8 @@ export default class viewsRouter extends CustomRouter {
         fileJs: "inventario.view.js",
         title: "Inventario MT - main",
         equiposInformaticos: equiposInformaticos,
+        currentPath: req.path,
+        estado: estado
         // user: req.session.user || req.user,
       });
     });
@@ -33,6 +37,33 @@ export default class viewsRouter extends CustomRouter {
         fileJs: "empleados.view.js",
         title: "Inventario MT - main",
         empleados: empleados,
+        currentPath: req.path
+        // user: req.session.user || req.user,
+      });
+    });
+
+    this.get('/main/places', ["PUBLIC"], async (req, res) => {
+      const lugares = await lugarService.getAllLugares();
+      res.render("lugares", {
+        fileFavicon: "favicon.ico",
+        fileCss: "styles.css",
+        fileJs: "empleados.view.js",
+        title: "Inventario MT - main",
+        lugares: lugares,
+        currentPath: req.path
+        // user: req.session.user || req.user,
+      });
+    });
+
+    this.get('/main/places/:id', ["PUBLIC"], async (req, res) => {
+      const lugar = await lugarService.getAllLugares();
+      res.render("oficinas", {
+        fileFavicon: "favicon.ico",
+        fileCss: "styles.css",
+        fileJs: "empleados.view.js",
+        title: "Inventario MT - main",
+        lugar: lugar,
+        currentPath: req.path
         // user: req.session.user || req.user,
       });
     });

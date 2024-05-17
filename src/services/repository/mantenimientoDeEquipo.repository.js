@@ -3,27 +3,27 @@ export default class MantenimientoDeEquipoRepository {
     this.dao = dao
   }
   createMantenimientoDeEquipo = async (obj) => {
-    return await daoService.create(obj);
+    return await this.dao.createMantenimientoDeEquipo(obj);
   }
   getAllMantenimientoDeEquipos = async () => {
-    return await daoService.getAll();
+    return await this.dao.getAllMantenimientoDeEquipos();
   }
   getMantenimientoDeEquipoById = async (id) => {
-    return await daoService.getById(id);
+    return await this.dao.getMantenimientoDeEquipoById(id);
   }
   updateMantenimientoDeEquipo = async (id, updatedData) => {
-    return await daoService.updateById(id, updatedData);
+    return await this.dao.updateMantenimientoDeEquipo(id, updatedData);
   }
   deleteMantenimientoDeEquipo = async (id) => {
-    return await daoService.deleteById(id);
+    return await this.dao.deleteMantenimientoDeEquipo(id);
   }
   findDeletedMantenimientoDeEquipoByID = async (id) => {
-    return await daoService.findDeletedBy("id", id);
+    return await this.dao.findDeletedMantenimientoDeEquipoByID("id", id);
   }
   getAllDeletedMantenimientoDeEquipos = async () => {
-    return await daoService.getAllDeleted();
+    return await this.dao.getAllDeletedMantenimientoDeEquipos();
   }
   restoreMantenimientoDeEquipoById = async (id) => {
-    return await daoService.restoreById(id);
+    return await this.dao.restoreMantenimientoDeEquipoById(id);
   }
 }

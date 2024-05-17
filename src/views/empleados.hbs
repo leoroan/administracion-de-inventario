@@ -1,15 +1,14 @@
 <main class="flex-grow-1">
 
   <div class="container">
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between align-items-center">
       <h1>Empleados del MT</h1>
-      <p>asociados a equipos</p>
+      {{> menu}}
     </div>
 
-    <button type="button" class="btn btn-primary btn-sm" id="goToInventoryBtn">Equipos</button>
 
     <ul class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 my-4">
-      <table class="table table-striped table-hover ">
+      <table class="table table-striped table-hover text-center">
         <thead class='table-dark'>
           <tr>
             {{!-- <th scope="col">#</th> --}}
@@ -30,9 +29,12 @@
             <td>{{this.dataValues.nombre}} {{this.dataValues.apellido}}</td>
             <td>{{this.dataValues.dni}}</td>
             <td>
-              {{#each this.dataValues.Oficinas}}
-              <span>{{this.nombre}}</span>
-              {{/each}}
+              {{#if (eq this.dataValues.Oficina null)}}
+              <div class="text-center">
+                <i class="bi bi-building-add"></i>
+              </div>
+              {{/if}}
+              {{!-- {{this.dataValues.Oficina}} --}}
             </td>
           </tr>
           <tr>

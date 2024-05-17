@@ -1,0 +1,27 @@
+<main class="flex-grow-1">
+
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1>Edificios del MT</h1>
+      {{> menu}}
+    </div>
+
+    <div class="row row-cols-1 row-cols-3 g-4 mt-5">
+      {{#each lugares}}
+      <div class="col">
+        <a href="/main/places/{{this.dataValues.id}}" class="btn ">
+          <div class="card w-75 shadow border-1">
+            <img src="/assets/edificio.svg" class="card-img-top" alt="imagen simbolica de un edificio">
+            <div class="card-body">
+              <h5 class="card-title">{{this.dataValues.nombre}}</h5>
+              <p class="card-text"> CALLE {{this.dataValues.calle}}, NRO:{{this.dataValues.altura}} .</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      {{/each}}
+    </div>
+
+  </div>
+</main>
+<script src="/js/{{fileJs}}"></script>

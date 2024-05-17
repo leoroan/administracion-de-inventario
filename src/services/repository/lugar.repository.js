@@ -3,27 +3,27 @@ export default class LugarRepository {
     this.dao = dao
   }
   createLugar = async (obj) => {
-    return await daoService.create(obj);
+    return await this.dao.createLugar(obj);
   }
   getAllLugares = async () => {
-    return await daoService.getAll();
+    return await this.dao.getAllLugares();
   }
   getLugarById = async (id) => {
-    return await daoService.getById(id);
+    return await this.dao.getLugarById(id);
   }
   updateLugar = async (id, updatedData) => {
-    return await daoService.updateById(id, updatedData);
+    return await this.dao.updateLugar(id, updatedData);
   }
   deleteLugar = async (id) => {
-    return await daoService.deleteById(id);
+    return await this.dao.deleteLugar(id);
   }
   findDeletedLugarByID = async (id) => {
-    return await daoService.findDeletedBy("id", id);
+    return await this.dao.findDeletedLugarByID("id", id);
   }
   getAllDeletedLugares = async () => {
-    return await daoService.getAllDeleted();
+    return await this.dao.getAllDeletedLugares();
   }
   restoreLugarById = async (id) => {
-    return await daoService.restoreById(id);
+    return await this.dao.restoreLugarById(id);
   }
 }

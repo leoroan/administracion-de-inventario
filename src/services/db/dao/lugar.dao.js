@@ -4,7 +4,7 @@ import DaoService from "./helper/DAO.service.js";
 const daoService = new DaoService(Lugar);
 export default class LugarDao {
 
-  async createLuga(obj) {
+  async createLugar(obj) {
     return await daoService.create(obj);
   }
   async getAllLugares() {

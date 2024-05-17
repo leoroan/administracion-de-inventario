@@ -3,28 +3,28 @@ export default class OficinaRepository {
     this.dao = dao
   }
   createOficina = async (obj) => {
-    return await daoService.create(obj);
+    return await this.dao.createOficina(obj);
   }
   getOficinaById = async (id) => {
-    return await daoService.getById(id);
+    return await this.dao.getOficinaById(id);
   }
   getAllOficinas = async () => {
-    return await daoService.getAll();
+    return await this.dao.getAllOficinas();
   }
   updateOficina = async (id, updatedData) => {
-    return await daoService.updateById(id, updatedData);
+    return await this.dao.updateOficina(id, updatedData);
   }
   deleteOficina = async (id) => {
-    return await daoService.deleteById(id);
+    return await this.dao.deleteOficina(id);
   }
   findDeletedOficinaByID = async (id) => {
-    return await daoService.findDeletedBy("id", id);
+    return await this.dao.findDeletedOficinaByID("id", id);
   }
   getAllDeletedOficinas = async () => {
-    return await daoService.getAllDeleted();
+    return await this.dao.getAllDeletedOficinas();
   }
   restoreOficinaById = async (id) => {
-    return await daoService.restoreById(id);
+    return await this.dao.restoreOficinaById(id);
   }
 
 
