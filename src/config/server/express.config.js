@@ -9,6 +9,7 @@ import equiposInformaticosExtendRouter from '../../routes/equiposInformaticos.ro
 import empleadoExtendRouter from '../../routes/empleado.router.js';
 import marcaEquipoExtendRouter from '../../routes/marcaEquipo.router.js';
 import ModeloEquipoRouter from '../../routes/modeloEquipo.router.js';
+import viewsRouter from '../../routes/views.router.js';
 
 export default function configureExpress(app) {
   app.use(cors());
@@ -52,6 +53,7 @@ export default function configureExpress(app) {
     res.send({ status: 200, message: 'Logger test' })
   })
 
+  //APIS
   const equiposInformaticos = new equiposInformaticosExtendRouter();
   const empleados = new empleadoExtendRouter();
   const marcaEquipo = new marcaEquipoExtendRouter();
@@ -62,13 +64,13 @@ export default function configureExpress(app) {
   app.use("/api/empleados", empleados.getRouter());
 
   //routes here, before *
-  app.get('/', (req, res) => {
-    res.status(200).render("index");
-  });
+  //VISTAS
+  const vistas = new viewsRouter();
+  app.use("/", vistas.getRouter());
 
-  app.get('*', (req, res) => {
-    req.logger.error('error 404 - PAGE NOT FOUND')
-    res.status(404).render("error404");
-  });
+  // app.get('*', (req, res) => {
+  //   req.logger.error('error 404 - PAGE NOT FOUND')
+  //   res.status(404).render("error404");
+  // });
 
 }
