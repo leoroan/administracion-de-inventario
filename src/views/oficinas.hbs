@@ -6,21 +6,29 @@
       {{> menu}}
     </div>
 
-    {{!-- <div class="row row-cols-1 row-cols-3 g-4 mt-5">
+    <h5>Total de oficinas en esta ubicacion: {{totalOficinas}}</h5>
+
+    <div class="row row-cols-1 row-cols-3 g-4 mt-5">
       {{#each oficinas}}
       <div class="col">
         <a href="/{{this.dataValues.id}}" class="btn ">
-          <div class="card w-75 shadow border-1">
-            <img src="/assets/edificio.svg" class="card-img-top" alt="imagen simbolica de un edificio">
+          <div class="card shadow border-1">
+            <img src="/assets/oficina.jpg" class="card-img-top" alt="imagen simbolica de una oficina">
             <div class="card-body">
               <h5 class="card-title">{{this.dataValues.nombre}}</h5>
-              <p class="card-text"> CALLE {{this.dataValues.calle}}, NRO:{{this.dataValues.altura}} .</p>
+              <p class="card-text">
+              <ul class="list-group">
+                <li class="list-group-item">Telefono: {{this.dataValues.telefono}}</li>
+                <li class="list-group-item">Email: {{this.dataValues.email}}</li>
+                <li class="list-group-item">Descripcion: {{this.dataValues.descripcion}}</li>
+              </ul>
+              </p>
             </div>
           </div>
         </a>
       </div>
       {{/each}}
-    </div> --}}
+    </div>
 
   </div>
 </main>

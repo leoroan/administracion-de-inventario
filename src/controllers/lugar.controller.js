@@ -1,5 +1,5 @@
 import { devLogger } from '../config/logs/logger.config.js';
-import { lugarService } from '../services/repository/services.js';
+import { lugarService, oficinaService } from '../services/repository/services.js';
 
 export async function crearLugar(req, res) {
   const obj = req.body;
@@ -87,6 +87,26 @@ export async function restaurarlugar(req, res) {
   const lugarId = req.params.id;
   try {
     const lugar = await lugarService.restoreLugarById(lugarId)
+    return res.sendSuccess(lugar);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
+export async function agregarOficinaAlugar(req, res) {
+  const lugarId = req.params.lugarId;
+  const oficinaId = req.params.oficinaId;
+  try {
+    const lugar = await lugarService.getLugarById(lugarId);
+    if (!lugar) {
+      return res.sendClientError('Place not found');
+    }
+    const oficina = await oficinaService.getOficinaById(oficinaId);
+    if (!oficina) {
+      return res.sendClientError('Office not found');
+    }
+    await lugar.addOficina(oficina)
     return res.sendSuccess(lugar);
   } catch (error) {
     devLogger.error(error);

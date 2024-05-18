@@ -7,13 +7,18 @@ import {
   obtenerLugarBorradoPorId,
   actualizarlugar,
   eliminarlugar,
-  restaurarlugar
+  restaurarlugar,
+  agregarOficinaAlugar
 } from '../controllers/lugar.controller.js'
 
 export default class LugarRouter extends CustomRouter {
   init() {
     this.post('/', ["PUBLIC"], async (req, res) => {
       crearLugar(req, res);
+    });
+
+    this.post('/addOficina/:lugarId/:oficinaId', ["PUBLIC"], async (req, res) => {
+      agregarOficinaAlugar(req, res);
     });
 
     this.get('/:id', ["PUBLIC"], async (req, res) => {

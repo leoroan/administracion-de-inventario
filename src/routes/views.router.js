@@ -56,13 +56,17 @@ export default class viewsRouter extends CustomRouter {
     });
 
     this.get('/main/places/:id', ["PUBLIC"], async (req, res) => {
-      const lugar = await lugarService.getAllLugares();
+      const lugarId = req.params.id
+      const lugar = await lugarService.getLugarById(lugarId);
+      const totalOficinas = lugar.dataValues.Oficinas.length
+      console.log(lugar.dataValues.Oficinas)
       res.render("oficinas", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
         fileJs: "empleados.view.js",
         title: "Inventario MT - main",
-        lugar: lugar,
+        oficinas: lugar.dataValues.Oficinas,
+        totalOficinas: totalOficinas,
         currentPath: req.path
         // user: req.session.user || req.user,
       });
