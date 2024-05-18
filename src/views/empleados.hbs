@@ -6,7 +6,6 @@
       {{> menu}}
     </div>
 
-
     <ul class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 my-4">
       <table class="table table-striped table-hover text-center">
         <thead class='table-dark'>
@@ -30,11 +29,14 @@
             <td>{{this.dataValues.dni}}</td>
             <td>
               {{#if (eq this.dataValues.Oficina null)}}
-              <div class="text-center">
-                <i class="bi bi-building-add"></i>
+              <div class="">
+                <a href="/main/employees/addsToOffice/?userId={{this.dataValues.id}}" class="btn icon-link icon-link-hover"><i
+                    class="bi bi-building-add"></i></a>
               </div>
-              {{/if}}
+              {{else}}
               {{!-- {{this.dataValues.Oficina}} --}}
+              <p>tiene ofi</p>
+              {{/if}}
             </td>
           </tr>
           <tr>
@@ -70,12 +72,6 @@
                           {{this.id}}
                           {{/each}}
                         </p>
-                      </div>
-                    </div>
-                    <div class="card w-50 text-center border-info border-3">
-                      <div class="card-body">
-                        <h6 class="card-title">Precio</h6>
-                        <p class="card-text">{{this.dataValues.precio}}</p>
                       </div>
                     </div>
                   </div>

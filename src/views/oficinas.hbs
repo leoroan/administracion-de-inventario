@@ -6,7 +6,7 @@
       {{> menu}}
     </div>
 
-    <h5>Total de oficinas en esta ubicacion: {{totalOficinas}}</h5>
+    <h5>Total de oficinas en esta ubicacion: {{count oficinas}}</h5>
 
     <div class="row row-cols-1 row-cols-3 g-4 mt-5">
       {{#each oficinas}}
@@ -18,9 +18,13 @@
               <h5 class="card-title">{{this.dataValues.nombre}}</h5>
               <p class="card-text">
               <ul class="list-group">
-                <li class="list-group-item">Telefono: {{this.dataValues.telefono}}</li>
-                <li class="list-group-item">Email: {{this.dataValues.email}}</li>
-                <li class="list-group-item">Descripcion: {{this.dataValues.descripcion}}</li>
+                <li class="list-group-item"><span class="fw-bold">Telefono:</span> {{this.dataValues.telefono}}</li>
+                <li class="list-group-item"><span class="fw-bold">Email:</span> {{this.dataValues.email}}</li>
+                <li class="list-group-item fs-4">
+                  <span class=""><i class="bi bi-person-arms-up ms-2"></i><span class="me-2"> {{count this.dataValues.Empleados}}</span></span>
+                  <span class=""><i class="bi bi-pc-display ms-2"></i><span class="me-2"> {{count this.dataValues.EquipoInformaticos}}</span></span>
+                  <span class=""><i class="bi bi-building-fill-down ms-2"></i><span class="me-2"> {{count this.dataValues.Dependencias}}</span></span>
+                </li> 
               </ul>
               </p>
             </div>

@@ -38,7 +38,7 @@ export default class DaoService {
 
   async getById(id) {
     try {
-      const crudService = await this.model.findByPk(id, { include: { all: true } });
+      const crudService = await this.model.findByPk(id, { include: { all: true, nested: true } });
       if (!crudService) {
         throw new CustomError(404, 'Elemento no encontrado');
       }

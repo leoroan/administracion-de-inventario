@@ -99,13 +99,7 @@ export async function agregarOficinaAlugar(req, res) {
   const oficinaId = req.params.oficinaId;
   try {
     const lugar = await lugarService.getLugarById(lugarId);
-    if (!lugar) {
-      return res.sendClientError('Place not found');
-    }
     const oficina = await oficinaService.getOficinaById(oficinaId);
-    if (!oficina) {
-      return res.sendClientError('Office not found');
-    }
     await lugar.addOficina(oficina)
     return res.sendSuccess(lugar);
   } catch (error) {

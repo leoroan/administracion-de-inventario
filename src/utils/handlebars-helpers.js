@@ -15,4 +15,8 @@ Handlebars.registerHelper('eq', function (a, b) {
   return a === b;
 });
 
+Handlebars.registerHelper('count', function(array) {
+  return array.length;
+});
+
 export default Handlebars;

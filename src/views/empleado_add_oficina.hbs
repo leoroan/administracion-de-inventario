@@ -1,0 +1,28 @@
+<main class="flex-grow-1">
+
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1>Agregando al empleado a una oficina</h1>
+    </div>
+
+    <h2>seleccione en que edificio está la oficina a la que pertenece el empleado</h2>
+
+    <div class="row row-cols-1 row-cols-3 g-4 mt-5">
+      {{#each lugares}}
+      <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{this.dataValues.nombre}}</h5>
+              <p class="card-text">CALLE {{this.dataValues.calle}}, NRO:{{this.dataValues.altura}} </p>
+              <a href="/adds/places/{{this.dataValues.id}}/{{../empleadoId}}" class="btn btn-primary">Seleccionar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+  </div>
+</main>
+<script src="/js/{{fileJs}}"></script>

@@ -7,7 +7,9 @@ import {
   obtenerOficinaBorradoPorId,
   actualizarOficina,
   eliminarOficina,
-  restaurarOficina
+  restaurarOficina,
+  agregarEmpleadoAoficina,
+  agregarOficinaAoficina
 } from '../controllers/oficina.controller.js'
 
 export default class OficinaRouter extends CustomRouter {
@@ -15,6 +17,11 @@ export default class OficinaRouter extends CustomRouter {
     this.post('/', ["PUBLIC"], async (req, res) => {
       crearOficina(req, res);
     });
+
+    this.post('/O2O/:unaOficinaId/:otraOficinaId', ["PUBLIC"], async (req, res) => {
+      agregarOficinaAoficina(req, res);
+    });
+    
 
     this.get('/:id', ["PUBLIC"], async (req, res) => {
       obtenerOficina(req, res);

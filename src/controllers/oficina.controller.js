@@ -1,5 +1,5 @@
 import { devLogger } from '../config/logs/logger.config.js';
-import { oficinaService } from '../services/repository/services.js';
+import { empleadoService, oficinaService } from '../services/repository/services.js';
 
 export async function crearOficina(req, res) {
   const obj = req.body;
@@ -88,6 +88,34 @@ export async function restaurarOficina(req, res) {
   try {
     const Oficina = await oficinaService.restoreOficinaById(OficinaId)
     return res.sendSuccess(Oficina);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
+export async function agregarEmpleadoAoficina(req, res) {
+  const oficinaId = req.params.oficinaId;
+  const empleadoId = req.params.empleadoId;
+  try {
+    const oficina = await oficinaService.getOficinaById(oficinaId);
+    const empleado = await empleadoService.getEmpleadoById(empleadoId);
+    await oficina.addEmpleado(empleado)
+    return res.sendSuccess(oficina);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
+export async function agregarOficinaAoficina(req, res) {
+  const unaOficinaId = req.params.unaOficinaId;
+  const otraOficinaId = req.params.otraOficinaId;
+  try {
+    const unaOficina = await oficinaService.getOficinaById(unaOficinaId);
+    const otraOficina = await oficinaService.getOficinaById(otraOficinaId);
+    await unaOficina.addDependencias(otraOficina)
+    return res.sendSuccess(unaOficina);
   } catch (error) {
     devLogger.error(error);
     return res.sendInternalServerError(error);
