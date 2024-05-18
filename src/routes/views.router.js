@@ -42,27 +42,12 @@ export default class viewsRouter extends CustomRouter {
       });
     });
 
-    this.get('/main/employees/addsToOffice/', ["PUBLIC"], async (req, res) => {
-      const empleadoId = req.query.userId;
-      const lugares = await lugarService.getAllLugares();
-      res.render("empleado_add_oficina", {
-        fileFavicon: "favicon.ico",
-        fileCss: "styles.css",
-        fileJs: "empleados.view.js",
-        title: "Inventario MT - main",
-        empleadoId: empleadoId,
-        lugares: lugares,
-        currentPath: req.path
-        // user: req.session.user || req.user,
-      });
-    });
-
     this.get('/main/places', ["PUBLIC"], async (req, res) => {
       const lugares = await lugarService.getAllLugares();
       res.render("lugares", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
-        fileJs: "empleados.view.js",
+        // fileJs: "lugares.view.js",
         title: "Inventario MT - main",
         lugares: lugares,
         currentPath: req.path
@@ -79,22 +64,6 @@ export default class viewsRouter extends CustomRouter {
         fileJs: "empleados.view.js",
         title: "Inventario MT - main",
         oficinas: lugar.dataValues.Oficinas,
-        currentPath: req.path
-        // user: req.session.user || req.user,
-      });
-    });
-
-    this.get('/adds/places/:id/:uid', ["PUBLIC"], async (req, res) => {
-      const lugarId = req.params.id;
-      const empleadoId = req.params.uid;
-      const lugar = await lugarService.getLugarById(lugarId);
-      res.render("empleado_add_oficina2", {
-        fileFavicon: "favicon.ico",
-        fileCss: "styles.css",
-        fileJs: "empleados.view.js",
-        title: "Inventario MT - main",
-        oficinas: lugar.dataValues.Oficinas,
-        empleadoId: empleadoId,
         currentPath: req.path
         // user: req.session.user || req.user,
       });

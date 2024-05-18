@@ -28,6 +28,9 @@ export default class EmpleadoDao {
   async restoreEmpleadoById(id) {
     return await daoService.restoreById(id);
   }
+  async insertInBulk(obj) {
+    return await daoService.bulkCreate(obj);
+  }
 }
 
 // async createEmpleado(obj) {

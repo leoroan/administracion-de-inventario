@@ -120,3 +120,14 @@ export async function restaurarEmpleado(req, res) {
     return res.sendInternalServerError(error);
   }
 }
+
+export async function agregarEnBloque(req, res) {
+  const empleados = req.body;
+  try {
+    const nuevosEmpleados = await empleadoService.insertInBulk(empleados);
+    return res.sendSuccess(nuevosEmpleados);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}

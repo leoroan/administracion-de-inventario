@@ -8,7 +8,8 @@ import {
   obtenerEmpleados,
   obtenerEmpleadoBorradoPorDni,
   obtenerEmpleadosBorrados,
-  restaurarEmpleado
+  restaurarEmpleado,
+  agregarEnBloque
 } from '../controllers/empleado.controller.js';
 
 export default class empleadoExtendRouter extends CustomRouter {
@@ -16,6 +17,14 @@ export default class empleadoExtendRouter extends CustomRouter {
 
     this.post('/', ["PUBLIC"], async (req, res) => {
       crearEmpleado(req, res);
+    });
+
+    this.post('/add/:empId/:eqId', ["PUBLIC"], async (req, res) => {
+      asignarEquipoAempleado(req, res);
+    });
+
+    this.post('/bulkCreate', ["PUBLIC"], async (req, res) => {
+      agregarEnBloque(req, res);
     });
 
     this.get('/:id', ["PUBLIC"], async (req, res) => {
@@ -46,9 +55,6 @@ export default class empleadoExtendRouter extends CustomRouter {
       eliminarEmpleado(req, res);
     });
 
-    this.post('/add/:empId/:eqId', ["PUBLIC"], async (req, res) => {
-      asignarEquipoAempleado(req, res);
-    });
   }
 }
 

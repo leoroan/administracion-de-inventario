@@ -146,6 +146,15 @@ export default class DaoService {
       throw CustomError.handleSequelizeError(error, `No se encontró nada borrado con el ID ${id}`);
     }
   }
+
+  async bulkCreate(users) {
+    try {
+      const crudService = await this.model.bulkCreate(users);
+      return crudService;
+    } catch (error) {
+      throw CustomError.handleSequelizeError(error, `No se pudo crear en lote`);
+    }
+  }
 }
 
 

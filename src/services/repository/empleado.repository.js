@@ -26,4 +26,7 @@ export default class EmpleadoRepository {
   restoreEmpleadoById = async (id) => {
     return await this.dao.restoreEmpleadoById(id);
   }
+  insertInBulk = async (obj) => {
+    return await this.dao.insertInBulk(obj);
+  }
 }
