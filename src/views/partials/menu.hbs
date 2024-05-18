@@ -2,16 +2,16 @@
   <ul>
     {{!-- Si esta condición es falsa (es decir, si currentPath no es "/main/employees"), el bloque interno se renderizará. --}}
     {{#unless (eq currentPath "/main/employees")}} 
-    <a href="/main/employees"><button type="button" class="btn btn-primary btn-sm mx-1">ver
-        empleados</button></a>
+    <a href="/main/employees"><button type="button" class="btn btn-primary btn-sm mx-1">VER
+        EMPLEADOS</button></a>
     {{/unless}}
     {{#unless (eq currentPath "/main/inventory")}}
-    <a href="/main/inventory"><button type="button" class="btn btn-primary btn-sm mx-1">ver
-        equipos</button></a>
+    <a href="/main/inventory"><button type="button" class="btn btn-primary btn-sm mx-1">VER
+        EQUIPOS</button></a>
     {{/unless}}
     {{#unless (eq currentPath "/main/places")}}
-    <a href="/main/places"><button type="button" class="btn btn-primary btn-sm mx-1">ver
-        Lugares</button></a>
+    <a href="/main/places"><button type="button" class="btn btn-primary btn-sm mx-1">VER
+        LUGARES</button></a>
     {{/unless}}
   </ul>
 </nav>

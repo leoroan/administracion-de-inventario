@@ -24,7 +24,8 @@ export default class viewsRouter extends CustomRouter {
         title: "Inventario MT - main",
         equiposInformaticos: equiposInformaticos,
         currentPath: req.path,
-        estado: estado
+        estado: estado,
+        rol: "admin"
         // user: req.session.user || req.user,
       });
     });
@@ -37,7 +38,8 @@ export default class viewsRouter extends CustomRouter {
         fileJs: "empleados.view.js",
         title: "Inventario MT - main",
         empleados: empleados,
-        currentPath: req.path
+        currentPath: req.path,
+        rol: "admin"
         // user: req.session.user || req.user,
       });
     });
@@ -50,7 +52,8 @@ export default class viewsRouter extends CustomRouter {
         // fileJs: "lugares.view.js",
         title: "Inventario MT - main",
         lugares: lugares,
-        currentPath: req.path
+        currentPath: req.path,
+        rol: "admin"
         // user: req.session.user || req.user,
       });
     });

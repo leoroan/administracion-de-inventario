@@ -6,11 +6,13 @@
       {{> menu}}
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mt-2">
+    <div class="d-flex justify-content-between align-items-center">
       {{> menu_equipos}}
       <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
+      {{#if (eq rol "admin")}}
+      <a class="btn" href=""><i class="bi bi-plus-circle-fill fs-2 text-success">NUEVO</i></a>
+      {{/if}}
     </div>
-
 
     <ul class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 my-2">
       <table class="table table-striped table-hover text-center">
@@ -23,9 +25,12 @@
             <th scope="col">TIPO</th>
             <th scope="col">USUARIO</th>
             <th scope="col">OFICINA </th>
+            {{#if (eq rol "admin")}}
+            <th>OPC</th>
+            {{/if}}
           </tr>
         </thead>
-        <tbody class='table-group-divider' id="tableBody">
+        <tbody class='table-group-divider fs-4' id="tableBody">
           {{#each equiposInformaticos}}
           {{#if (eq this.dataValues.estado ../estado)}}
           <tr data-bs-toggle="collapse" data-bs-target="#collapse{{@index}}" aria-expanded="false"
@@ -40,6 +45,10 @@
               {{#each this.dataValues.Oficinas}}
               <span>{{this.nombre}}</span>
               {{/each}}
+            </td>
+            <td>
+              <i class="bi bi-pencil-square text-warning"></i>
+              <i class="bi bi-x-circle text-danger"></i>
             </td>
           </tr>
           <tr>

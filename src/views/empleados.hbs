@@ -2,12 +2,17 @@
 
   <div class="container">
     <div class="d-flex justify-content-between align-items-center">
-      <h1>Empleados del MT</h1>
+      <h1>EMPLEADOS DEL MT</h1>
       {{> menu}}
     </div>
 
     <body>
-      <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
+      <div class="d-flex justify-content-between align-items-center">
+        <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
+        {{#if (eq rol "admin")}}
+        <a class="btn" href=""><i class="bi bi-plus-circle-fill fs-2 text-success">NUEVO</i></a>
+        {{/if}}
+      </div>
 
       <ul class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 my-4 table-responsive">
         <table class="table align-middle table-striped table-hover text-center">
@@ -19,10 +24,13 @@
               <th scope="col">img</th>
               <th scope="col">EMPLEADO</th>
               <th scope="col">DNI</th>
-              {{!-- <th scope="col">OFICINA </th> --}}
+              <th scope="col">OFICINA </th>
+              {{#if (eq rol "admin")}}
+              <th>OPC</th>
+              {{/if}}
             </tr>
           </thead>
-          <tbody class='table-group-divider' id="tableBody">
+          <tbody class='table-group-divider fs-4' id="tableBody">
             {{#each empleados}}
             <tr data-bs-toggle="collapse" data-bs-target="#collapse{{@index}}" aria-expanded="false"
               aria-controls="collapse{{@index}}">
@@ -32,17 +40,21 @@
               {{!-- <td>{{formatDate this.dataValues.updatedAt}}</td> --}}
               <td>{{this.dataValues.nombre}} {{this.dataValues.apellido}}</td>
               <td>{{this.dataValues.dni}}</td>
-              {{!-- <td>
+              <td>
                 {{#if (eq this.dataValues.Oficina null)}}
-                <div class="">
-                  <a href="/main/employees/addsToOffice/?userId={{this.dataValues.id}}"
-                    class="btn icon-link icon-link-hover"><i class="bi bi-building-add"></i></a>
-                </div>
+                <p>sin oficina asignada</p>
                 {{else}}
                 {{this.dataValues.Oficina}}
                 <p>tiene ofi</p>
                 {{/if}}
-              </td> --}}
+              </td>
+              {{#if (eq ../rol "admin")}}
+              <td>
+                <i class="bi bi-pencil-square text-warning"></i>
+                <i class="bi bi-x-circle text-danger"></i>
+              </td>
+
+              {{/if}}
 
             </tr>
             <tr>
