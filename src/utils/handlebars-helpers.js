@@ -7,7 +7,7 @@ Handlebars.registerHelper('formatDate', function (dateString) {
 });
 
 Handlebars.registerHelper('checkIfDataIsNull', function (data) {
-  return data === null ? 'sin datos' : data;
+  return data === null ? 'NO TIENE' : data;
 });
 
 // Ayudante para verificar si dos valores son iguales

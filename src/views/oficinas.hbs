@@ -2,46 +2,89 @@
 
   <div class="container">
     <div class="d-flex justify-content-between align-items-center">
-      <h1>Subsecretarías y otras del MT</h1>
+      <h1>OFICINAS DEL MT</h1>
       {{> menu}}
     </div>
 
-    <div class="d-flex justify-content-end align-items-center">
-      <h5>Total de oficinas en esta ubicacion: {{count oficinas}}</h5>
-    </div>
+    <body>
+      <div class="d-flex justify-content-between align-items-center">
+        <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
+        {{#if (eq rol "admin")}}
+        <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarOficinaModal"><i
+            class="bi bi-plus-circle-fill fs-3 text-success">NUEVO</i></a>
+        {{> modal_nuevo_empleado}}
+        {{/if}}
+      </div>
 
-    <div class="d-flex justify-content-between align-items-center">
-      <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
-      {{#if (eq rol "admin")}}
-      <a class="btn" href=""><i class="bi bi-plus-circle-fill fs-3 text-success">NUEVO</i></a>
-      {{/if}}
-    </div>
+      <ul class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 my-4 table-responsive">
+        <table class="table align-middle table-striped table-hover text-center">
+          <thead class='table-dark'>
+            <tr>
+              {{!-- <th scope="col">ACTUALIZADO</th> --}}
+              <th scope="col">NOMBRE</th>
+              <th scope="col">LUGAR</th>
+              {{#if (eq rol "admin")}}
+              <th>OPC</th>
+              {{/if}}
+            </tr>
+          </thead>
+          <tbody class='table-group-divider fs-4' id="tableBody">
+            {{#each oficinas}}
+            <tr data-bs-toggle="collapse" data-bs-target="#collapse{{@index}}" aria-expanded="false"
+              aria-controls="collapse{{@index}}">
+              <td>{{this.dataValues.nombre}}</td>
+              <td>
+                {{#if (eq this.dataValues.Lugar null)}}
+                <p>sin edificio asignado</p>
+                {{else}}
+                {{this.dataValues.Lugar.nombre}}
+                {{/if}}
+              </td>
+              {{#if (eq ../rol "admin")}}
+              <td>
+                <i class="bi bi-pencil-square text-warning"></i>
+                <a href="/asd"><i class="bi bi-x-circle text-danger"></i></a>
+              </td>
 
-    <ul class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 my-4 table-responsive">
-      <table class="table align-middle table-striped table-hover text-center">
-        <tbody class='table-group-divider' id="tableBody">
-          {{#each oficinas}}
-          <tr data-bs-toggle="collapse" data-bs-target="#collapse{{@index}}" aria-expanded="false"
-            aria-controls="collapse{{@index}}">
-            {{!-- <th scope="row">{{@index}}</th> --}}
-            <td> <img class="img-fluid" src="/assets/oficina.jpg" alt="default user image"></td>
-            {{!-- <td>{{formatDate this.dataValues.updatedAt}}</td> --}}
-            <td class="fs-1">
-              {{this.dataValues.nombre}}
-              <li class="list-group-item fs-4">
-                <span class=""><i class="bi bi-person-arms-up ms-2"></i><span class="me-2"> {{count
-                    this.dataValues.Empleados}}</span></span>
-                <span class=""><i class="bi bi-pc-display ms-2"></i><span class="me-2"> {{count
-                    this.dataValues.EquipoInformaticos}}</span></span>
-                <span class=""><i class="bi bi-building-fill-down ms-2"></i><span class="me-2"> {{count
-                    this.dataValues.Dependencias}}</span></span>
-              </li>
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </ul>
+              {{/if}}
+
+            </tr>
+            <tr>
+              <td colSpan="6" class="p-0">
+                <div class="collapse" id="collapse{{@index}}">
+                  <div class="card card-body">
+                    <div class="card-group mb-2">
+                      <div class="card w-50 text-center border-secondary border-3">
+                        <div class="card-body">
+                          <h6 class="card-title">CANTIDAD DE EMPLEADOS</h6>
+                          <span class=""><i class="bi bi-person-arms-up ms-2"></i><span class="me-2"> {{count
+                              this.dataValues.Empleados}}</span></span>
+                        </div>
+                      </div>
+                      <div class="card w-50 text-center border-secondary border-3">
+                        <div class="card-body">
+                          <h6 class="card-title">CANTIDAD DE QUIPOS</h6>
+                          <span class=""><i class="bi bi-pc-display ms-2"></i><span class="me-2"> {{count
+                              this.dataValues.EquipoInformaticos}}</span></span>
+                        </div>
+                      </div>
+                      <div class="card w-50 text-center border-secondary border-3">
+                        <div class="card-body">
+                          <h6 class="card-title">CANTIDAD DE SUB OFICINAS</h6>
+                          <span class=""><i class="bi bi-building-fill-down ms-2"></i><span class="me-2"> {{count
+                              this.dataValues.Dependencias}}</span></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </ul>
+    </body>
 
   </div>
 </main>

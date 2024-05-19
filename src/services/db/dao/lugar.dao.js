@@ -14,10 +14,10 @@ export default class LugarDao {
     return await daoService.getById(id);
   }
   async updateLugar(id, updatedData) {
-    return await daoService.updateById(id, updatedData);
+    return await daoService.update(id, updatedData);
   }
   async deleteLugar(id) {
-    return await daoService.deleteById(id);
+    return await daoService.delete(id);
   }
   async findDeletedLugarByID(id) {
     return await daoService.findDeletedBy("id", id);

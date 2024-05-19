@@ -1,4 +1,4 @@
-import { equipoInformaticoService, empleadoService, lugarService } from "../services/repository/services.js";
+import { equipoInformaticoService, empleadoService, lugarService, oficinaService } from "../services/repository/services.js";
 import CustomRouter from "./custom/custom.router.js";
 
 export default class viewsRouter extends CustomRouter {
@@ -21,7 +21,7 @@ export default class viewsRouter extends CustomRouter {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
         fileJs: "inventario.view.js",
-        title: "Inventario MT - main",
+        title: "Inventario MT - equipos",
         equiposInformaticos: equiposInformaticos,
         currentPath: req.path,
         estado: estado,
@@ -36,8 +36,22 @@ export default class viewsRouter extends CustomRouter {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
         fileJs: "empleados.view.js",
-        title: "Inventario MT - main",
+        title: "Inventario MT - empleados",
         empleados: empleados,
+        currentPath: req.path,
+        rol: "admin"
+        // user: req.session.user || req.user,
+      });
+    });
+
+    this.get('/main/offices', ["PUBLIC"], async (req, res) => {
+      const oficinas = await oficinaService.getAllOficinas();
+      res.render("oficinas", {
+        fileFavicon: "favicon.ico",
+        fileCss: "styles.css",
+        fileJs: "oficinas.view.js",
+        title: "Inventario MT - oficinas",
+        oficinas: oficinas,
         currentPath: req.path,
         rol: "admin"
         // user: req.session.user || req.user,
@@ -50,7 +64,7 @@ export default class viewsRouter extends CustomRouter {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
         // fileJs: "lugares.view.js",
-        title: "Inventario MT - main",
+        title: "Inventario MT - edificios",
         lugares: lugares,
         currentPath: req.path,
         rol: "admin"
@@ -61,11 +75,11 @@ export default class viewsRouter extends CustomRouter {
     this.get('/main/places/:id', ["PUBLIC"], async (req, res) => {
       const lugarId = req.params.id;
       const lugar = await lugarService.getLugarById(lugarId);
-      res.render("oficinas", {
+      res.render("lugares2", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
         fileJs: "empleados.view.js",
-        title: "Inventario MT - main",
+        title: "Inventario MT - oficinas",
         oficinas: lugar.dataValues.Oficinas,
         currentPath: req.path,
         rol: "admin"
