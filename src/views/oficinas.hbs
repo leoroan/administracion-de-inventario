@@ -23,6 +23,7 @@
               {{!-- <th scope="col">ACTUALIZADO</th> --}}
               <th scope="col">NOMBRE</th>
               <th scope="col">LUGAR</th>
+              <th scope="col"></th>
               {{#if (eq rol "admin")}}
               <th>OPC</th>
               {{/if}}
@@ -30,9 +31,8 @@
           </thead>
           <tbody class='table-group-divider fs-4' id="tableBody">
             {{#each oficinas}}
-            <tr data-bs-toggle="collapse" data-bs-target="#collapse{{@index}}" aria-expanded="false"
-              aria-controls="collapse{{@index}}">
-              <td>{{this.dataValues.nombre}}</td>
+            <tr aria-expanded="false" aria-controls="collapse{{@index}}">
+              <td class="fs-5">{{this.dataValues.nombre}}</td>
               <td>
                 {{#if (eq this.dataValues.Lugar null)}}
                 <p>sin edificio asignado</p>
@@ -42,43 +42,18 @@
               </td>
               {{#if (eq ../rol "admin")}}
               <td>
+                <span class=""><i class="bi bi-person-arms-up ms-2"></i><span class="me-2"> {{count
+                    this.dataValues.Empleados}}</span></span>
+                <span class=""><i class="bi bi-pc-display ms-2"></i><span class="me-2"> {{count
+                    this.dataValues.EquipoInformaticos}}</span></span>
+                <span class=""><i class="bi bi-building-fill-down ms-2"></i><span class="me-2"> {{count
+                    this.dataValues.Dependencias}}</span></span>
+              </td>
+              <td>
                 <i class="bi bi-pencil-square text-warning"></i>
                 <a href="/asd"><i class="bi bi-x-circle text-danger"></i></a>
               </td>
-
               {{/if}}
-
-            </tr>
-            <tr>
-              <td colSpan="6" class="p-0">
-                <div class="collapse" id="collapse{{@index}}">
-                  <div class="card card-body">
-                    <div class="card-group mb-2">
-                      <div class="card w-50 text-center border-secondary border-3">
-                        <div class="card-body">
-                          <h6 class="card-title">CANTIDAD DE EMPLEADOS</h6>
-                          <span class=""><i class="bi bi-person-arms-up ms-2"></i><span class="me-2"> {{count
-                              this.dataValues.Empleados}}</span></span>
-                        </div>
-                      </div>
-                      <div class="card w-50 text-center border-secondary border-3">
-                        <div class="card-body">
-                          <h6 class="card-title">CANTIDAD DE QUIPOS</h6>
-                          <span class=""><i class="bi bi-pc-display ms-2"></i><span class="me-2"> {{count
-                              this.dataValues.EquipoInformaticos}}</span></span>
-                        </div>
-                      </div>
-                      <div class="card w-50 text-center border-secondary border-3">
-                        <div class="card-body">
-                          <h6 class="card-title">CANTIDAD DE SUB OFICINAS</h6>
-                          <span class=""><i class="bi bi-building-fill-down ms-2"></i><span class="me-2"> {{count
-                              this.dataValues.Dependencias}}</span></span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
             </tr>
             {{/each}}
           </tbody>
