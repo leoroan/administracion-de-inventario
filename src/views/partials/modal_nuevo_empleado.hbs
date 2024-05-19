@@ -1,0 +1,75 @@
+<!-- Modal -->
+<div class="modal fade" id="agregarEmpleadoModal" tabindex="-1" aria-labelledby="agregarEmpleadoModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="agregarEmpleadoModalLabel">Agregar nuevo empleado</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="empleadoForm" novalidate>
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+            <div class="invalid-feedback">
+              Por favor, ingrese un nombre.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" class="form-control" id="apellido" name="apellido" required>
+            <div class="invalid-feedback">
+              Por favor, ingrese un apellido.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="telefono" name="telefono" >
+          </div>
+
+          <div class="mb-3">
+            <label for="dni" class="form-label">DNI</label>
+            <input type="text" class="form-control" id="dni" name="dni">
+            <div class="invalid-feedback">
+              Por favor, ingrese un DNI válido.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="rol" class="form-label">Rol</label>
+            <select class="form-select" id="rol" name="rol" required>
+              <option value="" disabled selected>Seleccione un rol</option>
+              <option value="ministro">Ministro</option>
+              <option value="secretario">Secretario</option>
+              <option value="subsecretario">Subsecretario</option>
+              <option value="director">Director</option>
+              <option value="director_de_linea">Director de Línea</option>
+              <option value="empleado">Empleado</option>
+              <option value="no_definido">No definido</option>
+            </select>
+            <div class="invalid-feedback">
+              Por favor, seleccione un rol.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required value="@transporte.gba.gob.ar">
+            <div class="invalid-feedback">
+              Por favor, ingrese un email válido.
+            </div>
+          </div>
+
+
+          <button type="submit" class="btn btn-primary">Crear Empleado</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

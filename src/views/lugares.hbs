@@ -6,11 +6,17 @@
       {{> menu}}
     </div>
 
+    <div class="d-flex justify-content-end align-items-center">
+      {{#if (eq rol "admin")}}
+      <a class="btn" href=""><i class="bi bi-plus-circle-fill fs-3 text-success">NUEVO</i></a>
+      {{/if}}
+    </div>
+
     <div class="row row-cols-1 row-cols-3 g-4 mt-5">
       {{#each lugares}}
       <div class="col">
         <a href="/main/places/{{this.dataValues.id}}" class="btn ">
-          <div class="card w-75 shadow border-1">
+          <div class="card shadow border-1">
             <img src="/assets/edificio.svg" class="card-img-top" alt="imagen simbolica de un edificio">
             <div class="card-body">
               <h5 class="card-title">{{this.dataValues.nombre}}</h5>
@@ -24,4 +30,5 @@
 
   </div>
 </main>
-{{!-- <script src="/js/{{fileJs}}"></script> --}}
+{{!--
+<script src="/js/{{fileJs}}"></script> --}}

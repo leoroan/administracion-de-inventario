@@ -5,11 +5,17 @@
       <h1>Subsecretarías y otras del MT</h1>
       {{> menu}}
     </div>
+
     <div class="d-flex justify-content-end align-items-center">
       <h5>Total de oficinas en esta ubicacion: {{count oficinas}}</h5>
     </div>
 
-    <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
+    <div class="d-flex justify-content-between align-items-center">
+      <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
+      {{#if (eq rol "admin")}}
+      <a class="btn" href=""><i class="bi bi-plus-circle-fill fs-3 text-success">NUEVO</i></a>
+      {{/if}}
+    </div>
 
     <ul class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 my-4 table-responsive">
       <table class="table align-middle table-striped table-hover text-center">

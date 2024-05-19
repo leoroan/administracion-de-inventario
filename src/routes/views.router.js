@@ -67,7 +67,8 @@ export default class viewsRouter extends CustomRouter {
         fileJs: "empleados.view.js",
         title: "Inventario MT - main",
         oficinas: lugar.dataValues.Oficinas,
-        currentPath: req.path
+        currentPath: req.path,
+        rol: "admin"
         // user: req.session.user || req.user,
       });
     });

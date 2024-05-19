@@ -10,7 +10,9 @@
       <div class="d-flex justify-content-between align-items-center">
         <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
         {{#if (eq rol "admin")}}
-        <a class="btn" href=""><i class="bi bi-plus-circle-fill fs-2 text-success">NUEVO</i></a>
+        <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal"><i
+            class="bi bi-plus-circle-fill fs-3 text-success">NUEVO</i></a>
+        {{> modal_nuevo_empleado}}
         {{/if}}
       </div>
 
