@@ -1,4 +1,4 @@
-import { equipoInformaticoService, empleadoService, lugarService, oficinaService } from "../services/repository/services.js";
+import { equipoInformaticoService, empleadoService, lugarService, oficinaService, marcaEquipoService, modeloEquipoService } from "../services/repository/services.js";
 import CustomRouter from "./custom/custom.router.js";
 
 export default class viewsRouter extends CustomRouter {
@@ -17,6 +17,7 @@ export default class viewsRouter extends CustomRouter {
     this.get('/main/inventory', ["PUBLIC"], async (req, res) => {
       const estado = req.query.estado || 'asignado';
       const equiposInformaticos = await equipoInformaticoService.getAllEquipoInformaticos();
+      const marcas = await marcaEquipoService.getAllMarcaEquipos();
       res.render("inventario", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
@@ -25,7 +26,9 @@ export default class viewsRouter extends CustomRouter {
         equiposInformaticos: equiposInformaticos,
         currentPath: req.path,
         estado: estado,
+        marcas: marcas,
         rol: "admin"
+        // user: req.session.user || req.user,
         // user: req.session.user || req.user,
       });
     });
@@ -78,7 +81,7 @@ export default class viewsRouter extends CustomRouter {
       res.render("lugares2", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
-        fileJs: "empleados.view.js",
+        // fileJs: "empleados.view.js",
         title: "Inventario MT - oficinas",
         oficinas: lugar.dataValues.Oficinas,
         currentPath: req.path,

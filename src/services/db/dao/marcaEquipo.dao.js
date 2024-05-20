@@ -27,4 +27,8 @@ export default class MarcaEquipoDao {
   async restoreMarcaEquipoById(id) {
     return await daoService.restoreById(id);
   }
+  async getMarcaEquipoByname(name) {
+    return await MarcaEquipo.findOne({ where: { nombre: name } });
+  }
+
 }

@@ -93,3 +93,15 @@ export async function restaurarModeloEquipo(req, res) {
     return res.sendInternalServerError(error);
   }
 }
+
+export async function obtenerModelosPorMarca(req, res) {
+  try {
+    const brand = req.params.brand;
+    const modelosEquipos = await modeloEquipoService.getModelosByBrand(brand);
+    return res.sendSuccess(modelosEquipos);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+
+}

@@ -27,28 +27,50 @@ document.addEventListener("DOMContentLoaded", function () {
         jsonData[key] = value;
       });
 
-      fetch("/api/empleados/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(jsonData)
-      })
-        .then(response => { console.log(response);
-          if (!response.ok) {
-            throw new Error("Error al crear empleado");
-          }
-          return response.json();
-        })
-        .then(data => {
-          // Manejar la respuesta de la API si es necesario
-          console.log("Empleado creado:", data);
-          // Aquí podrías redirigir a una página de éxito o hacer cualquier otra acción necesaria
-        })
-        .catch(error => {
-          console.error("Error:", error.message);
-          // Aquí podrías mostrar un mensaje de error al usuario o realizar otras acciones de manejo de errores
-        });
+      const formattedData = Object.entries(jsonData).map(([key, value]) => `${key}: ${value}`).join('<br>');
+
+      Swal.fire({
+        title: '¿Está seguro de enviar el formulario?',
+        html: `Los siguientes datos serán enviados:<br><br>${formattedData}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, enviar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch("/api/empleados/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(jsonData)
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("Error al crear empleado");
+              }
+              return response.json();
+            })
+            .then(data => {
+              Swal.fire({
+                title: 'Empleado creado exitosamente',
+                icon: 'success'
+              }).then(() => {
+                window.location.reload();
+              });
+            })
+            .catch(error => {
+              Swal.fire({
+                title: 'Error',
+                text: 'Error al crear el empleado',
+                icon: 'error'
+              });
+            });
+        } else {
+          form.reset();
+          Swal.fire('Envío cancelado', '', 'info');
+        }
+      });
     }
 
     form.classList.add("was-validated");

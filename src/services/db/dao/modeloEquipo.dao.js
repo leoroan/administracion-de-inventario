@@ -1,4 +1,5 @@
 import { ModeloEquipo } from '../models/ModeloEquipo.model.js';
+import { MarcaEquipo } from '../models/MarcaEquipo.model.js';
 import DaoService from './helper/DAO.service.js';
 
 const daoService = new DaoService(ModeloEquipo);
@@ -26,5 +27,8 @@ export default class ModeloEquipoDao {
   }
   async restoreModeloEquipoById(id) {
     return await daoService.restoreById(id);
+  }
+  async getModelosByBrand(brandName) {
+    return await ModeloEquipo.findAll({ include: [{ model: MarcaEquipo, where: { nombre: brandName } }] });
   }
 }

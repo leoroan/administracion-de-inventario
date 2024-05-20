@@ -10,10 +10,10 @@ export default class MarcaEquipoRepository {
   }
   getAllMarcaEquipos = async () => {
     return await this.dao.getAllMarcaEquipos();
-  }  
+  }
   updateMarcaEquipo = async (id, updatedData) => {
     return await this.dao.updateMarcaEquipo(id, updatedData);
-  }  
+  }
   deleteMarcaEquipo = async (id) => {
     return await this.dao.deleteMarcaEquipo(id);
   }
@@ -25,5 +25,8 @@ export default class MarcaEquipoRepository {
   }
   restoreMarcaEquipoById = async (id) => {
     return await this.dao.restoreMarcaEquipoById(id);
+  }
+  getMarcaEquipoByname = async (name) => {
+    return await this.dao.getMarcaEquipoByname(name);
   }
 }

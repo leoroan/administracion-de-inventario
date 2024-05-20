@@ -10,20 +10,23 @@ export default class ModeloEquipoRepository {
   }
   getAllModeloEquipos = async () => {
     return await this.dao.getAllModeloEquipos();
-  }  
+  }
   updateModeloEquipo = async (id, updatedData) => {
     return await this.dao.updateModeloEquipo(id, updatedData);
-  }  
+  }
   deleteModeloEquipo = async (id) => {
     return await this.dao.deleteModeloEquipo(id);
   }
-  findDeletedModeloEquipoByDni = async (dni) => {
-    return await this.dao.findDeletedModeloEquipoByDni(dni);
+  findDeletedModeloEquipoByID = async (dni) => {
+    return await this.dao.findDeletedModeloEquipoByID(dni);
   }
   getAllDeletedModeloEquipos = async () => {
     return await this.dao.getAllDeletedModeloEquipos();
   }
   restoreModeloEquipoById = async (id) => {
     return await this.dao.restoreModeloEquipoById(id);
+  }
+  getModelosByBrand = async (brandName) => {
+    return await this.dao.getModelosByBrand(brandName);
   }
 }

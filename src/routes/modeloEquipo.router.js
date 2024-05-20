@@ -7,7 +7,8 @@ import {
   obtenerModeloEquipoBorradoPorId,
   actualizarModeloEquipo,
   eliminarModeloEquipo,
-  restaurarModeloEquipo
+  restaurarModeloEquipo,
+  obtenerModelosPorMarca
 } from '../controllers/modeloEquipo.controller.js'
 
 export default class ModeloEquipoRouter extends CustomRouter {
@@ -28,12 +29,16 @@ export default class ModeloEquipoRouter extends CustomRouter {
       obtenerModeloEquipos(req, res);
     });
 
-    this.get('/erased/all/brands', ["PUBLIC"], async (req, res) => {
+    this.get('/erased/all/models', ["PUBLIC"], async (req, res) => {
       obtenerModeloEquiposBorrados(req, res);
     });
 
     this.get('/restore/:id', ["PUBLIC"], async (req, res) => {
       restaurarModeloEquipo(req, res);
+    });
+
+    this.get('/modelosXmarcas/:brand', ["PUBLIC"], async (req, res) => {
+      obtenerModelosPorMarca(req, res);
     });
 
     this.put('/:id', ["PUBLIC"], async (req, res) => {

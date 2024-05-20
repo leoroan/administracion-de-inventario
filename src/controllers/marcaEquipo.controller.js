@@ -1,5 +1,5 @@
 import { devLogger } from '../config/logs/logger.config.js';
-import { marcaEquipoService } from '../services/repository/services.js';
+import { marcaEquipoService, modeloEquipoService } from '../services/repository/services.js';
 
 export async function crearMarcaEquipo(req, res) {
   const obj = req.body;
@@ -88,6 +88,20 @@ export async function restaurarMarcaEquipo(req, res) {
   try {
     const MarcaEquipo = await marcaEquipoService.restoreMarcaEquipoById(MarcaEquipoId)
     return res.sendSuccess(MarcaEquipo);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
+export async function agregarModeloAmarca(req, res) {
+  const marcaName = req.params.marcaId;
+  const modeloId = req.params.modeloId;
+  try {
+    const marca = await marcaEquipoService.getMarcaEquipoByname(marcaName);
+    const modelo = await modeloEquipoService.getModeloEquipoById(modeloId);
+    await marca.addModeloEquipo(modelo)
+    return res.sendSuccess(marca);
   } catch (error) {
     devLogger.error(error);
     return res.sendInternalServerError(error);

@@ -7,13 +7,18 @@ import {
   obtenerMarcaEquipoBorradoPorId,
   actualizarMarcaEquipo,
   eliminarMarcaEquipo,
-  restaurarMarcaEquipo
+  restaurarMarcaEquipo,
+  agregarModeloAmarca
 } from '../controllers/marcaEquipo.controller.js'
 
 export default class MarcaEquipoRouter extends CustomRouter {
   init() {
     this.post('/', ["PUBLIC"], async (req, res) => {
       crearMarcaEquipo(req, res);
+    });
+
+    this.post('/M2B/:marcaId/:modeloId', ["PUBLIC"], async (req, res) => {
+      agregarModeloAmarca(req, res);
     });
 
     this.get('/:id', ["PUBLIC"], async (req, res) => {
