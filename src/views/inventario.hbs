@@ -24,7 +24,7 @@
             <th scope="col">Nro. ID</th>
             <th scope="col">MT</th>
             <th scope="col">TIPO</th>
-            <th scope="col">OFICINA </th>
+            {{!-- <th scope="col">OFICINA </th> --}}
             <th scope="col">NRO. SERIE</th>
             <th scope="col">MARCA</th>
             <th scope="col">MODELO</th>
@@ -43,11 +43,11 @@
             <td>{{checkIfDataIsNull this.dataValues.mt}}</td>
             <td>{{this.dataValues.tipoEquipo}}</td>
             <td>{{checkIfDataIsNull this.dataValues.numeroDeSerie}}</td>
-            <td>
+            {{!-- <td>
               {{#each this.dataValues.Oficinas}}
               <span>{{this.nombre}}</span>
               {{/each}}
-            </td>
+            </td> --}}
             <td>{{this.dataValues.marca}}</td>
             <td>{{this.dataValues.modelo}}</td>
             <td>

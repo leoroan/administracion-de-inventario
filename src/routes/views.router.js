@@ -1,4 +1,4 @@
-import { equipoInformaticoService, empleadoService, lugarService, oficinaService, marcaEquipoService, modeloEquipoService } from "../services/repository/services.js";
+import { equipoInformaticoService, empleadoService, lugarService, oficinaService, marcaEquipoService, modeloEquipoService, tipoEquipoService } from "../services/repository/services.js";
 import CustomRouter from "./custom/custom.router.js";
 
 export default class viewsRouter extends CustomRouter {
@@ -18,6 +18,7 @@ export default class viewsRouter extends CustomRouter {
       const estado = req.query.estado || 'asignado';
       const equiposInformaticos = await equipoInformaticoService.getAllEquipoInformaticos();
       const marcas = await marcaEquipoService.getAllMarcaEquipos();
+      const tipos = await tipoEquipoService.getAllTipoEquipos();
       res.render("inventario", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
@@ -27,6 +28,7 @@ export default class viewsRouter extends CustomRouter {
         currentPath: req.path,
         estado: estado,
         marcas: marcas,
+        tipos: tipos,
         rol: "admin"
         // user: req.session.user || req.user,
         // user: req.session.user || req.user,

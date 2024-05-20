@@ -1,4 +1,4 @@
-import CustomRouter from "./custom/custom.router";
+import CustomRouter from "./custom/custom.router.js";
 import {
   crearTipoEquipo,
   obtenerTipoEquipos,

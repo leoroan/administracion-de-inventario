@@ -13,10 +13,9 @@
             <label for="tipoEquipo">Tipo de Equipo:</label>
             <select class="form-control" id="tipoEquipo" name="tipoEquipo">
               <option value="" selected disabled>Seleccione una opción</option>
-              {{#each tipoEquipos}}
+              {{#each tipos}}
               <option value="{{this.dataValues.nombre}}">{{this.dataValues.nombre}}</option>
               {{/each}}
-              <option value="aa">aa</option>
               <option value="otro">Otro</option>
             </select>
             <div class="invalid-feedback">

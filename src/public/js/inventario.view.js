@@ -25,7 +25,7 @@ document.getElementById("marca").addEventListener("change", function () {
     nuevaMarca.style.display = "none";
     document.getElementById("nuevaMarcaInput").removeAttribute("required");
   }
-  cargarModelos(selectMarca.value );
+  cargarModelos(selectMarca.value);
 });
 
 document.getElementById("modelo").addEventListener("change", function () {
@@ -66,6 +66,13 @@ function cargarModelos(marca) {
       opcionOtro.textContent = 'Otro';
       selectModelo.appendChild(opcionOtro);
 
+      const opcionDefault = document.createElement('option');
+      opcionDefault.value = '';
+      opcionDefault.textContent = 'Seleccione una opción';
+      opcionDefault.selected = true; // Marcar como seleccionada
+      opcionDefault.disabled = true; // Deshabilitar la opción
+      selectModelo.appendChild(opcionDefault);
+
       // Agregamos las opciones obtenidas desde la API
       data.forEach(modelo => {
         const opcion = document.createElement('option');
@@ -78,6 +85,26 @@ function cargarModelos(marca) {
       console.error('Error al cargar los modelos:', error);
       // Aquí puedes mostrar un mensaje de error al usuario si lo deseas
     });
+}
+
+//tema agregando nuevos valores
+async function crearMarca(marca) {
+  console.log(marca);
+  // fetch(`/api/marca/${marca}`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json"
+  //   },
+  //   body: JSON.stringify({ nombre: marca })
+  // })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     console.log(data);
+  //   })
+  //   .catch(error => {
+  //     console.error('Error al agregar la marca:', error);
+  //     // Aquí puedes mostrar un mensaje de error al usuario si lo deseas
+  //   });
 }
 
 //tema ENVIO formulario
@@ -117,7 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       const formattedData = Object.entries(jsonData).map(([key, value]) => `${key}: ${value}`).join('<br>');
-      console.log(formattedData);
       Swal.fire({
         title: '¿Está seguro de enviar el formulario?',
         html: `Los siguientes datos serán enviados:<br><br>${formattedData}`,

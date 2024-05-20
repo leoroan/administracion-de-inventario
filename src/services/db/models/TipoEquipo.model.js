@@ -6,7 +6,15 @@ const TipoEquipo = sequelize.define('TipoEquipo', {
     type: DataTypes.STRING,
     allowNull: false
   },
-}, { timestamps: true, paranoid: true });
-
+}, {
+  timestamps: true,
+  paranoid: true,
+  hooks: {
+    beforeCreate: async (instance) => {
+      // Transformar datos a mayúsculas
+      instance.nombre = instance.nombre.toUpperCase();
+    }
+  }
+});
 export { TipoEquipo };
 

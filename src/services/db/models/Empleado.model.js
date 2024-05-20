@@ -13,7 +13,7 @@ const Empleado = sequelize.define('Empleado', {
   telefono: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'sin registrar'    
+    defaultValue: 'SIN REGISTRAR'
   },
   dni: {
     type: DataTypes.STRING,
@@ -21,9 +21,9 @@ const Empleado = sequelize.define('Empleado', {
     unique: true
   },
   rol: {
-    type: DataTypes.ENUM('ministro', 'secretario', 'subsecretario', 'director', 'director_de_linea', 'empleado', 'no_definido'),
+    type: DataTypes.ENUM('MINISTRO', 'SECRETARIO', 'SUBSECRETARIO', 'DIRECTOR', 'DIRECTOR_DE_LINEA', 'EMPLEADO', 'NO_DEFINIDO'),
     allowNull: false,
-    defaultValue: 'empleado' 
+    defaultValue: 'EMPLEADO'
   },
   email: {
     type: DataTypes.STRING,
@@ -33,6 +33,17 @@ const Empleado = sequelize.define('Empleado', {
       isEmail: true
     }
   }
-}, { timestamps: true, paranoid: true });
+}, {
+  timestamps: true, paranoid: true,
+  hooks: {
+    beforeCreate: async (instance) => {
+      // Transformar datos a mayúsculas
+      instance.nombre = instance.nombre.toUpperCase();
+      instance.apellido = instance.apellido.toUpperCase();
+      instance.rol = instance.rol.toUpperCase();
+      instance.email = instance.email.toUpperCase();
+    }
+  }
+});
 
 export { Empleado };
