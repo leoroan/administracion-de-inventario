@@ -11,7 +11,7 @@
       <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
       {{#if (eq rol "admin")}}
         <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarEquipoModal"><i
-            class="bi bi-plus-circle-fill fs-3 text-success">NUEVO</i></a>
+            class="bi bi-pc-display fs-1 text-success">+</i></a>
         {{> modal_nuevo_equipo}}
         {{/if}}
     </div>
@@ -51,7 +51,7 @@
             <td>{{this.dataValues.marca}}</td>
             <td>{{this.dataValues.modelo}}</td>
             <td>
-              <i class="bi bi-box-arrow-in-left text-success fs-3"></i>
+              <a href='/main/inventory/{{this.dataValues.id}}'><i class="bi bi-pencil-square text-warning"></i></a>
             </td>
           </tr>
           <tr>

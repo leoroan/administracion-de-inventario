@@ -35,6 +35,28 @@ export default class viewsRouter extends CustomRouter {
       });
     });
 
+    this.get('/main/inventory/:equipoId', ["PUBLIC"], async (req, res) => {
+      const equipo = await equipoInformaticoService.getEquipoInformaticoById(req.params.equipoId);
+      const equipoEmpleado = equipo.dataValues.Empleado;
+      const equipoOficina = equipo.dataValues.Oficina;
+      const equipoMantenimiento = equipo.dataValues.MantenimientoDeEquipos;
+      console.log(equipoEmpleado);
+      res.render("inventario_detalle", {
+        fileFavicon: "favicon.ico",
+        fileCss: "styles.css",
+        fileJs: "inventario.view.js",
+        title: "Inventario MT - equipos",
+        currentPath: req.path,
+        datosEquipo: equipo.dataValues,
+        equipoEmpleado: equipoEmpleado,
+        equipoOficina: equipoOficina,
+        equipoMantenimiento: equipoMantenimiento,
+        rol: "admin"
+        // user: req.session.user || req.user,
+        // user: req.session.user || req.user,
+      });
+    });
+
     this.get('/main/employees', ["PUBLIC"], async (req, res) => {
       const empleados = await empleadoService.getAllEmpleados();
       res.render("empleados", {
@@ -43,6 +65,21 @@ export default class viewsRouter extends CustomRouter {
         fileJs: "empleados.view.js",
         title: "Inventario MT - empleados",
         empleados: empleados,
+        currentPath: req.path,
+        rol: "admin"
+        // user: req.session.user || req.user,
+      });
+    });
+    this.get('/main/employees/:empleadoId', ["PUBLIC"], async (req, res) => {
+      const empleado = await empleadoService.getEmpleadoById(req.params.empleadoId);
+      const empleadoEquipos = empleado.dataValues.EquipoInformaticos;
+      res.render("empleados_detalle", {
+        fileFavicon: "favicon.ico",
+        fileCss: "styles.css",
+        fileJs: "empleado_detail.view.js",
+        title: "Inventario MT - empleados",
+        datosEmpleados: empleado.dataValues,
+        datosEquipos: empleadoEquipos,
         currentPath: req.path,
         rol: "admin"
         // user: req.session.user || req.user,
@@ -57,6 +94,20 @@ export default class viewsRouter extends CustomRouter {
         fileJs: "oficinas.view.js",
         title: "Inventario MT - oficinas",
         oficinas: oficinas,
+        currentPath: req.path,
+        rol: "admin"
+        // user: req.session.user || req.user,
+      });
+    });
+
+    this.get('/main/offices/:oficinaId', ["PUBLIC"], async (req, res) => {
+      const oficina = oficinaService.getOficinaById(req.params.oficinaId);
+      res.render("oficinas", {
+        fileFavicon: "favicon.ico",
+        fileCss: "styles.css",
+        fileJs: "oficinas.view.js",
+        title: "Inventario MT - oficinas",
+        datosOficina: oficina.dataValues,
         currentPath: req.path,
         rol: "admin"
         // user: req.session.user || req.user,

@@ -11,7 +11,7 @@
         <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
         {{#if (eq rol "admin")}}
         <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal"><i
-            class="bi bi-plus-circle-fill fs-3 text-success">NUEVO</i></a>
+            class="bi bi-person-plus fs-1 text-success"></i></a>
         {{> modal_nuevo_empleado}}
         {{/if}}
       </div>
@@ -26,7 +26,6 @@
               <th scope="col">img</th>
               <th scope="col">EMPLEADO</th>
               <th scope="col">DNI</th>
-              <th scope="col">OFICINA </th>
               {{#if (eq rol "admin")}}
               <th>OPC</th>
               {{/if}}
@@ -34,70 +33,19 @@
           </thead>
           <tbody class='table-group-divider fs-4' id="tableBody">
             {{#each empleados}}
-            <tr data-bs-toggle="collapse" data-bs-target="#collapse{{@index}}" aria-expanded="false"
-              aria-controls="collapse{{@index}}">
+            <tr>
               {{!-- <th scope="row">{{@index}}</th> --}}
               <td>{{this.dataValues.id}}</td>
-              <td> <img class="img-fluid" src="/assets/default_user.svg" alt="default user image"></td>
+              <td> <img class="img-fluid" src="/assets/default_user.svg" alt="default user image" style="width: 2rem;"></td>
               {{!-- <td>{{formatDate this.dataValues.updatedAt}}</td> --}}
               <td>{{this.dataValues.nombre}} {{this.dataValues.apellido}}</td>
               <td>{{this.dataValues.dni}}</td>
-              <td>
-                {{#if (eq this.dataValues.Oficina null)}}
-                <p>sin oficina asignada</p>
-                {{else}}
-                {{this.dataValues.Oficina}}
-                <p>tiene ofi</p>
-                {{/if}}
-              </td>
               {{#if (eq ../rol "admin")}}
               <td>
-                <i class="bi bi-pencil-square text-warning"></i>
-                <i class="bi bi-x-circle text-danger"></i>
+                <a href='/main/employees/{{this.dataValues.id}}'><i class="bi bi-pencil-square text-warning"></i></a>
+                {{!-- <i class="bi bi-x-circle text-danger"></i> --}}
               </td>
-
               {{/if}}
-
-            </tr>
-            <tr>
-              <td colSpan="6" class="p-0">
-                <div class="collapse" id="collapse{{@index}}">
-                  <div class="card card-body">
-                    <div class="card-group mb-2">
-                      <div class="card w-50 text-center border-info border-3">
-                        <div class="card-body">
-                          <h6 class="card-title">TELEFONO</h6>
-                          <p class="card-text">{{this.dataValues.telefono}}</p>
-                        </div>
-                      </div>
-                      <div class="card w-50 text-center border-info border-3">
-                        <div class="card-body">
-                          <h6 class="card-title">ROL</h6>
-                          <p class="card-text">{{this.dataValues.rol}}</p>
-                        </div>
-                      </div>
-                      <div class="card w-50 text-center border-info border-3">
-                        <div class="card-body">
-                          <h6 class="card-title">EMAIL</h6>
-                          <p class="card-text">{{this.dataValues.email}}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-group">
-                      <div class="card w-50 text-center border-info border-3">
-                        <div class="card-body">
-                          <h6 class="card-title">EQUIPOS ASOCIADOS</h6>
-                          <p class="card-text">
-                            {{#each this.dataValues.EquipoInformaticos}}
-                            {{this.id}}
-                            {{/each}}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
             </tr>
             {{/each}}
           </tbody>

@@ -4,7 +4,7 @@ import { equipoInformaticoService } from '../services/repository/services.js';
 import { empleadoService } from '../services/repository/services.js';
 
 export async function crearEmpleado(req, res) {
-  const obj = req.body;  try {
+  const obj = req.body; try {
     const empleado = await empleadoService.createEmpleado(obj);
     return res.sendSuccess(empleado);
   } catch (error) {
@@ -87,26 +87,20 @@ export async function eliminarEmpleado(req, res) {
 }
 
 export async function asignarEquipoAempleado(req, res) {
-  const empleadoId = req.params.empId;
-  const equipoInformaticoId = req.params.eqId;
-
+  const empleadoId = req.params.empleadoId;
+  const equipoInformaticoId = req.params.equipoId;
   try {
     const empleado = await empleadoService.getEmpleadoById(empleadoId, { include: 'EquipoInformaticos' });
-    if (!empleado) {
-      return res.status(404).json({ error: 'Employee not found' });
-    }
     const equipoInformatico = await equipoInformaticoService.getEquipoInformaticoById(equipoInformaticoId);
-    if (!equipoInformatico) {
-      return res.status(404).json({ error: 'hardware not found' });
-    }
     if (equipoInformatico.Empleado) {
-      return res.status(400).json({ error: 'hardware is already assigned to another employee', payload: equipoInformatico.Empleado }); // Verificar si el hardware ya está asignado a un empleado.
+      res.sendClientError('hardware is already assigned to another employee');
     }
+    await equipoInformaticoService.updateEquipoInformatico(equipoInformaticoId, { "estado": "asignado" });
     empleado.addEquipoInformaticos(equipoInformatico);
-    return res.status(200).json({ payload: 'hardware assigned to employee' });
+    res.sendSuccess({ state: "hardware assigned to employee" });
   } catch (error) {
-    console.error('Error adding hardware to employee:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
   }
 };
 

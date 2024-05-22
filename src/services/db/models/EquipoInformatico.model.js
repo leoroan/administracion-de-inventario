@@ -11,6 +11,7 @@ const EquipoInformatico = sequelize.define('EquipoInformatico', {
   mt: {
     type: DataTypes.INTEGER,
     allowNull: true,
+    defaultValue: 9999
   },
   marca: {
     type: DataTypes.STRING,
@@ -31,8 +32,8 @@ const EquipoInformatico = sequelize.define('EquipoInformatico', {
     unique: true
   },
   estado: {
-    type: DataTypes.ENUM('asignado', 'disponible', 'baja'),
-    defaultValue: 'disponible'
+    type: DataTypes.ENUM('ASIGNADO', 'DISPONIBLE', 'BAJA'),
+    defaultValue: 'DISPONIBLE'
   },
   observacion: {
     type: DataTypes.TEXT,
@@ -49,13 +50,25 @@ const EquipoInformatico = sequelize.define('EquipoInformatico', {
   },
   remitoNumero: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true,
+    defaultValue: 'SIN DATOS'
   },
   tipoEquipo: {
     type: DataTypes.STRING,
     allowNull: false
   },
-}, { timestamps: true, paranoid: true });
+}, {
+  timestamps: true, paranoid: true, hooks: {
+    beforeCreate: async (instance) => {
+      instance.marca = instance.marca.toUpperCase();
+      instance.modelo = instance.modelo.toUpperCase();
+      instance.estado = instance.estado.toUpperCase();
+      instance.observacion = instance.observacion.toUpperCase();
+      instance.especificacionesTecnicas = instance.especificacionesTecnicas.toUpperCase();
+      instance.tipoEquipo = instance.tipoEquipo.toUpperCase();
+    }
+  }
+});
 
 
 export { EquipoInformatico }

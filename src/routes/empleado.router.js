@@ -19,12 +19,12 @@ export default class empleadoExtendRouter extends CustomRouter {
       crearEmpleado(req, res);
     });
 
-    this.post('/add/:empId/:eqId', ["PUBLIC"], async (req, res) => {
-      asignarEquipoAempleado(req, res);
-    });
-
     this.post('/bulkCreate', ["PUBLIC"], async (req, res) => {
       agregarEnBloque(req, res);
+    });
+
+    this.post('/agregarEquipo/:empleadoId/:equipoId', ["PUBLIC"], async (req, res) => {
+      asignarEquipoAempleado(req, res);
     });
 
     this.get('/:id', ["PUBLIC"], async (req, res) => {
