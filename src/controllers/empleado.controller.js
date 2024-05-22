@@ -95,7 +95,7 @@ export async function asignarEquipoAempleado(req, res) {
     if (equipoInformatico.Empleado) {
       res.sendClientError('hardware is already assigned to another employee');
     }
-    await equipoInformaticoService.updateEquipoInformatico(equipoInformaticoId, { "estado": "asignado" });
+    await equipoInformaticoService.updateEquipoInformatico(equipoInformaticoId, { "estado": "ASIGNADO" });
     empleado.addEquipoInformaticos(equipoInformatico);
     res.sendSuccess({ state: "hardware assigned to employee" });
   } catch (error) {

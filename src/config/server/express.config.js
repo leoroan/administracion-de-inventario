@@ -13,6 +13,7 @@ import modeloEquipoExtendedRouter from '../../routes/modeloEquipo.router.js';
 import lugarExtendRouter from '../../routes/lugar.router.js';
 import oficinaExtendedRouter from '../../routes/oficina.router.js';
 import tipoEquipoExtendedRouter from '../../routes/tipoEquipo.router.js';
+import mantenimientoDeEquipoExtendedRouter from '../../routes/mantenimientoDeEquipo.router.js';
 import viewsRouter from '../../routes/views.router.js';
 
 export default function configureExpress(app) {
@@ -68,6 +69,7 @@ export default function configureExpress(app) {
   const lugares = new lugarExtendRouter();
   const oficinas = new oficinaExtendedRouter();
   const tipoEquipo = new tipoEquipoExtendedRouter();  
+  const mantenimientoDeEquipo = new mantenimientoDeEquipoExtendedRouter();  
   app.use("/api/equipos/", equiposInformaticos.getRouter());
   app.use("/api/marcas/", marcaEquipo.getRouter());
   app.use("/api/modelos/", modeloEquipo.getRouter());
@@ -75,6 +77,7 @@ export default function configureExpress(app) {
   app.use("/api/empleados/", empleados.getRouter());
   app.use("/api/oficinas/", oficinas.getRouter());
   app.use("/api/tipoEquipos/", tipoEquipo.getRouter());
+  app.use("/api/mantenimiento/", mantenimientoDeEquipo.getRouter());
 
   //routes here, before *
   //VISTAS

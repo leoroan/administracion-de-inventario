@@ -78,7 +78,7 @@ export async function actualizarEquipoInformatico(req, res) {
 export async function eliminarEquipoInformatico(req, res) {
   const equipoInformaticoId = req.params.id;
   try {
-    await equipoInformaticoService.updateEquipoInformatico(equipoInformaticoId, { "estado": "baja" });
+    await equipoInformaticoService.updateEquipoInformatico(equipoInformaticoId, { "estado": "BAJA" });
     await equipoInformaticoService.deleteEquipoInformatico(equipoInformaticoId);
     return res.sendSuccess({ state: "Hardware deleted" });
   } catch (error) {
@@ -91,7 +91,7 @@ export async function restaurarEquipoInformatico(req, res) {
   const equipoInformaticoId = req.params.id;
   try {
     const equipoInformatico = await equipoInformaticoService.restoreEquipoInformaticoById(equipoInformaticoId);
-    await equipoInformaticoService.updateEquipoInformatico(equipoInformaticoId, { "estado": "disponible" });
+    await equipoInformaticoService.updateEquipoInformatico(equipoInformaticoId, { "estado": "DISPONIBLE" });
     return res.sendSuccess(equipoInformatico);
   } catch (error) {
     devLogger.error(error);

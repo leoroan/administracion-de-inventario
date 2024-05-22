@@ -8,72 +8,126 @@
         <h1>{{datosEquipo.marca}} {{datosEquipo.modelo}}</h1>
       </div>
       <div class="d-flex justify-content-end">
-        <a href="/main/inventory"><button type="button" class="btn btn-primary btn-sm mx-1">volver</button></a>
+        <a href="/main/inventory?estado=DISPONIBLE"><button type="button" class="btn btn-primary btn-sm mx-1">volver</button></a>
       </div>
     </div>
 
-  <body>
-    <div class="container mb-5">
-      <div class="row">
-        <div class="col">
-          <div class="card">
-            <div class="card-body shadow">
-              <h5 class="card-title mb-3">Información del equipo</h5>
-              <div class="row mx-3">
-                {{#each datosEquipo}}
-                {{#unless (eq @key "mt")}}
-                {{#unless (eq @key "estado")}}
-                {{#unless (eq @key "createdAt")}}
-                {{#unless (eq @key "deletedAt")}}
-                {{#unless (eq @key "updatedAt")}}
-                {{#unless (eq @key "EmpleadoId")}}
-                {{#unless (eq @key "Empleado")}}
-                {{#unless (eq @key "MantenimientoDeEquipos")}}
-                {{#unless (eq @key "Oficinas")}}
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="{{@key}}" class="form-label fw-medium">{{@key}}</label>
-                    <input type="text" class="form-control" id="{{@key}}" value="{{this}}" readonly>
+    <body>
+      <div class="container mb-5">
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <div class="card-body shadow">
+                <h5 class="card-title mb-3">Información del equipo</h5>
+                <div class="row mx-3">
+                  {{#each datosEquipo}}
+                  {{#unless (eq @key "mt")}}
+                  {{#unless (eq @key "estado")}}
+                  {{#unless (eq @key "createdAt")}}
+                  {{#unless (eq @key "deletedAt")}}
+                  {{#unless (eq @key "updatedAt")}}
+                  {{#unless (eq @key "EmpleadoId")}}
+                  {{#unless (eq @key "Empleado")}}
+                  {{#unless (eq @key "MantenimientoDeEquipos")}}
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="{{@key}}" class="form-label fw-medium">{{@key}}</label>
+                      <input type="text" class="form-control" id="{{@key}}" value="{{this}}" readonly>
+                    </div>
                   </div>
+                  {{/unless}}
+                  {{/unless}}
+                  {{/unless}}
+                  {{/unless}}
+                  {{/unless}}
+                  {{/unless}}
+                  {{/unless}}
+                  {{/unless}}
+                  {{/each}}
                 </div>
-                {{/unless}}
-                {{/unless}}
-                {{/unless}}
-                {{/unless}}
-                {{/unless}}
-                {{/unless}}
-                {{/unless}}
-                {{/unless}}
-                {{/unless}}
-                {{/each}}
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="row mt-4">
-        <div class="col">
-          <div class="card">
-            <div class="card-body shadow">
-              <h5 class="card-title mb-3">Persona asociada al equipo</h5>
-              <div class="row">
-                <div class="row m-2">
-                  <div class="col">
-                    <div class="card">
-                      <div class="card-body shadow">
-                        <div class="d-flex">
-                          <div class="p-2 flex-fill col-md-1 fw-medium">
-                            <label for="id" class="form-label fw-medium">ID</label>
-                            <input type="text" class="form-control" id="id" value="{{equipoEmpleado.dataValues.id}}" readonly>
+        <div class="row mt-4">
+          <div class="col">
+            <div class="card">
+              <div class="card-body shadow">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title mb-3">Persona asociada al equipo</h5>
+                  {{#if (eq rol "admin")}}
+                  {{#if (eq equipoEmpleado null)}}
+                  <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarEquipoApersonaModal" data-id="{{datosEquipo.id}}"><i
+                      class="bi bi-person-plus fs-2 text-success"></i></a>
+                  {{> modal_equipo_a_persona}}
+                  {{/if}}
+                  {{/if}}
+                </div>
+                <div class="row">
+                  <div class="row m-2">
+                    <div class="col">
+                      <div class="card">
+                        {{#unless (eq equipoEmpleado null)}}
+                        <div class="card-body shadow">
+                          <div class="d-flex">
+                            <div class="p-2 flex-fill col-md-1 fw-medium">
+                              <label for="id" class="form-label fw-medium">ID</label>
+                              <input type="text" class="form-control" id="id" value="{{equipoEmpleado.dataValues.id}}"
+                                readonly>
+                            </div>
+                            <div class="p-2 flex-fill col-md-6 fw-medium">
+                              <label for="tipoEquipo" class="form-label fw-medium">NOMBRE Y APELLIDO</label>
+                              <input type="text" class="form-control" id="tipoEquipo"
+                                value="{{equipoEmpleado.dataValues.nombre}} {{equipoEmpleado.dataValues.apellido}}"
+                                readonly>
+                            </div>
+                            <a href='/main/employees/{{equipoEmpleado.dataValues.id}}'><i
+                                class="bi bi-box-arrow-in-right text-warning fs-2"></i></a>
                           </div>
-                          <div class="p-2 flex-fill col-md-6 fw-medium">
-                            <label for="tipoEquipo" class="form-label fw-medium">NOMBRE Y APELLIDO</label>
-                            <input type="text" class="form-control" id="tipoEquipo"
-                              value="{{equipoEmpleado.dataValues.nombre}} {{equipoEmpleado.dataValues.apellido}}" readonly>
-                          </div>
-                          <a href='/main/employees/{{equipoEmpleado.dataValues.id}}'><i class="bi bi-pencil-square text-warning fs-3"></i></a>
                         </div>
+                        {{/unless}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col">
+            <div class="card">
+              <div class="card-body shadow">
+                <h5 class="card-title mb-3">Registro de mantenimiento del equipo</h5>
+                <div class="row">
+                  <div class="row m-2">
+                    <div class="col">
+                      <div class="card">
+                        {{#if (eq equipoMantenimiento null )}}
+                        <div class="card-body shadow">
+                          <div class="d-flex">
+                            <div class="p-2 flex-fill col-md-1 fw-medium">
+                              <label for="id" class="form-label fw-medium">Fecha creado</label>
+                              <input type="text" class="form-control" id="id"
+                                value="{{equipoMantenimiento.dataValues.createdAt}}" readonly>
+                            </div>
+                            <div class="p-2 flex-fill col-md-1 fw-medium">
+                              <label for="id" class="form-label fw-medium">Fecha actualizado</label>
+                              <input type="text" class="form-control" id="id"
+                                value="{{equipoMantenimiento.dataValues.updatedAt}}" readonly>
+                            </div>
+                            <div class="p-2 flex-fill col-md-6 fw-medium">
+                              <label for="tipoEquipo" class="form-label fw-medium">Descripcion</label>
+                              <input type="text" class="form-control" id="tipoEquipo"
+                                value="{{equipoMantenimiento.dataValues.descripcion}}" readonly>
+                            </div>
+                            <a href='/main/mantenimiento/{{equipoMantenimiento.dataValues.id}}'><i
+                                class="bi bi-box-arrow-in-right text-warning fs-2"></i></a>
+                          </div>
+                        </div>
+                        {{/if}}
                       </div>
                     </div>
                   </div>
@@ -83,8 +137,7 @@
           </div>
         </div>
       </div>
-    </div>
-  </body>
+    </body>
 
   </div>
 </main>

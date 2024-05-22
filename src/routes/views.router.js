@@ -38,18 +38,15 @@ export default class viewsRouter extends CustomRouter {
     this.get('/main/inventory/:equipoId', ["PUBLIC"], async (req, res) => {
       const equipo = await equipoInformaticoService.getEquipoInformaticoById(req.params.equipoId);
       const equipoEmpleado = equipo.dataValues.Empleado;
-      const equipoOficina = equipo.dataValues.Oficina;
       const equipoMantenimiento = equipo.dataValues.MantenimientoDeEquipos;
-      console.log(equipoEmpleado);
       res.render("inventario_detalle", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
-        fileJs: "inventario.view.js",
+        fileJs: "inventory_detail.view.js",
         title: "Inventario MT - equipos",
         currentPath: req.path,
         datosEquipo: equipo.dataValues,
         equipoEmpleado: equipoEmpleado,
-        equipoOficina: equipoOficina,
         equipoMantenimiento: equipoMantenimiento,
         rol: "admin"
         // user: req.session.user || req.user,
