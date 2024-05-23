@@ -98,13 +98,20 @@ export default class viewsRouter extends CustomRouter {
     });
 
     this.get('/main/offices/:oficinaId', ["PUBLIC"], async (req, res) => {
-      const oficina = oficinaService.getOficinaById(req.params.oficinaId);
-      res.render("oficinas", {
+      const oficina = await oficinaService.getOficinaById(req.params.oficinaId);
+      const oficinaEmpleados = oficina.dataValues.Empleados;
+      const oficinaEquipos = oficina.dataValues.EquipoInformaticos;
+      const oficinaDependecias = oficina.dataValues.Dependencias;
+      console.log(oficinaDependecias);
+      res.render("oficinas_detalle", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
         fileJs: "oficinas.view.js",
         title: "Inventario MT - oficinas",
         datosOficina: oficina.dataValues,
+        oficinaEmpleados: oficinaEmpleados,
+        oficinaEquipos: oficinaEquipos,
+        oficinaDependecias: oficinaDependecias,
         currentPath: req.path,
         rol: "admin"
         // user: req.session.user || req.user,

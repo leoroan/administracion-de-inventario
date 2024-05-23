@@ -31,7 +31,7 @@ myModal.addEventListener('shown.bs.modal', async function (event) {
     datosOrdenados.forEach(option => {
       const opt = document.createElement('option');
       opt.value = option.id;
-      opt.textContent = `${option.nombre} ${option.apellido}`;
+      opt.textContent = `${option.nombre} ${option.apellido}, ID: ${option.id}`;
       selectElement.appendChild(opt);
     });
 
