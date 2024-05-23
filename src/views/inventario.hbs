@@ -10,10 +10,10 @@
       {{> menu_equipos}}
       <input class="fw-medium border-2 rounded" type="text" id="busqueda" placeholder="Buscar...">
       {{#if (eq rol "admin")}}
-        <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarEquipoModal"><i
-            class="bi bi-pc-display fs-1 text-success">+</i></a>
-        {{> modal_nuevo_equipo}}
-        {{/if}}
+      <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarEquipoModal"><i
+          class="bi bi-pc-display fs-1 text-success">+</i></a>
+      {{> modal_nuevo_equipo}}
+      {{/if}}
     </div>
 
     <ul class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 my-2 table-responsive">
@@ -28,16 +28,13 @@
             <th scope="col">NRO. SERIE</th>
             <th scope="col">MARCA</th>
             <th scope="col">MODELO</th>
-            {{#if (eq rol "admin")}}
-            <th>OPC</th>
-            {{/if}}
+            <th>OPCIONES</th>
           </tr>
         </thead>
         <tbody class='table-group-divider fs-5' id="tableBody">
           {{#each equiposInformaticos}}
           {{#if (eq this.dataValues.estado ../estado)}}
-          <tr data-bs-toggle="collapse" data-bs-target="#collapse{{@index}}" aria-expanded="false"
-            aria-controls="collapse{{@index}}">
+          <tr>
             {{!-- <th scope="row">{{@index}}</th> --}}
             <td>{{this.dataValues.id}}</td>
             <td>{{checkIfDataIsNull this.dataValues.mt}}</td>
@@ -51,68 +48,16 @@
             <td>{{this.dataValues.marca}}</td>
             <td>{{this.dataValues.modelo}}</td>
             <td>
-              <a href='/main/inventory/{{this.dataValues.id}}'><i class="bi bi-box-arrow-in-right text-success fs-4"></i></a>
-            </td>
-          </tr>
-          <tr>
-            <td colSpan="9" class="p-0">
-              <div class="collapse" id="collapse{{@index}}">
-                <div class="card card-body">
-
-                  <div class="card-group mb-2">
-                    <div class="card w-50 text-center border-info border-3">
-                      <div class="card-body">
-                        <h6 class="card-title">ULTIMA ACTUALIZACION</h6>
-                        <p class="card-text"></p>
-                        <p class="card-text">{{formatDate this.dataValues.updatedAt}}</p>
-                      </div>
-                    </div>
-                    <div class="card w-50 text-center border-info border-3">
-                      <div class="card-body">
-                        <h6 class="card-title">Nro de Patrimonio</h6>
-                        <p class="card-text">{{this.dataValues.numeroDePatrimonio}}</p>
-                      </div>
-                    </div>
-                    <div class="card w-50 text-center border-info border-3">
-                      <div class="card-body">
-                        <h6 class="card-title">UBICACION</h6>
-                        <p class="card-text">
-                          {{#each this.dataValues.Oficinas}}
-                          <span>{{this.nombre}}</span>
-                          {{/each}}
-                        </p>
-                      </div>
-                    </div>
-                    <div class="card w-50 text-center border-info border-3">
-                      <div class="card-body">
-                        <h6 class="card-title">UBICACION</h6>
-                        <p class="card-text">
-                          {{#each this.dataValues.Oficinas}}
-                          <span>{{this.nombre}}</span>
-                          {{/each}}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="card-group">
-                    {{#if this.dataValues.MantenimientoDeEquipos}}
-                    <div class="card-group">
-                      <div class="card w-50 text-center border-0 mt-3">
-                        <div class="d-flex justify-content-end">
-                          <button type="button" class="btn btn-outline-warning fw-bold">
-                            VER HISTORIAL DE MANTENIMIENTO
-                          </button>
-                        </div>
-                      </div>
-                      {{/if}}
-                    </div>
-                  </div>
-                </div>
+              <div class="d-flex justify-content-around">
+                <a class="btn fs-3" href='/main/inventory/{{this.dataValues.id}}'><i
+                    class="bi bi-box-arrow-in-right text-success"></i></a>
+                {{#if (eq ../rol "admin")}}
+                <a class="btn fs-4" onclick="deleteUser({{this.dataValues.id}})"><i
+                    class="bi bi-x-circle text-danger"></i></a>
+                {{/if}}
               </div>
             </td>
           </tr>
-          {{else}}
           {{/if}}
           {{/each}}
         </tbody>

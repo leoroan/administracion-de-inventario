@@ -70,6 +70,7 @@ export default class viewsRouter extends CustomRouter {
     this.get('/main/employees/:empleadoId', ["PUBLIC"], async (req, res) => {
       const empleado = await empleadoService.getEmpleadoById(req.params.empleadoId);
       const empleadoEquipos = empleado.dataValues.EquipoInformaticos;
+      const empleadoOficina = empleado.dataValues.Oficina;
       res.render("empleados_detalle", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
@@ -77,6 +78,7 @@ export default class viewsRouter extends CustomRouter {
         title: "Inventario MT - empleados",
         datosEmpleados: empleado.dataValues,
         datosEquipos: empleadoEquipos,
+        empleadoOficina: empleadoOficina,
         currentPath: req.path,
         rol: "admin"
         // user: req.session.user || req.user,
@@ -102,11 +104,10 @@ export default class viewsRouter extends CustomRouter {
       const oficinaEmpleados = oficina.dataValues.Empleados;
       const oficinaEquipos = oficina.dataValues.EquipoInformaticos;
       const oficinaDependecias = oficina.dataValues.Dependencias;
-      console.log(oficinaDependecias);
       res.render("oficinas_detalle", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
-        fileJs: "oficinas.view.js",
+        fileJs: "oficina_detail.view.js",
         title: "Inventario MT - oficinas",
         datosOficina: oficina.dataValues,
         oficinaEmpleados: oficinaEmpleados,

@@ -46,11 +46,16 @@ document.addEventListener("DOMContentLoaded", function () {
             body: JSON.stringify(jsonData)
           })
             .then(response => {
-              if (!response.ok) {
-                throw new Error("Error al crear empleado");
+              if (response.ok) {
+                return response.json();
+
               }
-              return response.json();
+              return response.json().then(error => {
+                // console.log(error.error.message);
+                throw new Error(error.error.message);
+              })
             })
+
             .then(data => {
               Swal.fire({
                 title: 'Empleado creado exitosamente',
@@ -60,9 +65,10 @@ document.addEventListener("DOMContentLoaded", function () {
               });
             })
             .catch(error => {
+              // console.log(error);
               Swal.fire({
                 title: 'Error',
-                text: 'Error al crear el empleado',
+                text: error,//'Error al crear el empleado',
                 icon: 'error'
               });
             });
@@ -104,3 +110,45 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+//delete empleado (baja)
+function deleteUser(empleadoId) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción no se puede deshacer',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/api/empleados/${empleadoId}`, {
+        method: 'DELETE'
+      })
+        .then(response => {
+          if (response.ok) {
+            Swal.fire(
+              '¡Eliminado!',
+              'El empleado ha sido dado de baja correctamente!',
+              'success'
+            ).then(() => {
+              window.location.reload();
+            });
+          } else {
+            Swal.fire(
+              '¡Error!',
+              'No se pudo eliminar el empleado, probablemente tiene equipos asignados, primero hay q retirarselos!!',
+              'error'
+            );
+          }
+        })
+        .catch(error => {
+          Swal.fire(
+            '¡Error!',
+            'Ocurrió un error al intentar eliminar la persona.',
+            'error'
+          );
+          console.error('Error al eliminar la persona:', error);
+        });
+    }
+  });
+}

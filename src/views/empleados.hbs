@@ -20,32 +20,31 @@
         <table class="table align-middle table-striped table-hover text-center">
           <thead class='table-dark'>
             <tr>
-              {{!-- <th scope="col">#</th> --}}
               <th scope="col">Nro. ID</th>
-              {{!-- <th scope="col">ACTUALIZADO</th> --}}
-              <th scope="col">img</th>
+              <th scope="col">IMAGEN</th>
               <th scope="col">EMPLEADO</th>
               <th scope="col">DNI</th>
-              {{#if (eq rol "admin")}}
-              <th>OPC</th>
-              {{/if}}
+              <th>OPCIONES</th>
             </tr>
           </thead>
           <tbody class='table-group-divider fs-5' id="tableBody">
             {{#each empleados}}
             <tr>
-              {{!-- <th scope="row">{{@index}}</th> --}}
               <td>{{this.dataValues.id}}</td>
-              <td> <img class="img-fluid" src="/assets/default_user.svg" alt="default user image" style="width: 2rem;"></td>
-              {{!-- <td>{{formatDate this.dataValues.updatedAt}}</td> --}}
+              <td> <img class="img-fluid" src="/assets/default_user.svg" alt="default user image" style="width: 2rem;">
+              </td>
               <td>{{this.dataValues.nombre}} {{this.dataValues.apellido}}</td>
               <td>{{this.dataValues.dni}}</td>
-              {{#if (eq ../rol "admin")}}
               <td>
-                <a href='/main/employees/{{this.dataValues.id}}'><i class="bi bi-box-arrow-in-right text-success fs-4"></i></a>
-                {{!-- <i class="bi bi-x-circle text-danger"></i> --}}
+                <div class="d-flex justify-content-around">
+                  <a class="btn fs-3" href='/main/employees/{{this.dataValues.id}}'><i
+                      class="bi bi-box-arrow-in-right text-success"></i></a>
+                  {{#if (eq ../rol "admin")}}
+                  <a class="btn fs-4" onclick="deleteUser({{this.dataValues.id}})"><i
+                      class="bi bi-x-circle text-danger"></i></a>
+                  {{/if}}
+                </div>
               </td>
-              {{/if}}
             </tr>
             {{/each}}
           </tbody>

@@ -21,6 +21,25 @@
               <div class="card-body shadow">
                 <h5 class="card-title mb-3">Información del equipo</h5>
                 <div class="row mx-3">
+
+                  {{#if datosEquipo.Oficinas}}
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="ubicacion" class="form-label fw-medium">ubicacion del equipo</label>
+                      <input type="text" class="form-control" id="{{@key}}" value="{{datosEquipo.}}" readonly>
+                    </div>
+                  </div>
+                  {{/if}}
+
+                  {{#if equipoEmpleado}}
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="ubicacion" class="form-label fw-medium">ubicacion del equipo</label>
+                      <input type="text" class="form-control" id="{{@key}}" value="{{#if equipoEmpleado.dataValues.Oficina.nombre}}{{equipoEmpleado.dataValues.Oficina.nombre}}{{else}}No hay dato{{/if}}" readonly>
+                    </div>
+                  </div>
+                  {{/if}}
+
                   {{#each datosEquipo}}
                   {{#unless (eq @key "mt")}}
                   {{#unless (eq @key "estado")}}
@@ -30,6 +49,9 @@
                   {{#unless (eq @key "EmpleadoId")}}
                   {{#unless (eq @key "Empleado")}}
                   {{#unless (eq @key "MantenimientoDeEquipos")}}
+                  {{#unless (eq @key "Oficinas")}}
+                  {{#unless (eq @key "precio")}}
+                  {{#unless (eq @key "remitoNumero")}}
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label for="{{@key}}" class="form-label fw-medium">{{@key}}</label>
@@ -44,7 +66,26 @@
                   {{/unless}}
                   {{/unless}}
                   {{/unless}}
+                  {{/unless}}
+                  {{/unless}}
+                  {{/unless}}
                   {{/each}}
+
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="fechaCreacion" class="form-label fw-medium">Fecha de creacion</label>
+                      <input type="text" class="form-control" id="fechaCreacion"
+                        value="{{formatDate datosEquipo.createdAt}}" readonly>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="fechaActualizacion" class="form-label fw-medium">ultima actualizacion</label>
+                      <input type="text" class="form-control" id="fechaActualizacion"
+                        value="{{formatDate datosEquipo.updatedAt}}" readonly>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -91,10 +132,9 @@
                               </a>
 
                               {{#if (eq rol "admin")}}
-                              <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarEquipoApersonaModal"
-                                data-id="{{equipoEmpleado.id}}"><i class="bi bi-x-circle fs-3 text-danger"></i>
-                              </a>
-                              {{!-- {{> modal_remove_equipo_a_persona}} --}}
+                              <a class="btn fs-4"
+                                onclick="removerEquipo({{datosEquipo.id}}, {{equipoEmpleado.dataValues.id}})"><i
+                                  class="bi bi-x-circle text-danger"></i></a>
                               {{/if}}
 
                             </div>

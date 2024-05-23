@@ -21,7 +21,6 @@ export default class OficinaRouter extends CustomRouter {
     this.post('/O2O/:unaOficinaId/:otraOficinaId', ["PUBLIC"], async (req, res) => {
       agregarOficinaAoficina(req, res);
     });
-    
 
     this.get('/:id', ["PUBLIC"], async (req, res) => {
       obtenerOficina(req, res);

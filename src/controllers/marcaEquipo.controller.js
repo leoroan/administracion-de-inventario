@@ -100,7 +100,6 @@ export async function agregarModeloAmarca(req, res) {
   try {
     const marca = await marcaEquipoService.getMarcaEquipoByname(marcaName);
     const modelo = await modeloEquipoService.getModeloEquipoById(modeloId);
-    console.log(marca, modelo);
     await marca.addModeloEquipo(modelo)
     return res.sendSuccess(marca);
   } catch (error) {

@@ -107,7 +107,7 @@
                 <div class="d-flex justify-content-between">
                   <h5 class="card-title mb-3">Oficina asociada al empleado</h5>
                   {{#if (eq rol "admin")}}
-                  {{#unless (eq oficinaEquipos null)}}
+                  {{#unless (eq empleadoOficina null)}}
                   {{!-- cambiar oficina? --}}
                   {{/unless}}
                   {{/if}}
@@ -116,29 +116,24 @@
                   <div class="row m-2">
                     <div class="col">
                       <div class="card">
-                        {{#if (eq oficinaEquipos null )}}
+                        {{#unless (eq empleadoOficina null )}}
                         <div class="card-body shadow">
                           <div class="d-flex">
                             <div class="p-2 flex-fill col-md-1 fw-medium">
-                              <label for="id" class="form-label fw-medium">Fecha creado</label>
-                              <input type="text" class="form-control" id="id"
-                                value="{{oficinaEquipos.dataValues.createdAt}}" readonly>
-                            </div>
-                            <div class="p-2 flex-fill col-md-1 fw-medium">
-                              <label for="id" class="form-label fw-medium">Fecha actualizado</label>
-                              <input type="text" class="form-control" id="id"
-                                value="{{oficinaEquipos.dataValues.updatedAt}}" readonly>
+                              <label for="id" class="form-label fw-medium">ID</label>
+                              <input type="text" class="form-control" id="id" value="{{empleadoOficina.dataValues.id}}"
+                                readonly>
                             </div>
                             <div class="p-2 flex-fill col-md-6 fw-medium">
                               <label for="tipoEquipo" class="form-label fw-medium">Descripcion</label>
                               <input type="text" class="form-control" id="tipoEquipo"
-                                value="{{oficinaEquipos.dataValues.descripcion}}" readonly>
+                                value="{{empleadoOficina.dataValues.nombre}}" readonly>
                             </div>
-                            <a href='/main/mantenimiento/{{oficinaEquipos.dataValues.id}}'><i
+                            <a href='/main/offices/{{empleadoOficina.dataValues.id}}'><i
                                 class="bi bi-box-arrow-in-right text-warning fs-2"></i></a>
                           </div>
                         </div>
-                        {{/if}}
+                        {{/unless}}
                       </div>
                     </div>
                   </div>

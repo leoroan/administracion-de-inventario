@@ -9,7 +9,9 @@ import {
   obtenerEmpleadoBorradoPorDni,
   obtenerEmpleadosBorrados,
   restaurarEmpleado,
-  agregarEnBloque
+  agregarEnBloque,
+  removerEquipoAempleado,
+  asignarOficinaAempleado
 } from '../controllers/empleado.controller.js';
 
 export default class empleadoExtendRouter extends CustomRouter {
@@ -27,18 +29,26 @@ export default class empleadoExtendRouter extends CustomRouter {
       asignarEquipoAempleado(req, res);
     });
 
+    this.post('/removerEquipo/:empleadoId/:equipoId', ["PUBLIC"], async (req, res) => {
+      removerEquipoAempleado(req, res);
+    });
+
+    this.post('/agregarOficina/:empleadoId/:oficinaId', ["PUBLIC"], async (req, res) => {
+      asignarOficinaAempleado(req, res);
+    });
+
     this.get('/:id', ["PUBLIC"], async (req, res) => {
       obtenerEmpleado(req, res);
     });
-    
+
     this.get('/erased/:dni', ["PUBLIC"], async (req, res) => {
       obtenerEmpleadoBorradoPorDni(req, res);
     });
-    
+
     this.get('/', ["PUBLIC"], async (req, res) => {
       obtenerEmpleados(req, res);
     });
-    
+
     this.get('/erased/all/employees', ["PUBLIC"], async (req, res) => {
       obtenerEmpleadosBorrados(req, res);
     });
@@ -46,7 +56,7 @@ export default class empleadoExtendRouter extends CustomRouter {
     this.get('/restore/:id', ["PUBLIC"], async (req, res) => {
       restaurarEmpleado(req, res);
     });
-    
+
     this.put('/:id', ["PUBLIC"], async (req, res) => {
       actualizarEmpleado(req, res);
     });
