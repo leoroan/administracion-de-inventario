@@ -98,7 +98,7 @@ export default class CustomRouter {
 
     res.sendSuccess = payload => { req.logger.info(obtenerIds(payload)), res.status(200).send(payload) };
     res.sendInternalServerError = (error) => { req.logger.fatal(error), res.status(500).send({ status: "Internal server error", error: error }) };
-    res.sendClientError = (error) => { req.logger.error(error), res.status(400).send({ status: "Client Error, Bad request from client.", error }) };
+    res.sendClientError = (error) => { req.logger.error(error), res.status(400).send({ status: "Client Error, Bad request from client.", error: error }) };
     res.sendUnauthorizedError = error => { req.logger.fatal(error), res.status(401).send({ error: "User not authenticated or missing token." }) };
     res.sendForbiddenError = error => { req.logger.fatal(error), res.status(403).send({ error: "Token invalid or user with no access, Unauthorized please check your roles!" }) };
     next()

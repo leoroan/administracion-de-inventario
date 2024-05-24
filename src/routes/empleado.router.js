@@ -11,7 +11,8 @@ import {
   restaurarEmpleado,
   agregarEnBloque,
   removerEquipoAempleado,
-  asignarOficinaAempleado
+  asignarOficinaAempleado,
+  removerOficinaAempleado
 } from '../controllers/empleado.controller.js';
 
 export default class empleadoExtendRouter extends CustomRouter {
@@ -35,6 +36,10 @@ export default class empleadoExtendRouter extends CustomRouter {
 
     this.post('/agregarOficina/:empleadoId/:oficinaId', ["PUBLIC"], async (req, res) => {
       asignarOficinaAempleado(req, res);
+    });
+
+    this.post('/removerOficina/:empleadoId/:oficinaId', ["PUBLIC"], async (req, res) => {
+      removerOficinaAempleado(req, res);
     });
 
     this.get('/:id', ["PUBLIC"], async (req, res) => {

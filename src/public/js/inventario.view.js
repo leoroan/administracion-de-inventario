@@ -231,3 +231,50 @@ document.addEventListener("DOMContentLoaded", function () {
     validarSelect(selectModelo);
   });
 });
+
+//delete equipo (baja)
+function deleteEquipo(equipoId) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción no se puede deshacer',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, dar de baja',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/api/equipos/${equipoId}`, {
+        method: 'DELETE'
+      })
+        .then(response => {
+          if (response.ok) {
+            Swal.fire(
+              '¡Eliminado!',
+              'El equipo ha sido dado de baja correctamente!',
+              'success'
+            ).then(() => {
+              window.location.reload();
+            });
+          } else {
+            return response.json().then(error => {
+              throw new Error(error.error);
+            })
+            // Swal.fire(
+            //   '¡Error!',
+            //   'No se pudo eliminar el equipo',
+            //   'error'
+            // );
+          }
+        })
+        .catch(error => {
+          Swal.fire({
+            title: '¡Error!',
+            text: error,
+            icon: 'error'
+          });
+        });
+    } else {
+      Swal.fire('Borrado cancelado', '', 'info');
+    }
+  });
+}

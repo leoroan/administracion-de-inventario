@@ -42,15 +42,15 @@
               </td>
               {{#if (eq ../rol "admin")}}
               <td>
-                <span class=""><i class="bi bi-person-arms-up ms-2"></i><span class="me-2"> {{count
+                <span class="" title="cantidad de empleados"><i class="bi bi-person-arms-up ms-2"></i><span class="me-2"> {{count
                     this.dataValues.Empleados}}</span></span>
-                <span class=""><i class="bi bi-pc-display ms-2"></i><span class="me-2"> {{count
+                <span class="" title="cantidad de equipos"><i class="bi bi-pc-display ms-2"></i><span class="me-2"> {{count
                     this.dataValues.EquipoInformaticos}}</span></span>
-                <span class=""><i class="bi bi-building-fill-down ms-2"></i><span class="me-2"> {{count
+                <span class="" title="cantidad de sub oficinas"><i class="bi bi-building-fill-down ms-2"></i><span class="me-2"> {{count
                     this.dataValues.Dependencias}}</span></span>
               </td>
               <td>
-                <a href='/main/offices/{{this.dataValues.id}}'><i
+                <a href='/main/offices/{{this.dataValues.id}}' title="ver más"><i
                     class="bi bi-box-arrow-in-right text-success fs-4"></i></a>
               </td>
               {{/if}}

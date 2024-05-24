@@ -50,10 +50,10 @@
             <td>
               <div class="d-flex justify-content-around">
                 <a class="btn fs-3" href='/main/inventory/{{this.dataValues.id}}'><i
-                    class="bi bi-box-arrow-in-right text-success"></i></a>
+                    class="bi bi-box-arrow-in-right text-success" title="ver más"></i></a>
                 {{#if (eq ../rol "admin")}}
-                <a class="btn fs-4" onclick="deleteUser({{this.dataValues.id}})"><i
-                    class="bi bi-x-circle text-danger"></i></a>
+                <a class="btn fs-4" onclick="deleteEquipo({{this.dataValues.id}})"><i
+                    class="bi bi-x-circle text-danger" title="dar de baja"></i></a>
                 {{/if}}
               </div>
             </td>

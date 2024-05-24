@@ -52,10 +52,10 @@ myModalEmpleadoAoficina.addEventListener('shown.bs.modal', async function (event
       }
 
       const result = await Swal.fire({
-        title: '¿Está seguro de agregar este equipo a esta persona?',
+        title: '¿Está seguro de agregar esta persona a esta oficina?',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Sí, entregar',
+        confirmButtonText: 'Sí, agregar',
         cancelButtonText: 'Cancelar'
       });
 
@@ -66,33 +66,45 @@ myModalEmpleadoAoficina.addEventListener('shown.bs.modal', async function (event
             headers: {
               "Content-Type": "application/json"
             }
-          });
+          })
+            // if (!response.ok) {
+            //   throw new Error("Error al querer agregar al empleado");
+            // }
 
-          if (!response.ok) {
-            throw new Error("Error al querer agregar al empleado");
-          }
+            // await Swal.fire({
+            //   title: 'Agregado correctamente!',
+            //   icon: 'success'
+            // });
+            // window.location.reload();
+            .then(response => {
+              if (response.ok) {
+                Swal.fire(
+                  'Agregado!',
+                  'La persona se agregó correctamente!',
+                  'success'
+                ).then(() => {
+                  window.location.reload();
+                });
+              } else {
+                return response.json().then(error => {
+                  throw new Error(error.error);
+                })
+              }
+            })
 
-          await Swal.fire({
-            title: 'Agregado correctamente!',
-            icon: 'success'
-          });
-
-          window.location.reload();
         } catch (error) {
           Swal.fire({
             title: 'Error',
-            text: 'Error al querer agregar al empleado',
+            text: error,
             icon: 'error'
           });
         }
       } else {
-        // formDarEmpleado.reset();
         Swal.fire('Agregar empleado a oficina cancelado', '', 'info');
         // window.location.reload();
       }
     });
   } catch (error) {
-    console.error('Error al obtener las opciones:', error);
     Swal.fire({
       title: 'Error',
       text: 'Error al cargar los empleados',
@@ -101,4 +113,68 @@ myModalEmpleadoAoficina.addEventListener('shown.bs.modal', async function (event
   }
 });
 
+removerEmpleado = (oficinaId, empleadoId) => {
+  confirmAndFetch({
+    confirmationTitle: '¿Estás seguro?',
+    confirmationText: 'El empleado pasará a estar sin designar en oficina',
+    confirmButtonText: 'Sí, retirarlo!',
+    cancelButtonText: 'Cancelar',
+    url: `/api/empleados/removerOficina/${empleadoId}/${oficinaId}`,
+    method: 'POST',
+    successTitle: 'Retirado!',
+    successText: 'El empleado ha sido desvinculado correctamente',
+    errorTitle: '¡Error!',
+    errorText: 'No se pudo retirar de la oficina.',
+    onSuccess: () => {
+      window.location.reload();
+    }
+  });
+}
 
+function confirmAndFetch(config) {
+  Swal.fire({
+    title: config.confirmationTitle,
+    text: config.confirmationText,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: config.confirmButtonText,
+    cancelButtonText: config.cancelButtonText
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(config.url, {
+        method: config.method
+      })
+        .then(response => {
+          if (response.ok) {
+            Swal.fire({
+              title: config.successTitle,
+              text: config.successText,
+              icon: 'success'
+            }).then(() => {
+              if (config.onSuccess) {
+                config.onSuccess();
+              }
+            });
+          } else {
+            return response.json().then(error => {
+              throw new Error(error.error);
+            })
+            // Swal.fire({
+            //   title: config.errorTitle,
+            //   text: config.errorText,
+            //   icon: 'error'
+            // });
+          }
+        })
+        .catch(error => {
+          Swal.fire({
+            title: config.errorTitle,
+            text: error,
+            icon: 'error'
+          });
+        });
+    } else {
+      Swal.fire('Borrado cancelado', '', 'info');
+    }
+  });
+}

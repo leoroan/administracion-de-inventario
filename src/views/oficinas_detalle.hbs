@@ -8,8 +8,7 @@
         <h1>{{datosOficina.nombre}}</h1>
       </div>
       <div class="d-flex justify-content-end">
-        <a href="/main/offices"><button type="button"
-            class="btn btn-primary btn-sm mx-1">volver</button></a>
+        <a href="/main/offices"><button type="button" class="btn btn-primary btn-sm mx-1">volver</button></a>
       </div>
     </div>
 
@@ -82,17 +81,24 @@
                           <div class="d-flex">
                             <div class="p-2 flex-fill col-md-1 fw-medium">
                               <label for="id" class="form-label fw-medium">ID</label>
-                              <input type="text" class="form-control" id="id" value="{{this.dataValues.id}}"
-                                readonly>
+                              <input type="text" class="form-control" id="id" value="{{this.dataValues.id}}" readonly>
                             </div>
                             <div class="p-2 flex-fill col-md-6 fw-medium">
                               <label for="tipoEquipo" class="form-label fw-medium">NOMBRE Y APELLIDO</label>
                               <input type="text" class="form-control" id="tipoEquipo"
-                                value="{{this.dataValues.nombre}} {{this.dataValues.apellido}}"
-                                readonly>
+                                value="{{this.dataValues.nombre}} {{this.dataValues.apellido}}" readonly>
                             </div>
-                            <a href='/main/employees/{{this.dataValues.id}}'><i
-                                class="bi bi-box-arrow-in-right text-warning fs-2"></i></a>
+                            <div class="d-flex justify-content-between flex-column text-center">
+                              <a href='/main/employees/{{this.dataValues.id}}'><i
+                                  class="bi bi-box-arrow-in-right text-warning fs-2"></i>
+                              </a>
+                              {{#if (eq ../rol "admin")}}
+                              <a class="btn fs-4"
+                                onclick="removerEmpleado({{../datosOficina.id}}, {{this.dataValues.id}})"><i
+                                  class="bi bi-x-circle text-danger"></i></a>
+                              {{/if}}
+
+                            </div>
                           </div>
                         </div>
                         {{/each}}

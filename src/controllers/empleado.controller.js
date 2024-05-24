@@ -109,20 +109,21 @@ export async function asignarEquipoAempleado(req, res) {
 };
 
 export async function asignarOficinaAempleado(req, res) {
-    const empleadoId = req.params.empleadoId;
-    const oficinaId = req.params.oficinaId;
-    try {
-      const empleado = await empleadoService.getEmpleadoById(empleadoId, { include: 'Oficina' });
-      const oficina = await oficinaService.getOficinaById(oficinaId);
-      if (empleado.Oficina) {
-        res.sendClientError('office is already assigned to another employee');
-      }
-      empleado.setOficina(oficina);
-      res.sendSuccess({ state: "office assigned to employee" });
-    } catch (error) {
-      devLogger.error(error);
-      return res.sendInternalServerError(error);
+  const empleadoId = req.params.empleadoId;
+  const oficinaId = req.params.oficinaId;
+  try {
+    const empleado = await empleadoService.getEmpleadoById(empleadoId, { include: 'Oficina' });
+    const oficina = await oficinaService.getOficinaById(oficinaId);
+    if (empleado.Oficina) {
+      res.sendClientError('El empleado ya está asignado a otra oficina.');
+    } else {
+      await empleado.setOficina(oficina);
+      res.sendSuccess({ state: "Empleado asignado a la oficina" });
     }
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
 }
 
 export async function removerEquipoAempleado(req, res) {
@@ -137,6 +138,20 @@ export async function removerEquipoAempleado(req, res) {
     await equipoInformaticoService.updateEquipoInformatico(equipoInformaticoId, { "estado": "DISPONIBLE" });
     empleado.removeEquipoInformaticos(equipoInformatico);
     res.sendSuccess({ state: "hardware removed from employee" });
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
+export async function removerOficinaAempleado(req, res) {
+  const empleadoId = req.params.empleadoId;
+  const oficinaId = req.params.oficinaId;
+  try {
+    const empleado = await empleadoService.getEmpleadoById(empleadoId, { include: 'Oficina' });
+    const oficina = await oficinaService.getOficinaById(oficinaId);
+    oficina.removeEmpleado(empleado)
+    res.sendSuccess({ state: "office removed from employee" });
   } catch (error) {
     devLogger.error(error);
     return res.sendInternalServerError(error);

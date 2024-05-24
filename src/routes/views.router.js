@@ -39,6 +39,8 @@ export default class viewsRouter extends CustomRouter {
       const equipo = await equipoInformaticoService.getEquipoInformaticoById(req.params.equipoId);
       const equipoEmpleado = equipo.dataValues.Empleado;
       const equipoMantenimiento = equipo.dataValues.MantenimientoDeEquipos;
+      const equipoOficina = equipo.dataValues.Oficinas;
+      console.log(equipoOficina);
       res.render("inventario_detalle", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
@@ -48,6 +50,7 @@ export default class viewsRouter extends CustomRouter {
         datosEquipo: equipo.dataValues,
         equipoEmpleado: equipoEmpleado,
         equipoMantenimiento: equipoMantenimiento,
+        equipoOficina: equipoOficina,
         rol: "admin"
         // user: req.session.user || req.user,
         // user: req.session.user || req.user,

@@ -78,6 +78,10 @@ export async function actualizarEquipoInformatico(req, res) {
 export async function eliminarEquipoInformatico(req, res) {
   const equipoInformaticoId = req.params.id;
   try {
+    const equipo = await equipoInformaticoService.getEquipoInformaticoById(equipoInformaticoId, { include: "Empleado" })
+    if (equipo.Empleado) {
+      return res.sendClientError('El equipo tiene un empleado asignado');
+    }
     await equipoInformaticoService.updateEquipoInformatico(equipoInformaticoId, { "estado": "BAJA" });
     await equipoInformaticoService.deleteEquipoInformatico(equipoInformaticoId);
     return res.sendSuccess({ state: "Hardware deleted" });
