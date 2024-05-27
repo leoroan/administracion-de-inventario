@@ -22,13 +22,16 @@
                 <h5 class="card-title mb-3">Información del equipo</h5>
                 <div class="row mx-3">
 
-                  {{#if datosEquipo.Oficinas}}
+                  {{#if equipoOficina}}
+                  {{#each equipoOficina}}
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label for="ubicacion" class="form-label fw-medium">ubicacion del equipo</label>
-                      <input type="text" class="form-control" id="{{@key}}" value="{{datosEquipo.}}" readonly>
+                      <input type="text" class="form-control" id="oficinaNombre" value="{{this.dataValues.nombre}}"
+                        readonly>
                     </div>
                   </div>
+                  {{/each}}
                   {{/if}}
 
                   {{#if equipoEmpleado}}
@@ -95,7 +98,7 @@
         </div>
 
         {{#if (eq rol "admin")}}
-        {{#unless equipoEmpleado}}
+        {{#unless (or equipoEmpleado equipoOficina)}}
         <div class="col mt-4">
           <div class="card">
             <div class="card-body shadow">
@@ -105,7 +108,6 @@
                   <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarEquipoApersonaModal"
                     data-id="{{datosEquipo.id}}"><i class="bi bi-person-plus fs-2 text-success"></i></a>
                   {{> modal_equipo_a_persona}}
-                  {{#unless equipoOficina}}
                 </div>
 
                 <div>
@@ -118,7 +120,6 @@
             </div>
           </div>
         </div>
-        {{/unless}}
         {{/unless}}
         {{/if}}
 
@@ -155,19 +156,15 @@
                                 value="{{equipoEmpleado.dataValues.nombre}} {{equipoEmpleado.dataValues.apellido}}"
                                 readonly>
                             </div>
-
                             <div class="d-flex justify-content-between flex-column text-center">
-
                               <a class="btn" href='/main/employees/{{equipoEmpleado.dataValues.id}}'><i
                                   class="bi bi-box-arrow-in-right text-warning fs-2"></i>
                               </a>
-
                               {{#if (eq rol "admin")}}
                               <a class="btn fs-4"
                                 onclick="removerEquipo({{datosEquipo.id}}, {{equipoEmpleado.dataValues.id}})"><i
                                   class="bi bi-x-circle text-danger"></i></a>
                               {{/if}}
-
                             </div>
 
                           </div>
@@ -190,50 +187,45 @@
               <div class="card-body shadow">
                 <div class="d-flex justify-content-between">
                   <h5 class="card-title mb-3">Oficina asociada al equipo</h5>
-                  {{#if (eq rol "admin")}}
+                  {{!-- {{#if (eq rol "admin")}}
                   {{#unless (eq equipoOficina null)}}
                   <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarEquipoAoficinaModal"
                     data-id="{{datosEquipo.id}}"><i class="bi bi-pc-display fs-3 text-success">+</i></a>
                   {{> modal_equipo_a_oficina}}
                   {{/unless}}
-                  {{/if}}
+                  {{/if}} --}}
                 </div>
                 <div class="row">
                   <div class="row m-2">
                     <div class="col">
                       <div class="card">
-                        {{#if (eq equipoOficina null)}}
+                        {{#unless (eq equipoOficina null)}}
+                        {{#each equipoOficina}}
                         <div class="card-body shadow">
                           <div class="d-flex">
                             <div class="p-2 flex-fill col-md-1 fw-medium">
                               <label for="id" class="form-label fw-medium">ID</label>
-                              <input type="text" class="form-control" id="id" value="{{equipoOficina.dataValues.id}}"
-                                readonly>
+                              <input type="text" class="form-control" id="id" value="{{this.dataValues.id}}" readonly>
                             </div>
                             <div class="p-2 flex-fill col-md-6 fw-medium">
-                              <label for="tipoEquipo" class="form-label fw-medium">NOMBRE Y APELLIDO</label>
-                              <input type="text" class="form-control" id="tipoEquipo"
-                                value="{{equipoOficina.dataValues.nombre}} {{equipoOficina.dataValues.apellido}}"
+                              <label for="tipoEquipo" class="form-label fw-medium">NOMBRE</label>
+                              <input type="text" class="form-control" id="tipoEquipo" value="{{this.dataValues.nombre}}"
                                 readonly>
                             </div>
-
                             <div class="d-flex justify-content-between flex-column text-center">
-
-                              <a class="btn" href='/main/employees/{{equipoOficina.dataValues.id}}'><i
+                              <a class="btn" href='/main/offices/{{this.dataValues.id}}'><i
                                   class="bi bi-box-arrow-in-right text-warning fs-2"></i>
                               </a>
-
-                              {{#if (eq rol "admin")}}
+                              {{#if (eq ../rol "admin")}}
                               <a class="btn fs-4"
-                                onclick="removerEquipo({{datosEquipo.id}}, {{equipoOficina.dataValues.id}})"><i
+                                onclick="removerOficina({{../datosEquipo.id}}, {{this.dataValues.id}})"><i
                                   class="bi bi-x-circle text-danger"></i></a>
                               {{/if}}
-
                             </div>
-
                           </div>
                         </div>
-                        {{/if}}
+                        {{/each}}
+                        {{/unless}}
                       </div>
                     </div>
                   </div>

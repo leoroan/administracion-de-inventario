@@ -118,41 +118,54 @@
               <div class="card-body">
                 <div class="d-flex justify-content-between">
                   <h5 class="card-title mb-3">Equipos asociados a la oficina</h5>
-                  {{#if (eq rol "admin")}}
+                  {{!-- {{#if (eq rol "admin")}}
                   {{#unless (eq oficinaEquipos null)}}
                   <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarEquipoAoficinaModal"
                     data-id="{{oficinaEquipos.id}}"><i class="bi bi-pc-display fs-3 text-success">+</i></a>
                   {{> modal_equipo_a_oficina}}
                   {{/unless}}
-                  {{/if}}
+                  {{/if}} --}}
                 </div>
                 <div class="row">
                   <div class="row m-2">
                     <div class="col">
                       <div class="card">
-                        {{#if (eq oficinaEquipos null )}}
+                        {{#unless (eq oficinaEquipos null )}}
+                        {{#each oficinaEquipos}}
                         <div class="card-body shadow">
                           <div class="d-flex">
                             <div class="p-2 flex-fill col-md-1 fw-medium">
-                              <label for="id" class="form-label fw-medium">Fecha creado</label>
-                              <input type="text" class="form-control" id="id"
-                                value="{{oficinaEquipos.dataValues.createdAt}}" readonly>
+                              <label for="id" class="form-label fw-medium">ID</label>
+                              <input type="text" class="form-control" id="id" value="{{this.dataValues.id}}" readonly>
                             </div>
                             <div class="p-2 flex-fill col-md-1 fw-medium">
-                              <label for="id" class="form-label fw-medium">Fecha actualizado</label>
-                              <input type="text" class="form-control" id="id"
-                                value="{{oficinaEquipos.dataValues.updatedAt}}" readonly>
+                              <label for="id" class="form-label fw-medium">MARCA</label>
+                              <input type="text" class="form-control" id="id" value="{{this.dataValues.marca}}"
+                                readonly>
                             </div>
                             <div class="p-2 flex-fill col-md-6 fw-medium">
-                              <label for="tipoEquipo" class="form-label fw-medium">Descripcion</label>
-                              <input type="text" class="form-control" id="tipoEquipo"
-                                value="{{oficinaEquipos.dataValues.descripcion}}" readonly>
+                              <label for="tipoEquipo" class="form-label fw-medium">MODELO</label>
+                              <input type="text" class="form-control" id="tipoEquipo" value="{{this.dataValues.modelo}}"
+                                readonly>
                             </div>
-                            <a href='/main/mantenimiento/{{oficinaEquipos.dataValues.id}}'><i
-                                class="bi bi-box-arrow-in-right text-warning fs-2"></i></a>
+                            <div class="p-2 flex-fill col-md-6 fw-medium">
+                              <label for="tipoEquipo" class="form-label fw-medium">TIPO</label>
+                              <input type="text" class="form-control" id="tipoEquipo"
+                                value="{{this.dataValues.tipoEquipo}}" readonly>
+                            </div>
+                            <div class="d-flex justify-content-between flex-column text-center">
+                              <a href='/main/inventory/{{this.dataValues.id}}'><i
+                                  class="bi bi-box-arrow-in-right text-warning fs-2"></i></a>
+                              {{#if (eq ../rol "admin")}}
+                              <a class="btn fs-4"
+                                onclick="removerEquipo({{../datosOficina.id}}, {{this.dataValues.id}})"><i
+                                  class="bi bi-x-circle text-danger"></i></a>
+                              {{/if}}
+                            </div>
                           </div>
                         </div>
-                        {{/if}}
+                        {{/each}}
+                        {{/unless}}
                       </div>
                     </div>
                   </div>

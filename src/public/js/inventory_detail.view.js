@@ -51,7 +51,7 @@ myModalEquipoAoficina.addEventListener('shown.bs.modal', async function (event) 
 
       if (result.isConfirmed) {
         try {
-          const response = await fetch(`/api/empleados/agregarEquipo/${oficinaId}/${equipoId}`, {
+          const response = await fetch(`/api/oficinas/add/${oficinaId}/${equipoId}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
@@ -187,6 +187,49 @@ myModalEquipoApersona.addEventListener('shown.bs.modal', async function (event) 
     });
   }
 });
+
+function removerOficina(equipoId, oficinaId) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'El equipo pasará a estar en estado "disponible"',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, retirarlo!',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/api/oficinas/remove/${oficinaId}/${equipoId}`, {
+        method: 'POST'
+      })
+        .then(response => {
+          if (response.ok) {
+            Swal.fire(
+              'Retirado!',
+              'El equipo ha sido desvinculado correctamente, este pasa a estar en estado "disponible"',
+              'success'
+            ).then(() => {
+              window.location.reload();
+            });
+          } else {
+            Swal.fire(
+              '¡Error!',
+              'No se pudo retirar de la oficina.',
+              'error'
+            );
+          }
+        })
+        .catch(error => {
+          Swal.fire(
+            '¡Error!',
+            'Ocurrió un error al intentar retirar el equipo.',
+            'error'
+          );
+          console.error('Error al querer retirar el equipo:', error);
+        });
+    }
+  });
+
+}
 
 
 function removerEquipo(equipoId, empleadoId) {

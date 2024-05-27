@@ -1,5 +1,5 @@
 import { devLogger } from '../config/logs/logger.config.js';
-import { empleadoService, oficinaService } from '../services/repository/services.js';
+import { empleadoService, equipoInformaticoService, oficinaService } from '../services/repository/services.js';
 
 export async function crearOficina(req, res) {
   const obj = req.body;
@@ -101,6 +101,38 @@ export async function agregarEmpleadoAoficina(req, res) {
     const oficina = await oficinaService.getOficinaById(oficinaId);
     const empleado = await empleadoService.getEmpleadoById(empleadoId);
     await oficina.addEmpleado(empleado)
+    return res.sendSuccess(oficina);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
+export async function agregarEquipoAoficina(req, res) {
+  const oficinaId = req.params.oficinaId;
+  const equipoId = req.params.equipoId;
+  try {
+    const oficina = await oficinaService.getOficinaById(oficinaId);
+    const equipo = await equipoInformaticoService.getEquipoInformaticoById(equipoId);
+    await equipoInformaticoService.updateEquipoInformatico(equipoId, { "estado": "ASIGNADO" });
+    await oficina.addEquipoInformatico(equipo);
+    await equipo.addOficina(oficina);
+    return res.sendSuccess(oficina);
+  } catch (error) {
+    devLogger.error(error);
+    return res.sendInternalServerError(error);
+  }
+}
+
+export async function removerEquipoAoficina(req, res) {
+  const oficinaId = req.params.oficinaId;
+  const equipoId = req.params.equipoId;
+  try {
+    const oficina = await oficinaService.getOficinaById(oficinaId);
+    const equipo = await equipoInformaticoService.getEquipoInformaticoById(equipoId);
+    await equipoInformaticoService.updateEquipoInformatico(equipoId, { "estado": "DISPONIBLE" });
+    await oficina.removeEquipoInformatico(equipo);
+    await equipo.setOficinas(null);
     return res.sendSuccess(oficina);
   } catch (error) {
     devLogger.error(error);

@@ -13,7 +13,7 @@ const connectWithRetry = () => {
   return sequelize.authenticate()
     .then(() => {
       devLogger.debug('Sequelize db connection success');
-      // return sequelize.sync({ force: true, alter: true });
+      return sequelize.sync({  alter: true });
       return sequelize.sync();
     })
     .then(() => {

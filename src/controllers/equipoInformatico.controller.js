@@ -102,24 +102,3 @@ export async function restaurarEquipoInformatico(req, res) {
     return res.sendInternalServerError(error);
   }
 }
-
-// export async function asignarTipoEquipoAequipo(req, res) {
-//   const equipoInformaticoId = req.params.eid;
-//   const tipoEquipoId = req.params.tid;
-//   try {
-//     const equipoInformatico = await equipoInformaticoService.getEquipoInformaticoById(equipoInformaticoId);
-//     if (!equipoInformatico) {
-//       return res.sendClientError('hardware not found');
-//     }
-//     const tipoEquipo = await tipoEquipoService.getTipoEquipoById(tipoEquipoId);
-//     if (!tipoEquipo) {
-//       return res.sendClientError(error);
-//     }
-//     equipoInformatico.setTipoEquipo(tipoEquipo);
-//     return res.sendSuccess(equipoInformatico);
-//   } catch (error) {
-//     devLogger.error(error);
-//     return res.sendInternalServerError(error);
-//   }
-// }
-

@@ -10,7 +10,7 @@ const Oficina = sequelize.define('Oficina', {
   descripcion: {
     type: DataTypes.TEXT,
     allowNull: true,
-    defaultValue: 'sin descripcion'
+    defaultValue: 'SIN DESCRIPCION'
   },
   telefono: {
     type: DataTypes.STRING,
@@ -25,6 +25,15 @@ const Oficina = sequelize.define('Oficina', {
       isEmail: true
     }
   },
-}, { timestamps: true, paranoid: true });
+}, {
+  timestamps: true, paranoid: true,
+  hooks: {
+    beforeCreate: async (instance) => {
+      instance.nombre = instance.nombre.toUpperCase();
+      instance.descripcion = instance.descripcion.toUpperCase();
+      instance.email = instance.email.toUpperCase();
+    }
+  }
+});
 
 export { Oficina };

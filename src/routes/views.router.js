@@ -40,7 +40,6 @@ export default class viewsRouter extends CustomRouter {
       const equipoEmpleado = equipo.dataValues.Empleado;
       const equipoMantenimiento = equipo.dataValues.MantenimientoDeEquipos;
       const equipoOficina = equipo.dataValues.Oficinas;
-      console.log(equipoOficina);
       res.render("inventario_detalle", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
@@ -90,12 +89,14 @@ export default class viewsRouter extends CustomRouter {
 
     this.get('/main/offices', ["PUBLIC"], async (req, res) => {
       const oficinas = await oficinaService.getAllOficinas();
+      const lugares = await lugarService.getAllLugares();
       res.render("oficinas", {
         fileFavicon: "favicon.ico",
         fileCss: "styles.css",
         fileJs: "oficinas.view.js",
         title: "Inventario MT - oficinas",
         oficinas: oficinas,
+        lugares: lugares,
         currentPath: req.path,
         rol: "admin"
         // user: req.session.user || req.user,

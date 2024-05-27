@@ -1,0 +1,54 @@
+<div class="modal fade" id="agregarOficinaModal" tabindex="-1" aria-labelledby="agregarOficinaModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="agregarOficinaModalLabel">Crear una nueva oficina</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="oficinaForm" novalidate>
+
+          <div class="mb-3 form-group">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+            <div class="invalid-feedback">
+              Por favor, ingrese un nombre de oficina.
+            </div>
+          </div>
+
+          <div class="mb-3 form-group">
+            <label for="descripcion" class="form-label">descripcion</label>
+            <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+          </div>
+
+          <div class="mb-3 form-group">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="telefono" name="telefono">
+          </div>
+
+          <div class="mb-3 form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email" name="email">
+          </div>
+
+          <label for="edificioLugar">Edificio donde se encuentra la oficina:</label>
+            <select class="form-select" id="lugarId" name="lugarId">
+              <option value="" selected disabled>Seleccione una opción</option>
+              {{#each lugares}}
+              <option value="{{this.dataValues.id}}">{{this.dataValues.nombre}}</option>
+              {{/each}}
+            </select>
+            <div class="invalid-feedback">
+              Por favor, seleccione una opción.
+            </div>
+
+          <button type="submit" class="btn btn-primary mt-3">Crear oficina</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

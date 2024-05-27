@@ -12,7 +12,7 @@
         {{#if (eq rol "admin")}}
         <a class="btn" data-bs-toggle="modal" data-bs-target="#agregarOficinaModal"><i
             class="bi bi-building-add fs-1 text-success"></i></a>
-        {{> modal_nuevo_empleado}}
+        {{> modal_nueva_oficina}}
         {{/if}}
       </div>
 
@@ -35,7 +35,7 @@
               <td class="fs-5">{{this.dataValues.nombre}}</td>
               <td>
                 {{#if (eq this.dataValues.Lugar null)}}
-                <p>sin edificio asignado</p>
+                <p>SIN EDIFICIO ASIGNADO</p>
                 {{else}}
                 {{this.dataValues.Lugar.nombre}}
                 {{/if}}

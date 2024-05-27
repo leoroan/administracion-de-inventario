@@ -1,5 +1,3 @@
-console.log("greetings from empelados main");
-
 const busqueda = document.getElementById('busqueda');
 const filas = document.querySelectorAll('tbody tr');
 

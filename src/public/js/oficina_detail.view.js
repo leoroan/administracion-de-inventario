@@ -131,6 +131,24 @@ removerEmpleado = (oficinaId, empleadoId) => {
   });
 }
 
+removerEquipo = (oficinaId, equipoId) => {
+  confirmAndFetch({
+    confirmationTitle: '¿Estás seguro?',
+    confirmationText: 'El equipo pasará a estar disponible',
+    confirmButtonText: 'Sí, retirarlo!',
+    cancelButtonText: 'Cancelar',
+    url: `/api/oficinas/remove/${oficinaId}/${equipoId}/`,
+    method: 'POST',
+    successTitle: 'Retirado!',
+    successText: 'El equipo ha sido removido correctamente',
+    errorTitle: '¡Error!',
+    errorText: 'No se pudo retirar de la oficina.',
+    onSuccess: () => {
+      window.location.reload();
+    }
+  });
+}
+
 function confirmAndFetch(config) {
   Swal.fire({
     title: config.confirmationTitle,
