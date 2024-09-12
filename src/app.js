@@ -1,10 +1,9 @@
 import express from 'express';
-import config from './config/config.js';
+import config from './config/configuration.js';
 import configureExpress from './config/server/express.config.js';
-import { sequelize } from './services/db/models/models.setup.db.js';
-import { devLogger } from './config/logs/logger.config.js';
-import { checkConnection } from "./config/mail/nodemailer.config.js";
-const SERVER_PORT = config.port;
+import { sequelize } from './services/db/models/setup.db.js';
+import { devLogger } from './config/logger/logger.config.js';
+import { checkConnection } from './config/mail/nodemailer.config.js';
 
 const app = express();
 configureExpress(app);
@@ -12,16 +11,16 @@ configureExpress(app);
 const connectWithRetry = () => {
   return sequelize.authenticate()
     .then(() => {
-      devLogger.debug('Sequelize db connection success');
-      return sequelize.sync({  alter: true });
+      devLogger.info('Connection success');
+      // return sequelize.sync({ force: true, alter: true });
       return sequelize.sync();
     })
     .then(() => {
-      devLogger.debug('Syncing models, done connection');
-      // console.log("seqs.models: ", sequelize.models);
-      app.listen(SERVER_PORT, () => {
-        devLogger.info(`Server listening at ${SERVER_PORT}`);
-        checkConnection; // nodemailer
+      devLogger.info(`Models sincro: done, DB connection at port: ${config.db.db_port}`);
+      // console.log(sequelize.models)
+      app.listen(config.port, () => {
+        devLogger.info(`Server listen at port: ${config.port} in ${config.environment}-mode `);
+        checkConnection;
       });
     })
     .catch((error) => {

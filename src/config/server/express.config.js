@@ -1,92 +1,63 @@
-// express-config.js
-import express from 'express';
-import session from 'express-session';
-import handlebars from "express-handlebars";
-import handlebarsHelper from '../../utils/handlebars-helpers.js';
-import cors from 'cors';
-import __dirname from "../../utils.js";
-import { addLogger } from "../../middlewares/logger.middleware.js";
-import equiposInformaticosExtendRouter from '../../routes/equiposInformaticos.router.js';
-import empleadoExtendRouter from '../../routes/empleado.router.js';
-import marcaEquipoExtendRouter from '../../routes/marcaEquipo.router.js';
-import modeloEquipoExtendedRouter from '../../routes/modeloEquipo.router.js';
-import lugarExtendRouter from '../../routes/lugar.router.js';
-import oficinaExtendedRouter from '../../routes/oficina.router.js';
-import tipoEquipoExtendedRouter from '../../routes/tipoEquipo.router.js';
-import mantenimientoDeEquipoExtendedRouter from '../../routes/mantenimientoDeEquipo.router.js';
-import viewsRouter from '../../routes/views.router.js';
+import cors from 'cors'
+import helmet from 'helmet'
+import express from 'express'
+import session from 'express-session'
+import passport from 'passport'
+import cookieParser from 'cookie-parser'
+import { addLogger } from '../../middlewares/logger.middleware.js'
+// import userExtendRouter from '../../routes/user.router.js'
+// import sessionExtendRouter from '../../routes/session.router.js'
+// import initializePassport from '../auth/passport.config.js'
+
+// import { createAdmin } from '../../controllers/user.controller.js'
 
 export default function configureExpress(app) {
-  app.use(cors());
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(addLogger);
+  // initializePassport();
+  // createAdmin();
 
-  app.engine("hbs",
-    handlebars.engine({
-      handlebars: handlebarsHelper,
-      extname: "hbs",
-      defaultLayout: "main",
-      partialsDir: `${__dirname}/views/partials`,
-      layoutsDir: `${__dirname}/views/layouts`,
-      runtimeOptions: {
-        allowProtoPropertiesByDefault: true,
-        allowProtoMethodsByDefault: true
+  const allowedOrigins = [
+    process.env.FRONTEND_ORIGIN,
+    // 'https://actasweb.vtv.gba.gob.ar',
+  ];
+  app.use(cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
       }
-    })
-  );
+    },
+    credentials: true
+  }));
 
-  app.set("view engine", "hbs");
-  app.set("views", `${__dirname}/views`);
-  app.use(express.static(`${__dirname}/public`));
+  app.use(express.json())
+  app.use(express.urlencoded({ extended: true }))
+  app.use(addLogger)
+  app.use(cookieParser('@ny1kN0wTh15?'))
+  app.use(helmet());
+
   app.use(session({
-    secret: 'mtInventory',
+    secret: 'MinTrpInv@202X',
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, //  en producción cambia esto a true
-      maxAge: 1800000,
-      // httpOnly: true, // Agrega este header para mayor seguridad
-      // sameSite: 'strict' // Agrega este header para mayor seguridad
+      httpOnly: true,
+      secure: false, //  en producción cambiar esto a true
+      // sameSite: "strict",
+      maxAge: 1800000
     }
-  }));
+  }))
+  app.use(passport.initialize())
+  app.use(passport.session())
 
-  app.get('/loggerTest', (req, res) => {
-    req.logger.debug('Test - DEBUG')
-    req.logger.http('Test - HTTP')
-    req.logger.info('Test - INFO')
-    req.logger.warning('Test - WARNING')
-    req.logger.error('Test - ERROR')
-    req.logger.fatal('Test - FATAL')
-    res.send({ status: 200, message: 'Logger test' })
-  })
+  // routes here, before *
+  // const userRouter = new userExtendRouter()
+  // const sessionRouter = new sessionExtendRouter()
 
-  //APIS
-  const equiposInformaticos = new equiposInformaticosExtendRouter();
-  const empleados = new empleadoExtendRouter();
-  const marcaEquipo = new marcaEquipoExtendRouter();
-  const modeloEquipo = new modeloEquipoExtendedRouter();
-  const lugares = new lugarExtendRouter();
-  const oficinas = new oficinaExtendedRouter();
-  const tipoEquipo = new tipoEquipoExtendedRouter();  
-  const mantenimientoDeEquipo = new mantenimientoDeEquipoExtendedRouter();  
-  app.use("/api/equipos/", equiposInformaticos.getRouter());
-  app.use("/api/marcas/", marcaEquipo.getRouter());
-  app.use("/api/modelos/", modeloEquipo.getRouter());
-  app.use("/api/lugares/", lugares.getRouter());
-  app.use("/api/empleados/", empleados.getRouter());
-  app.use("/api/oficinas/", oficinas.getRouter());
-  app.use("/api/tipoEquipos/", tipoEquipo.getRouter());
-  app.use("/api/mantenimiento/", mantenimientoDeEquipo.getRouter());
+  // app.use('/api/users', userRouter.getRouter())
+  // app.use('/api/session', sessionRouter.getRouter())
 
-  //routes here, before *
-  //VISTAS
-  const vistas = new viewsRouter();
-  app.use("/", vistas.getRouter());
-
-  // app.get('*', (req, res) => {
-  //   req.logger.error('error 404 - PAGE NOT FOUND')
-  //   res.status(404).render("error404");
-  // });
-
+  app.get('/status', (req, res) => {
+    res.sendStatus(200);
+  });
 }

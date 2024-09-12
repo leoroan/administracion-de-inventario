@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 
-export const PRIVATE_KEY = "CoderhouseBackendCourseSecretKeyJWT";
+export const PRIVATE_KEY = "usersPrivateKeyTest001";
 
 export const generateJWToken = (user) => {
-  return jwt.sign({ user }, PRIVATE_KEY, { expiresIn: '1h' })
+  return jwt.sign({ user }, PRIVATE_KEY, { expiresIn: '30m' })
 }
 
 export const authToken = (req, res, next) => {

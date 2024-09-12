@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
-import { devLogger } from "../logs/logger.config.js";
+import { devLogger } from "../logger/logger.config.js";
+
 const transporter = nodemailer.createTransport({
   host: 'mail.transporte.gba.gob.ar',
   port: 587,
@@ -9,16 +10,18 @@ const transporter = nodemailer.createTransport({
   },
   auth: {
     user: 'no-responder@transporte.gba.gob.ar',
-    pass: 'asd1234'
-  }
+    pass: 'MinTrpDevs20XX'
+  },
+  // logger: true, 
+  // debug: true  
 });
 
-const checkConnection = transporter.verify(function (error, success) {
+const checkConnection = transporter.verify(function (error) {
   if (error) {
-    devLogger.error("cannot stablish connection to mail server");
+    devLogger.warning("cannot establish connection to mail server: " + error.message);
   } else {
-    devLogger.debug('nodemailer ready to send');
+    devLogger.info('nodemailer ready to send');
   }
-})
+});
 
 export { transporter, checkConnection };
