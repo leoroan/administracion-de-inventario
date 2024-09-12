@@ -5,6 +5,7 @@ import session from 'express-session'
 import passport from 'passport'
 import cookieParser from 'cookie-parser'
 import { addLogger } from '../../middlewares/logger.middleware.js'
+import errorHandler from '../../middlewares/errorHandler.middleware.js'
 // import userExtendRouter from '../../routes/user.router.js'
 // import sessionExtendRouter from '../../routes/session.router.js'
 // import initializePassport from '../auth/passport.config.js'
@@ -42,7 +43,7 @@ export default function configureExpress(app) {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false, //  en producción cambiar esto a true
+      secure: process.env.ENV_MODE === "DESARROLLO" ? false : true, //  en producción cambiar esto a true
       // sameSite: "strict",
       maxAge: 1800000
     }
@@ -60,4 +61,5 @@ export default function configureExpress(app) {
   app.get('/status', (req, res) => {
     res.sendStatus(200);
   });
+  app.use(errorHandler);
 }

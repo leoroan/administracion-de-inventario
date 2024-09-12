@@ -5,10 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev-mt": "nodemon src/app.js --mode mt",
-    "dev-dpt": "nodemon src/app.js --mode dpt",
-    "dev-local": "nodemon src/app.js --mode local",
-    "start": "node src/app.js --mode prod"
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
   },
   "keywords": [
     "administrador",

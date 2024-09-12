@@ -1,6 +1,8 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
-import { PRIVATE_KEY, authToken } from "../../utils/jwt.js";
+import { PRIVATE_KEY } from "../../utils/jwt.js";
+import { ForbiddenError, InternalServerError, UnauthorizedError } from "../../utils/errors.js";
+import { devLogger } from "../../config/logger/logger.config.js";
 
 
 export default class CustomRouter {
@@ -50,25 +52,31 @@ export default class CustomRouter {
   };
 
 
-  handlePolicies = (policies) => (req, res, next) => {    
+  handlePolicies = (policies) => (req, res, next) => {
     if (policies[0] === "PUBLIC") return next();
     // const authHeader = req.cookies; //for postman
     const authHeader = req.headers.authorization;  // for explorer
-    if (!authHeader) {
-      return res.status(401).send({ error: "User not authenticated or missing token." });
-    }
+    // if (!authHeader) {
+    //   return res.status(401).send({ error: "User not authenticated or missing token." });
+    // }
+    if (!authHeader) throw new UnauthorizedError();
     // const token = authHeader['jwtCookieToken'];//for postman
     const token = authHeader.split(' ')[1];// for explorer
-    if (!token) {
-      return res.status(401).send("Token missing.");
-    }
+    // if (!token) {
+    //   return res.status(401).send("Token missing.");
+    // }
+    if (!token) throw new UnauthorizedError('Token missing');
     jwt.verify(token, PRIVATE_KEY, (err, decoded) => {
-      if (err) {
-        return res.status(403).send("Invalid token.");
-      }
-      const userRole = decoded.user.rol;
-      if (!policies.includes(userRole)) {
-        return res.status(403).send("User does not have access.");
+      // if (err) {
+      //   return res.status(403).send("Invalid token.");
+      // }
+      if (err) throw new ForbiddenError('Invalid token');
+      // const userRole = decoded.user.rol;
+      // if (!policies.includes(userRole)) {
+      //   return res.status(403).send("User does not have access.");
+      // }
+      if (!policies.includes(decoded.user.rol)) {
+        throw new ForbiddenError('User does not have access');
       }
       next();
     });
@@ -76,11 +84,11 @@ export default class CustomRouter {
 
   generateCustomResponses = (req, res, next) => {
     //Custom responses 
-    res.sendSuccess = payload => res.status(200).send({ status: "Success", payload });
-    res.sendInternalServerError = error => res.status(500).send({ status: "Error", error });
-    res.sendClientError = error => res.status(400).send({ status: "Client Error, Bad request from client.", error });
-    res.sendUnauthorizedError = error => res.status(401).send({ error: "User not authenticated or missing token.", error });
-    res.sendForbiddenError = error => res.status(403).send({ error: "Token invalid or user with no access, Unauthorized please check your roles!" });
+    res.sendSuccess = (payload) => res.status(200).send({ status: "Success", payload });
+    // res.sendInternalServerError = error => res.status(500).send({ status: "Error", error });
+    // res.sendClientError = error => res.status(400).send({ status: "Client Error, Bad request from client.", error });
+    // res.sendUnauthorizedError = error => res.status(401).send({ error: "User not authenticated or missing token.", error });
+    // res.sendForbiddenError = error => res.status(403).send({ error: "Token invalid or user with no access, Unauthorized please check your roles!" });
     next()
   }
 
@@ -89,9 +97,10 @@ export default class CustomRouter {
       try {
         await callback.apply(this, item);
       } catch (error) {
-        console.error(error);
+        devLogger.error(error);
         // params[1] hace referencia al res
-        item[1].status(500).send(error);
+        // item[1].status(500).send(error);
+        next(new InternalServerError());
       }
     });
   };

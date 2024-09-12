@@ -16,10 +16,10 @@ const connectWithRetry = () => {
       return sequelize.sync();
     })
     .then(() => {
-      devLogger.info(`Models sincro: done, DB connection at port: ${config.db.db_port}`);
+      devLogger.info(`Models sincronized, Database connection on port: ${config.db.db_port}`);
       // console.log(sequelize.models)
       app.listen(config.port, () => {
-        devLogger.info(`Server listen at port: ${config.port} in ${config.environment}-mode `);
+        devLogger.info(`Server listening on port ${process.env.PORT} in ${config.environment}-mode `);
         checkConnection;
       });
     })

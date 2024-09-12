@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import config from '../configuration.js';
+import { devLogger } from "../logger/logger.config.js";
 
 const database = config.db.database;
 const username = config.db.user;
@@ -13,7 +14,7 @@ const sequelize = new Sequelize(database, username, password, {
   port: port || 3306,
   dialect: 'mysql',
   timezone: '-03:00',
-  // logging: false
+  logging: msg => devLogger.debug(msg)
 });
 
 export { sequelize };
