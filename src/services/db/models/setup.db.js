@@ -1,5 +1,5 @@
 import { sequelize } from "../../../config/db/sequelize.config.js";
-// import { User } from "../models/user.model.js";
+import { Empleado } from "./Empleado.model.js";
 // import { ActaCalibracion } from "./acta.calibracion.model.js";
 // import { ActaConstatacion } from "./acta.constatacion.model.js";
 // import { ActaInspeccion } from "./acta.inspeccion.model.js";
@@ -12,67 +12,44 @@ import { sequelize } from "../../../config/db/sequelize.config.js";
 // import { ImagenesActas } from "./imagenActa.model.js"
 // import { PlantaVerificadora } from "./plantaVerificadora.model.js";
 
-// const establecerRelaciones = () => {
-//   User.hasMany(OrdenServicio)
-//   User.hasMany(ActaConstatacion)
-//   User.hasMany(ActaInspeccion)
-//   User.hasMany(ActaRequerimiento)
-//   User.hasMany(ActaCalibracion)
-//   User.hasMany(ActaDestruccionObleas)
+const establecerRelaciones = () => {
+  // Empleado - Oficina:
+  Empleado.belongsTo(Oficina); //Un Empleado pertenece a una Oficina
+  Oficina.hasMany(Empleado, { onDelete: 'RESTRICT' });   //Una Oficina tiene varios Empleados, No permite eliminar una oficina si tiene empleados asignados
+  // Oficina - EquipoInformatico:
+  Oficina.hasMany(EquipoInformatico); //Una Oficina tiene varios EquiposInformaticos
+  // Un EquipoInformatico puede pertenecer a una Oficina o a un Empleado (relación exclusiva):
+  EquipoInformatico.belongsTo(Oficina, { foreignKey: 'oficinaId', allowNull: true, unique: true, onDelete: 'RESTRICT' });
+  EquipoInformatico.belongsTo(Empleado, { foreignKey: 'empleadoId', allowNull: true, unique: true, onDelete: 'RESTRICT' });
+  // Oficina - Edificio:
+  Oficina.belongsTo(Edificio, { onDelete: 'RESTRICT' }); //Una Oficina pertenece a un Edificio
+  Edificio.hasMany(Oficina);  //Un Edificio tiene varias Oficinas
+  // Oficina - Dependencias/Suboficinas:
+  Oficina.hasMany(Oficina, { as: 'Dependencias' });
+  Oficina.belongsTo(Oficina, { as: 'OficinaPadre' });
+  // Empleado - EquipoInformatico:
+  Empleado.hasMany(EquipoInformatico); //Un Empleado puede tener varios EquiposInformaticos:
+  // EquipoInformatico - RegistroDeMantenimientoDeEquipo:
+  EquipoInformatico.hasMany(RegistroDeMantenimientoDeEquipo);
+  RegistroDeMantenimientoDeEquipo.belongsTo(EquipoInformatico);
+  // Marca - Modelo:
+  Marca.hasMany(Modelo); //Una Marca tiene varios Modelos
+  Modelo.belongsTo(Marca, { onDelete: 'RESTRICT' }); //Un Modelo pertenece a una Marca
 
-//   OrdenServicio.belongsTo(User);
-//   OrdenServicio.belongsTo(PlantaVerificadora);
-//   OrdenServicio.hasOne(ActaInspeccion);
-//   OrdenServicio.hasOne(ActaCalibracion);
-//   OrdenServicio.hasOne(ActaDestruccionObleas);
-//   OrdenServicio.hasOne(ActaRequerimiento);
 
-//   ActaConstatacion.belongsTo(User);
-//   ActaConstatacion.belongsTo(PlantaVerificadora);
-//   ActaConstatacion.belongsTo(ActaInspeccion);
-//   ActaConstatacion.hasMany(ImagenesActas);
 
-//   ActaRequerimiento.belongsTo(User);
-//   ActaRequerimiento.belongsTo(PlantaVerificadora);
-//   ActaRequerimiento.hasMany(ImagenesActas);
-//   ActaRequerimiento.belongsTo(OrdenServicio);
 
-//   ActaInspeccion.belongsTo(User);
-//   ActaInspeccion.belongsTo(OrdenServicio);
-//   ActaInspeccion.belongsTo(PlantaVerificadora);
-//   ActaInspeccion.hasMany(Matafuegos);
-//   ActaInspeccion.hasMany(Oblea);
-//   ActaInspeccion.hasMany(lineaDeInspeccion);
-//   ActaInspeccion.hasMany(ImagenesActas);
 
-//   PlantaVerificadora.hasMany(ActaInspeccion, { onDelete: 'SET NULL' });
-//   PlantaVerificadora.hasMany(OrdenServicio, { onDelete: 'SET NULL' });
-//   PlantaVerificadora.hasMany(ActaCalibracion, { onDelete: 'SET NULL' });
-//   PlantaVerificadora.hasMany(ActaConstatacion, { onDelete: 'SET NULL' });
-//   PlantaVerificadora.hasMany(ActaDestruccionObleas, { onDelete: 'SET NULL' });
-//   PlantaVerificadora.hasMany(ActaRequerimiento, { onDelete: 'SET NULL' });
 
-//   Matafuegos.belongsTo(ActaInspeccion);
-//   Oblea.belongsTo(ActaInspeccion);
-//   lineaDeInspeccion.belongsTo(ActaInspeccion);
 
-//   ActaCalibracion.belongsTo(User);
-//   ActaCalibracion.belongsTo(PlantaVerificadora);
-//   ActaCalibracion.belongsTo(OrdenServicio);
-//   ActaCalibracion.hasMany(ImagenesActas);
 
-//   ActaDestruccionObleas.belongsTo(User);
-//   ActaDestruccionObleas.belongsTo(OrdenServicio);
-//   ActaDestruccionObleas.belongsTo(PlantaVerificadora);
-//   ActaDestruccionObleas.hasMany(ImagenesActas);
-//   ActaDestruccionObleas.hasMany(Oblea);
 
-//   ImagenesActas.belongsTo(ActaConstatacion);
-//   ImagenesActas.belongsTo(ActaRequerimiento);
-//   ImagenesActas.belongsTo(ActaInspeccion);
-//   ImagenesActas.belongsTo(ActaCalibracion);
-//   ImagenesActas.belongsTo(ActaDestruccionObleas);
-// }
 
-// establecerRelaciones();
+
+
+
+
+}
+
+establecerRelaciones();
 export { sequelize };
