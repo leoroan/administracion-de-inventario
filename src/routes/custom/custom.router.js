@@ -4,7 +4,6 @@ import { PRIVATE_KEY } from "../../utils/jwt.js";
 import { ForbiddenError, InternalServerError, UnauthorizedError } from "../../utils/errors.js";
 import { devLogger } from "../../config/logger/logger.config.js";
 
-
 export default class CustomRouter {
   constructor() {
     this.router = Router();
@@ -53,15 +52,19 @@ export default class CustomRouter {
 
 
   handlePolicies = (policies) => (req, res, next) => {
+    const conPostman = process.env.USE_POSTMAN;
+
     if (policies[0] === "PUBLIC") return next();
     // const authHeader = req.cookies; //for postman
-    const authHeader = req.headers.authorization;  // for explorer
+    // const authHeader = req.headers.authorization;  // for explorer
+    const authHeader = conPostman ? req.cookies : req.headers.authorization;
     // if (!authHeader) {
     //   return res.status(401).send({ error: "User not authenticated or missing token." });
     // }
     if (!authHeader) throw new UnauthorizedError();
     // const token = authHeader['jwtCookieToken'];//for postman
-    const token = authHeader.split(' ')[1];// for explorer
+    // const token = authHeader.split(' ')[1];// for explorer
+    const token = conPostman ? authHeader['jwtCookieToken'] : authHeader.split(' ')[1];
     // if (!token) {
     //   return res.status(401).send("Token missing.");
     // }

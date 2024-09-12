@@ -93,14 +93,16 @@ const initializePassport = () => {
 
 const cookieExtractor = req => {
   let token = null;
-  // if (req && req.cookies) { // this for postman
-  //   token = req.cookies['jwtCookieToken'];
-  // }
-  if (req && req.headers) {  // this for browser
-    // Extraer el token del encabezado Authorization
-    const authHeader = req.headers['authorization'];
-    if (authHeader) {
-      token = authHeader.split(' ')[1];
+  if (process.env.USE_POSTMAN) {
+    if (req && req.cookies) { // this for postman
+      token = req.cookies['jwtCookieToken'];
+    }
+  } else {
+    if (req && req.headers) {  // this for browser
+      const authHeader = req.headers['authorization'];
+      if (authHeader) {
+        token = authHeader.split(' ')[1];
+      }
     }
   }
   return token;
