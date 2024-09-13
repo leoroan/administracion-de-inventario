@@ -24,7 +24,7 @@ const connectWithRetry = () => {
       });
     })
     .catch((error) => {
-      devLogger.error('Connection failed', error);
+      devLogger.error('Unable to connect to the database:', error);
       devLogger.warning('Retrying in 60 seconds... <maybe db down?>');
       return new Promise((resolve) => {
         setTimeout(resolve, 60000);

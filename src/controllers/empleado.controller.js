@@ -1,43 +1,43 @@
-// import { devLogger } from '../config/logger/logger.config.js';
-// import { userService } from "../services/service.js";
-// import { createHash } from '../utils/bcrypt.js';
+import { devLogger } from '../config/logger/logger.config.js';
+import { empleadoService } from '../services/service.js';
+import { createHash } from '../utils/bcrypt.js';
 
-// // Crear un nuevo usuario
-// export async function createAdmin() {
-//   try {
-//     const adminUser = await userService.getUserByUsername("administrador");   
-//     if (!adminUser) {
-//       await userService.createUser({
-//         username: 'administrador',
-//         password: createHash('administrador101402'), 
-//         rol: 'ADMIN',
-//         email: 'admin@transporte.gba.gob.ar'
-//       });
-//       devLogger.info('init-usr-created.');
-//     } else {
-//       devLogger.info('usr-allready.');
-//     }
-//   } catch (error) {
-//     devLogger.error(error);
-//   }
-// }
+// Crear un nuevo usuario
+export async function createAdministrador() {
+  try {
+    const adminUser = await empleadoService.findByEmailORusername("administrador");  
+    if (!adminUser) {
+      await empleadoService.createGeneric({
+        username: process.env.ADMIN_USER,
+        password: createHash(process.env.ADMIN_PASS),
+        rol: 'ADMIN',
+        email: process.env.ADMIN_EMAIL,
+        nombre: 'Administrador',
+        apellido: 'General',
+        dni: '00000000'
+      });
+      devLogger.info('An administrator has been created.');
+    } else {
+      devLogger.info('Administrator already exists.');
+    }
+  } catch (error) {
+    devLogger.debug(`Error in createAdministrador: ${error.message}, Stack: ${error.stack}`);
+  }
+}
 
-// export async function createUser(req, res) {
-//   try {
-//     const user = await userService.createUser(req.body);
-//     // const { username, password } = req.body;    
-//     // const user = await userService.createUser({ username, password });
-//     res.status(201).json(user);
-//   } catch (error) {
-//     devLogger.error(error)
-//     res.status(400).json({ error: error.message });
-//   }
-// }
+export async function create(req, res) {
+  try {
+    const empleado = await empleadoService.createGeneric(req.body);
+    res.sendSuccess(empleado)
+  } catch (error) {
+    next(error);
+  }
+}
 
 // // Obtener un usuario por ID
 // export async function getUserById(req, res) {
 //   try {
-//     const user = await userService.getUserById(req.params.id);
+//     const user = await empleadoService.getUserById(req.params.id);
 //     if (user) {
 //       res.json(user);
 //     } else {
@@ -52,7 +52,7 @@
 // // Obtener un usuario por nombre de usuario
 // export async function getUserByUsername(req, res) {
 //   try {
-//     const user = await userService.getUserByUsername(req.params.username);
+//     const user = await empleadoService.getUserByUsername(req.params.username);
 //     if (user) {
 //       res.json(user);
 //     } else {
@@ -67,7 +67,7 @@
 // // Obtener un usuario por correo electrónico
 // export async function getUserByEmail(req, res) {
 //   try {
-//     const user = await userService.getUserByEmail(req.params.email);
+//     const user = await empleadoService.getUserByEmail(req.params.email);
 //     if (user) {
 //       res.json(user);
 //     } else {
@@ -81,7 +81,7 @@
 
 // export async function getUserByEmailORusername(req, res) {
 //   try {
-//     const user = await userService.getUserByEmailORusername(req.params.some);
+//     const user = await empleadoService.getUserByEmailORusername(req.params.some);
 //     if (user) {
 //       res.json(user);
 //     } else {
@@ -96,7 +96,7 @@
 // // Obtener todos los usuarios
 // export async function getAllUsers(req, res) {
 //   try {
-//     const users = await userService.getAllUsers();
+//     const users = await empleadoService.getAllUsers();
 //     res.sendSuccess(users);
 //   } catch (error) {
 //     devLogger.error(error)
@@ -107,7 +107,7 @@
 // // Actualizar un usuario
 // export async function updateUser(req, res) {
 //   try {
-//     const updatedUser = await userService.updateUser(req.params.id, req.body);
+//     const updatedUser = await empleadoService.updateUser(req.params.id, req.body);
 //     res.json(updatedUser);
 //   } catch (error) {
 //     devLogger.error(error)
@@ -118,7 +118,7 @@
 // // Eliminar un usuario
 // export async function deleteUser(req, res) {
 //   try {
-//     const message = await userService.deleteUser(req.params.id);
+//     const message = await empleadoService.deleteUser(req.params.id);
 //     res.json({ message });
 //   } catch (error) {
 //     devLogger.error(error)
@@ -131,7 +131,7 @@
 //   const userId = req.user.id;
 //   let estado = req.query.estado ? req.query.estado : "PENDIENTE";
 //   try {
-//     const orders = await userService.getOrdenesDelUsuarioPorEstado(userId, estado);
+//     const orders = await empleadoService.getOrdenesDelUsuarioPorEstado(userId, estado);
 //     res.json(orders);
 //   } catch (error) {
 //     devLogger.error(error)
@@ -145,7 +145,7 @@
 //   let estado = req.query.estado ? req.query.estado : "PENDIENTE";
 //   let tipoActa = req.query.tipoActa ? req.query.tipoActa : "ActaInspeccion";
 //   try {
-//     const orders = await userService.getActasDelUsuarioPorEstado(userId, tipoActa, estado);
+//     const orders = await empleadoService.getActasDelUsuarioPorEstado(userId, tipoActa, estado);
 //     res.json(orders);
 //   } catch (error) {
 //     devLogger.error(error)
@@ -157,7 +157,7 @@
 // export async function obtenerTodasLasActasDelUsuarioOrdenadasPorFecha(req, res) {
 //   const userId = req.user.id;
 //   try {
-//     const orders = await userService.obtenerTodasLasActasDelUsuarioOrdenadasPorFecha(userId);
+//     const orders = await empleadoService.obtenerTodasLasActasDelUsuarioOrdenadasPorFecha(userId);
 //     res.json(orders);
 //   } catch (error) {
 //     devLogger.error(error)
@@ -175,7 +175,7 @@
 //       const result = await getAllFromUser(userId, page, pageSize);
 //       return res.json(result);
 //     }
-//     const orders = await userService.getAllFromUser(userId);
+//     const orders = await empleadoService.getAllFromUser(userId);
 //     res.json(orders);
 //   } catch (error) {
 //     devLogger.error(error)
@@ -191,7 +191,7 @@
 //       const result = await getAllFromAll(page, pageSize);
 //       return res.json(result);
 //     }
-//     const orders = await userService.getAllFromAll();
+//     const orders = await empleadoService.getAllFromAll();
 //     res.json(orders);
 //   } catch (error) {
 //     devLogger.error(error)

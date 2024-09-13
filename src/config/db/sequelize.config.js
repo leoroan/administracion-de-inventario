@@ -14,7 +14,8 @@ const sequelize = new Sequelize(database, username, password, {
   port: port || 3306,
   dialect: 'mysql',
   timezone: '-03:00',
-  logging: msg => devLogger.debug(msg)
+  logging: false,
+  // logging: msg => devLogger.debug(msg)
 });
 
 export { sequelize };

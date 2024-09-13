@@ -6,15 +6,14 @@ import passport from 'passport'
 import cookieParser from 'cookie-parser'
 import { addLogger } from '../../middlewares/logger.middleware.js'
 import errorHandler from '../../middlewares/errorHandler.middleware.js'
+import { createAdministrador } from '../../controllers/empleado.controller.js'
 // import userExtendRouter from '../../routes/user.router.js'
 // import sessionExtendRouter from '../../routes/session.router.js'
 // import initializePassport from '../auth/passport.config.js'
 
-// import { createAdmin } from '../../controllers/user.controller.js'
-
 export default function configureExpress(app) {
   // initializePassport();
-  // createAdmin();
+  createAdministrador();
 
   const allowedOrigins = [
     process.env.FRONTEND_ORIGIN,

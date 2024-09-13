@@ -1,5 +1,5 @@
-import { Router } from "express";
 import jwt from "jsonwebtoken";
+import { Router } from "express";
 import { PRIVATE_KEY } from "../../utils/jwt.js";
 import { ForbiddenError, InternalServerError, UnauthorizedError } from "../../utils/errors.js";
 import { devLogger } from "../../config/logger/logger.config.js";
@@ -52,6 +52,7 @@ export default class CustomRouter {
 
 
   handlePolicies = (policies) => (req, res, next) => {
+    devLogger.info("from CR:policies");
     const conPostman = process.env.USE_POSTMAN;
 
     if (policies[0] === "PUBLIC") return next();
@@ -86,24 +87,32 @@ export default class CustomRouter {
   };
 
   generateCustomResponses = (req, res, next) => {
-    //Custom responses 
-    res.sendSuccess = (payload) => res.status(200).send({ status: "Success", payload });
-    // res.sendInternalServerError = error => res.status(500).send({ status: "Error", error });
-    // res.sendClientError = error => res.status(400).send({ status: "Client Error, Bad request from client.", error });
-    // res.sendUnauthorizedError = error => res.status(401).send({ error: "User not authenticated or missing token.", error });
-    // res.sendForbiddenError = error => res.status(403).send({ error: "Token invalid or user with no access, Unauthorized please check your roles!" });
-    next()
+    devLogger.info("from CR:Custom-Responses");
+    res.sendSuccess = (payload) => res.status(200).json({ status: "Success", payload });
+    res.sendError = (error) => {
+      if (error instanceof UnauthorizedError) {
+        res.status(error.statusCode).json({ error: error.message });
+      } else if (error instanceof ForbiddenError) {
+        res.status(error.statusCode).json({ error: error.message });
+      } else if (error instanceof ClientError) {
+        res.status(error.statusCode).json({ error: error.message });
+      } else if (error instanceof InternalServerError) {
+        res.status(error.statusCode).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    };
+    next();
   }
 
   #applyCallbacks(callbacks) {
-    return callbacks.map((callback) => async (...item) => {
+    devLogger.info("from CR:Applying-Callbacks");
+    return callbacks.map((callback) => async (req, res, next) => {
       try {
-        await callback.apply(this, item);
+        await callback(req, res, next);
       } catch (error) {
-        devLogger.error(error);
-        // params[1] hace referencia al res
-        // item[1].status(500).send(error);
-        next(new InternalServerError());
+        devLogger.debug(error);
+        next(error);
       }
     });
   };
