@@ -2,31 +2,31 @@ export default class GenericRepository {
   constructor(dao) {
     this.dao = dao
   }
-  createGeneric = async (data) => {
+  create = async (data) => {
     return await this.dao.create(data);
   }
-  findByIdGeneric = async (id) => {
+  findById = async (id) => {
     return await this.dao.findById(id);
   }
-  findAllGeneric = async () => {
+  findAll = async () => {
     return await this.dao.findAll();
   }
-  updateGeneric = async (id, updatedData) => {
+  update = async (id, updatedData) => {
     return await this.dao.update(id, updatedData);
   }
-  deleteGeneric = async (id) => {
+  delete = async (id) => {
     return await this.dao.delete(id);
   }
-  // findDeletedByIdGeneric = async (id) => {
+  // findDeletedById = async (id) => {
   //   return await this.dao.findDeletedBy(id);
   // }
-  // getAllDeletedGeneric = async () => {
+  // getAllDeleted = async () => {
   //   return await this.dao.getAllDeleted();
   // }
-  // restoreByIdGeneric = async (id) => {
+  // restoreById = async (id) => {
   //   return await this.dao.restoreById(id);
   // }
-  // insertInBulkGeneric = async (obj) => {
+  // insertInBulk = async (obj) => {
   //   return await this.dao.insertInBulk(obj);
   // }
 }

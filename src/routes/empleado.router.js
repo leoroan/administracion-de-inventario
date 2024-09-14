@@ -1,14 +1,20 @@
 import CustomRouter from "../routes/custom/custom.router.js";
 import passport from "passport";
+import {
+  create,
+} from "../controllers/empleado.controller.js";
 
 export default class EmpleadoExtendRouter extends CustomRouter {
+  /**
+   * api:/api/empleados
+   */
   init() {
 
-        this.post('/', ["SUPERVISOR", "ADMIN"], async (req, res) => {
-          create(req, res);
-        });
+    this.post('/', ["PUBLIC"], async (req, res) => {     
+      create(req, res);
+    });
 
-    //     this.get('/:id', ['ADMIN', 'SUPERVISOR'], async (req, res) => {
+    //     this.get('/:id', ['ADMIN', 'SUPERVISOR'], passport.authenticate('jwt'),  async (req, res) => {
     //       getUserById(req, res);
     //     });
 
