@@ -1,8 +1,6 @@
-/* eslint-disable no-undef */
 import dotenv from 'dotenv';
 import { devLogger } from './logger/logger.config.js';
 
-// Cargar el archivo .env en la raíz del proyecto
 dotenv.config();
 
 if (
@@ -16,7 +14,6 @@ if (
   process.exit(1);
 }
 
-// Registrar información de configuración
 devLogger.info(`[MODE]: ${process.env.ENV_MODE}, [DB]: ${process.env.BDD_MODE}`);
 
 process.on('exit', code => {
