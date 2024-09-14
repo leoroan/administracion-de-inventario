@@ -1,9 +1,10 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import jwtStrategy from 'passport-jwt';
-import { User } from '../../services/db/models/user.model.js';
+import { Empleado } from '../../services/db/models/Empleado.model.js';
 import { createHash, isValidPassword } from '../../utils/bcrypt.js';
 import { PRIVATE_KEY } from '../../utils/jwt.js';
+import { devLogger } from '../logger/logger.config.js';
 
 //  Declaramos estrategia
 const localStrategy = passportLocal.Strategy;
@@ -17,7 +18,7 @@ const initializePassport = () => {
       try {
         return done(null, jwt_payload.user);
       } catch (error) {
-        console.error(error);
+        devLogger.error(error);
         return done(error);
       }
     }
@@ -25,21 +26,21 @@ const initializePassport = () => {
 
   passport.use('register', new localStrategy({ passReqToCallback: true },
     async (req, username, password, done) => {
-      const { rol, nombre, apellido, dni } = req.body;
+      const { nombre, apellido, dni, email } = req.body;
       try {
         const exist = await User.findOne({ where: { username } });
         if (exist) {
           done(null, false)
         }
-        const user = {
+        const employee = {
           username,
           password: createHash(password),
           nombre,
           apellido,
-          rol,
-          dni
+          dni,
+          email
         }
-        const result = await User.create(user)
+        const result = await Empleado.create(employee);
         return done(null, result)
       } catch (error) {
         return done("Registration ERROR " + error);
@@ -51,23 +52,23 @@ const initializePassport = () => {
   passport.use('login', new localStrategy({ passReqToCallback: true, usernameField: 'username' },
     async (req, username, password, done) => {
       try {
-        const user = await User.findOne({ where: { username } });
-        if (!user) {
-          console.warn("User doesn't exists with username: " + username);
+        const employee = await Empleado.findOne({ where: { username } });
+        if (!employee) {
+          devLogger.warning("User doesn't exists with username: " + username);
           return done(null, false);
         }
-        if (!isValidPassword(user.dataValues, password)) {
-          console.warn("Invalid credentials for user: " + username);
+        if (!isValidPassword(employee.dataValues, password)) {
+          devLogger.warning("Invalid credentials for employee: " + username);
           return done(null, false);
         }
 
         const userDTO = {
-          id: user.dataValues.id,
-          username: user.dataValues.username,
-          rol: user.dataValues.rol,
-          nombre: user.nombre,
-          apellido: user.apellido,
-          email: user.email
+          id: employee.dataValues.id,
+          username: employee.dataValues.username,
+          rol: employee.dataValues.rol,
+          nombre: employee.nombre,
+          apellido: employee.apellido,
+          email: employee.email
         };
 
         return done(null, userDTO);
@@ -77,16 +78,16 @@ const initializePassport = () => {
     })
   );
 
-  passport.serializeUser((user, done) => {
-    done(null, user.id)
+  passport.serializeUser((employee, done) => {
+    done(null, employee.id)
   });
 
   passport.deserializeUser(async (id, done) => {
     try {
-      let user = await User.findOne({ where: { id } });
-      done(null, user)
+      let employee = await Empleado.findOne({ where: { id } });
+      done(null, employee)
     } catch (error) {
-      console.error("Error deserializando el usuario: " + error);
+      devLogger.error("Error deserializando el usuario: " + error);
     }
   });
 };
