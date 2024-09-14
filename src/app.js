@@ -14,14 +14,14 @@ const connectWithRetry = () => {
     .then(() => {
       devLogger.info(`[DB-Connection]: Success, on port: [${config.db.db_port}]`);
       // return sequelize.sync({ force: true, alter: true });
-      createAdministrator();
       return sequelize.sync();
     })
     .then(() => {
       devLogger.info(`[DB-Models]: Sincronized.`);
       // console.log(sequelize.models)
-      app.listen(config.port, () => {
+      app.listen(process.env.PORT, () => {
         devLogger.info(`[Server]: Listening on port [${process.env.PORT}]`);
+        createAdministrator();
         checkConnection;
       });
     })
