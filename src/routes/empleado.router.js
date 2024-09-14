@@ -2,6 +2,8 @@ import CustomRouter from "../routes/custom/custom.router.js";
 import passport from "passport";
 import {
   create,
+  getAll,
+  getById,
 } from "../controllers/empleado.controller.js";
 
 export default class EmpleadoExtendRouter extends CustomRouter {
@@ -10,13 +12,14 @@ export default class EmpleadoExtendRouter extends CustomRouter {
    */
   init() {
 
-    this.post('/', ["PUBLIC"], async (req, res) => {     
+    this.post('/', ['PUBLIC'], async (req, res) => {
       create(req, res);
     });
 
-    //     this.get('/:id', ['ADMIN', 'SUPERVISOR'], passport.authenticate('jwt'),  async (req, res) => {
-    //       getUserById(req, res);
-    //     });
+    // this.get('/:id', ['ADMIN', 'SUPERVISOR'], passport.authenticate('jwt'), async (req, res) => {
+    this.get('/:id', ['PUBLIC'], async (req, res) => {
+      getById(req, res);
+    });
 
     //     this.get('/:email', ['INSPECTOR', 'ADMIN', 'SUPERVISOR'], async (req, res) => {
     //       getUserByEmail(req, res);
@@ -26,9 +29,9 @@ export default class EmpleadoExtendRouter extends CustomRouter {
     //       getUserByUsername(req, res);
     //     });
 
-    //     this.get('/', ['ADMIN', 'SUPERVISOR'], async (req, res) => {
-    //       getAllUsers(req, res);
-    //     });
+    this.get('/',  ['PUBLIC'], async (req, res) => {
+      getAll(req, res);
+    });
 
     //     this.put('/:id', ['INSPECTOR', 'ADMIN', 'SUPERVISOR'], async (req, res) => {
     //       updateUser(req, res);

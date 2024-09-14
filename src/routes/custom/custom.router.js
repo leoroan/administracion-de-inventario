@@ -100,7 +100,7 @@ export default class CustomRouter {
       }
     };
     next();
-  }
+  };
 
   #applyCallbacks(callbacks) {
     return callbacks.map((callback) => async (req, res, next) => {

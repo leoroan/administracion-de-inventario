@@ -28,10 +28,10 @@ export async function createAdministrator() {
 export async function create(req, res) {
   try {
     const empleado = await empleadoService.create(req.body);
-    res.sendSuccess(`Employee created, id:${empleado.id}`)
+    return res.sendSuccess(`Employee created, id:${empleado.id}`)
   } catch (error) {
     devLogger.debug(error)
-    res.sendError(error);
+    return res.sendError(error);
   }
 }
 
@@ -39,15 +39,16 @@ export async function getById(req, res) {
   try {
     const empleado = await empleadoService.findById(req.params.id);
     if (empleado) {
-      res.sendSuccess(empleado);
+      return res.sendSuccess(empleado);
     } else {
-      res.sendError({ error: 'Empleado not found' });
+      return res.sendError({ error: 'Empleado not found' });
     }
   } catch (error) {
-    devLogger.debug(error)
-    res.sendError({ error });
+    devLogger.debug(error);
+    return res.sendError(error);
   }
 }
+
 
 // // Obtener un usuario por nombre de usuario
 // export async function getUserByUsername(req, res) {
@@ -93,16 +94,16 @@ export async function getById(req, res) {
 //   }
 // }
 
-// // Obtener todos los usuarios
-// export async function getAllUsers(req, res) {
-//   try {
-//     const users = await empleadoService.getAllUsers();
-//     res.sendSuccess(users);
-//   } catch (error) {
-//     devLogger.error(error)
-//     res.sendInternalServerError({ error: error.message });
-//   }
-// }
+// Obtener todos los usuarios
+export async function getAll(req, res) {
+  try {
+    const empleados = await empleadoService.findAll();
+    return res.sendSuccess(empleados);
+  } catch (error) {
+    devLogger.error(error)
+    return res.sendError(error);
+  }
+}
 
 // // Actualizar un usuario
 // export async function updateUser(req, res) {
