@@ -17,7 +17,7 @@ if (
 }
 
 // Registrar información de configuración
-devLogger.warning(`>>>>> [Modo: ${process.env.ENV_MODE}, Bdd: ${process.env.BDD_MODE}] <<<<<`);
+devLogger.info(`[MODE]: ${process.env.ENV_MODE}, [DB]: ${process.env.BDD_MODE}`);
 
 process.on('exit', code => {
   console.log('Código de salida del proceso: ' + code);

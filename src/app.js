@@ -4,6 +4,7 @@ import configureExpress from './config/server/express.config.js';
 import { sequelize } from './services/db/models/setup.db.js';
 import { devLogger } from './config/logger/logger.config.js';
 import { checkConnection } from './config/mail/nodemailer.config.js';
+import { createAdministrator } from './controllers/empleado.controller.js'
 
 const app = express();
 configureExpress(app);
@@ -11,15 +12,16 @@ configureExpress(app);
 const connectWithRetry = () => {
   return sequelize.authenticate()
     .then(() => {
-      devLogger.info('Connection success');
+      devLogger.info(`[DB-Connection]: Success, on port: [${config.db.db_port}]`);
       // return sequelize.sync({ force: true, alter: true });
+      createAdministrator();
       return sequelize.sync();
     })
     .then(() => {
-      devLogger.info(`Models sincronized, Database connection on port: ${config.db.db_port}`);
+      devLogger.info(`[DB-Models]: Sincronized.`);
       // console.log(sequelize.models)
       app.listen(config.port, () => {
-        devLogger.info(`Server listening on port ${process.env.PORT} in ${config.environment}-mode `);
+        devLogger.info(`[Server]: Listening on port [${process.env.PORT}]`);
         checkConnection;
       });
     })

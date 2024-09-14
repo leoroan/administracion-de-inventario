@@ -3,7 +3,7 @@ import { empleadoService } from '../services/service.js';
 import { createHash } from '../utils/bcrypt.js';
 
 // Crear un nuevo usuario
-export async function createAdministrador() {
+export async function createAdministrator() {
   try {
     const adminUser = await empleadoService.findByEmailORusername("administrador");  
     if (!adminUser) {
@@ -16,9 +16,9 @@ export async function createAdministrador() {
         apellido: 'General',
         dni: '00000000'
       });
-      devLogger.info('An administrator has been created.');
+      devLogger.info('[Administrator]: Has been created.');
     } else {
-      devLogger.info('Administrator already exists.');
+      devLogger.info('[Administrator]: Already exists.');
     }
   } catch (error) {
     devLogger.debug(`Error in createAdministrador: ${error.message}, Stack: ${error.stack}`);
