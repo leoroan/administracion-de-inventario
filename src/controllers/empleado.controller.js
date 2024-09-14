@@ -5,7 +5,7 @@ import { createHash } from '../utils/bcrypt.js';
 // Crear un nuevo usuario
 export async function createAdministrator() {
   try {
-    const adminUser = await empleadoService.findByEmailORusername("administrador");  
+    const adminUser = await empleadoService.findByEmailORusername("administrador");
     if (!adminUser) {
       await empleadoService.createGeneric({
         username: process.env.ADMIN_USER,
@@ -21,33 +21,33 @@ export async function createAdministrator() {
       devLogger.info('[Administrator]: Already exists.');
     }
   } catch (error) {
-    devLogger.debug(`Error in createAdministrador: ${error.message}, Stack: ${error.stack}`);
+    devLogger.debug(`Error in createAdministrator: ${error.message}, Stack: ${error.stack}`);
   }
 }
 
 export async function create(req, res) {
   try {
-    const empleado = await empleadoService.createGeneric(req.body);
-    res.sendSuccess(empleado)
+    const empleado = await empleadoService.create(req.body);
+    res.sendSuccess(`Employee created, id:${empleado.id}`)
   } catch (error) {
-    next(error);
+    devLogger.debug(error)
+    res.sendError(error);
   }
 }
 
-// // Obtener un usuario por ID
-// export async function getUserById(req, res) {
-//   try {
-//     const user = await empleadoService.getUserById(req.params.id);
-//     if (user) {
-//       res.json(user);
-//     } else {
-//       res.status(404).json({ error: 'User not found' });
-//     }
-//   } catch (error) {
-//     devLogger.error(error)
-//     res.status(400).json({ error: error.message });
-//   }
-// }
+export async function getById(req, res) {
+  try {
+    const empleado = await empleadoService.findById(req.params.id);
+    if (empleado) {
+      res.sendSuccess(empleado);
+    } else {
+      res.sendError({ error: 'Empleado not found' });
+    }
+  } catch (error) {
+    devLogger.debug(error)
+    res.sendError({ error });
+  }
+}
 
 // // Obtener un usuario por nombre de usuario
 // export async function getUserByUsername(req, res) {
