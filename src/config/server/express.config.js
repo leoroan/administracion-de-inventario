@@ -6,9 +6,10 @@ import passport from 'passport'
 import cookieParser from 'cookie-parser'
 import { addLogger } from '../../middlewares/logger.middleware.js'
 import errorHandler from '../../middlewares/errorHandler.middleware.js'
+import EmpleadoExtendRouter from '../../routes/empleado.router.js'
+import initializePassport from '../auth/passport.config.js'
 // import userExtendRouter from '../../routes/user.router.js'
 // import sessionExtendRouter from '../../routes/session.router.js'
-// import initializePassport from '../auth/passport.config.js'
 
 export default function configureExpress(app) {
   // initializePassport();
@@ -42,21 +43,22 @@ export default function configureExpress(app) {
       httpOnly: true,
       secure: process.env.ENV_MODE === "DESARROLLO" ? false : true, //  en producción cambiar esto a true
       // sameSite: "strict",
-      maxAge: 1800000
+      maxAge: 3600000
     }
   }))
   app.use(passport.initialize())
   app.use(passport.session())
 
-  // routes here, before *
-  // const userRouter = new userExtendRouter()
+  // routes
+  const empleadoRouter = new EmpleadoExtendRouter();
   // const sessionRouter = new sessionExtendRouter()
 
-  // app.use('/api/users', userRouter.getRouter())
+  app.use('/api/empleados', empleadoRouter.getRouter())
   // app.use('/api/session', sessionRouter.getRouter())
+
+  app.use(errorHandler);
 
   app.get('/status', (req, res) => {
     res.sendStatus(200);
   });
-  app.use(errorHandler);
 }
