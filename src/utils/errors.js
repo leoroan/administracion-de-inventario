@@ -36,15 +36,15 @@ export class SequelizeError {
   static handleSequelizeError(error, defaultMessage) {
     let customError;
     if (error.name === 'SequelizeValidationError') {
-      customError = new ClientError(`Validation Error: ${error.message}`);
+      customError = new ClientError(`Validation Error: ${defaultMessage}, ${error.errors[0].message}`);
     } else if (error.name === 'SequelizeUniqueConstraintError') {
-      customError = new ClientError(`Duplicate Error: ${error.message}`);
+      customError = new ClientError(`Duplicate Error: ${defaultMessage}, ${error.errors[0].message}`);
     } else {
       customError = new InternalServerError(defaultMessage || 'Database Error');
     }
-    devLogger.error(`SequelizeError: ${customError.message}, Stack: ${error.stack}`);
-
+    devLogger.debug(`${error.name}: ${customError.message}, Stack: ${error.stack}`);
     return customError;
   }
+  
 }
 

@@ -14,7 +14,7 @@ export default class GenericDAO {
       return newRecord;
     } catch (error) {
       if (transaction) await transaction.rollback();
-      throw SequelizeError.handleSequelizeError(error, `Error creating ${this.model.name}: ${error.message}`);
+      throw SequelizeError.handleSequelizeError(error, `Error creating ${this.model.name}`);
     }
   }
 
@@ -25,7 +25,7 @@ export default class GenericDAO {
       if (!record) throw new ClientError(`${this.model.name} not found`);
       return record;
     } catch (error) {
-      throw SequelizeError.handleSequelizeError(error, `Error fetching ${this.model.name}: ${error.message}`);
+      throw SequelizeError.handleSequelizeError(error, `Error fetching ${this.model.name}`);
     }
   }
 
@@ -35,7 +35,7 @@ export default class GenericDAO {
       const records = await this.model.findAll({ where: query });
       return records;
     } catch (error) {
-      throw SequelizeError.handleSequelizeError(error, `Error fetching ${this.model.name}: ${error.message}`);
+      throw SequelizeError.handleSequelizeError(error, `Error fetching ${this.model.name}`);
     }
   }
 
@@ -51,7 +51,7 @@ export default class GenericDAO {
       return updatedRecord;
     } catch (error) {
       if (transaction) await transaction.rollback();
-      throw SequelizeError.handleSequelizeError(error, `Error updating ${this.model.name}: ${error.message}`);
+      throw SequelizeError.handleSequelizeError(error, `Error updating ${this.model.name}`);
     }
   }
 
@@ -67,7 +67,7 @@ export default class GenericDAO {
       return true;
     } catch (error) {
       if (transaction) await transaction.rollback();
-      throw SequelizeError.handleSequelizeError(error, `Error deleting ${this.model.name}: ${error.message}`);
+      throw SequelizeError.handleSequelizeError(error, `Error deleting ${this.model.name}`);
     }
   }
 }

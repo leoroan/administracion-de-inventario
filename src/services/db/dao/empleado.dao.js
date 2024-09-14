@@ -13,7 +13,7 @@ export default class EmpleadoDAO extends GenericDAO {
       const user = await this.model.findOne({ where: { email } });
       return user;
     } catch (error) {
-      throw SequelizeError.handleSequelizeError(error, `Error fetching user by email`);
+      throw SequelizeError.handleSequelizeError(error, `Error fetching Empleado`);
     }
   }
 
@@ -22,7 +22,7 @@ export default class EmpleadoDAO extends GenericDAO {
       const user = await this.model.findOne({ where: { [Op.or]: [{ email: some }, { username: some }] } });
       return user;
     } catch (error) {
-      throw SequelizeError.handleSequelizeError(error, `Error fetching user by email or username`);
+      throw SequelizeError.handleSequelizeError(error, `Error fetching Empleado`);
     }
   }
 }
