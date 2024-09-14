@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Router } from "express";
 import { PRIVATE_KEY } from "../../utils/jwt.js";
-import { ForbiddenError, InternalServerError, UnauthorizedError } from "../../utils/errors.js";
+import { ClientError, ForbiddenError, InternalServerError, UnauthorizedError } from "../../utils/errors.js";
 import { devLogger } from "../../config/logger/logger.config.js";
 
 export default class CustomRouter {
@@ -52,9 +52,7 @@ export default class CustomRouter {
 
 
   handlePolicies = (policies) => (req, res, next) => {
-    devLogger.info("from CR:policies");
     const conPostman = process.env.USE_POSTMAN;
-
     if (policies[0] === "PUBLIC") return next();
     // const authHeader = req.cookies; //for postman
     // const authHeader = req.headers.authorization;  // for explorer
@@ -87,26 +85,24 @@ export default class CustomRouter {
   };
 
   generateCustomResponses = (req, res, next) => {
-    devLogger.info("from CR:Custom-Responses");
-    res.sendSuccess = (payload) => res.status(200).json({ status: "Success", payload });
+    res.sendSuccess = (payload) => res.status(200).send(payload);
     res.sendError = (error) => {
       if (error instanceof UnauthorizedError) {
-        res.status(error.statusCode).json({ error: error.message });
+        res.status(error.statusCode).send(error.message);
       } else if (error instanceof ForbiddenError) {
-        res.status(error.statusCode).json({ error: error.message });
+        res.status(error.statusCode).send(error.message);
       } else if (error instanceof ClientError) {
-        res.status(error.statusCode).json({ error: error.message });
+        res.status(error.statusCode).send(error.message);
       } else if (error instanceof InternalServerError) {
-        res.status(error.statusCode).json({ error: error.message });
+        res.status(error.statusCode).send(error.message);
       } else {
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).send('Internal Server Error');
       }
     };
     next();
   }
 
   #applyCallbacks(callbacks) {
-    devLogger.info("from CR:Applying-Callbacks");
     return callbacks.map((callback) => async (req, res, next) => {
       try {
         await callback(req, res, next);
