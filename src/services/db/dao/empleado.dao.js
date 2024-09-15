@@ -10,19 +10,20 @@ export default class EmpleadoDAO extends GenericDAO {
 
   async findByEmail(email) {
     try {
-      const user = await this.model.findOne({ where: { email } });
-      return user;
+      const record = await this.model.findOne({ where: { email } });
+      return record;
     } catch (error) {
-      throw SequelizeError.handleSequelizeError(error, `Error fetching Empleado`);
+      throw SequelizeError.handleSequelizeError(error, `Error fetching Empleado by email`);
     }
   }
 
   async findByEmailORusername(some) {
     try {     
-      const user = await this.model.findOne({ where: { [Op.or]: [{ email: some }, { username: some }] } });
-      return user;
+      const record = await this.model.findOne({ where: { [Op.or]: [{ email: some }, { username: some }] } });
+      if (!record) throw new Error(`${this.model.name} not found`);
+      return record;
     } catch (error) {
-      throw SequelizeError.handleSequelizeError(error, `Error fetching Empleado`);
+      throw SequelizeError.handleSequelizeError(error, `Error fetching Empleado by email or username`);
     }
   }
 }

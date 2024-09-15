@@ -21,7 +21,7 @@ export async function createAdministrator() {
       devLogger.info('[Administrator]: Already exists.');
     }
   } catch (error) {
-    devLogger.debug(`Error in createAdministrator: ${error.message}, Stack: ${error.stack}`);
+    devLogger.debug(`Error trying to create an Administrator: ${error.message}, Stack: ${error.stack}`);
   }
 }
 
@@ -35,20 +35,55 @@ export async function create(req, res) {
   }
 }
 
-export async function getById(req, res) {
+export async function findById(req, res) {
   try {
     const empleado = await empleadoService.findById(req.params.id);
-    if (empleado) {
-      return res.sendSuccess(empleado);
-    } else {
-      return res.sendError({ error: 'Empleado not found' });
-    }
+    return res.sendSuccess(empleado);
   } catch (error) {
     devLogger.debug(error);
     return res.sendError(error);
   }
 }
 
+export async function findAll(req, res) {
+  try {
+    const empleados = await empleadoService.findAll();
+    return res.sendSuccess(empleados);
+  } catch (error) {
+    devLogger.error(error)
+    return res.sendError(error);
+  }
+}
+
+export async function getByEmailORusername(req, res) {
+  try {
+    const user = await empleadoService.findByEmailORusername(req.params.some);
+    return res.sendSuccess(user);
+  } catch (error) {
+    devLogger.error(error)
+    res.sendError(error);
+  }
+}
+
+export async function updateUser(req, res) {
+  try {
+    const updatedEmployee = await empleadoService.update(req.params.id, req.body);
+    return res.sendSuccess(updatedEmployee);
+  } catch (error) {
+    devLogger.error(error)
+    return res.sendError(error);
+  }
+}
+
+export async function deleteUser(req, res) {
+  try {
+    const message = await empleadoService.delete(req.params.id);
+    return res.sendSuccess(message);
+  } catch (error) {
+    devLogger.error(error)
+    res.sendError(error);
+  }
+}
 
 // // Obtener un usuario por nombre de usuario
 // export async function getUserByUsername(req, res) {
@@ -74,53 +109,6 @@ export async function getById(req, res) {
 //     } else {
 //       res.status(404).json({ error: 'User not found' });
 //     }
-//   } catch (error) {
-//     devLogger.error(error)
-//     res.status(400).json({ error: error.message });
-//   }
-// }
-
-// export async function getUserByEmailORusername(req, res) {
-//   try {
-//     const user = await empleadoService.getUserByEmailORusername(req.params.some);
-//     if (user) {
-//       res.json(user);
-//     } else {
-//       res.status(404).json({ error: 'User not found' });
-//     }
-//   } catch (error) {
-//     devLogger.error(error)
-//     res.status(400).json({ error: error.message });
-//   }
-// }
-
-// Obtener todos los usuarios
-export async function getAll(req, res) {
-  try {
-    const empleados = await empleadoService.findAll();
-    return res.sendSuccess(empleados);
-  } catch (error) {
-    devLogger.error(error)
-    return res.sendError(error);
-  }
-}
-
-// // Actualizar un usuario
-// export async function updateUser(req, res) {
-//   try {
-//     const updatedUser = await empleadoService.updateUser(req.params.id, req.body);
-//     res.json(updatedUser);
-//   } catch (error) {
-//     devLogger.error(error)
-//     res.status(400).json({ error: error.message });
-//   }
-// }
-
-// // Eliminar un usuario
-// export async function deleteUser(req, res) {
-//   try {
-//     const message = await empleadoService.deleteUser(req.params.id);
-//     res.json({ message });
 //   } catch (error) {
 //     devLogger.error(error)
 //     res.status(400).json({ error: error.message });

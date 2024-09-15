@@ -2,43 +2,45 @@ import CustomRouter from "../routes/custom/custom.router.js";
 import passport from "passport";
 import {
   create,
-  getAll,
-  getById,
+  findAll,
+  findById,
+  updateUser,
+  deleteUser,
+  getByEmailORusername
 } from "../controllers/empleado.controller.js";
 
 export default class EmpleadoExtendRouter extends CustomRouter {
   /**
    * api:/api/empleados
    */
-  init() {
+  init() {     // this.get('/:id', ['ADMIN', 'SUPERVISOR'], passport.authenticate('jwt'), async (req, res) => {
 
     this.post('/', ['PUBLIC'], async (req, res) => {
       create(req, res);
     });
 
-    // this.get('/:id', ['ADMIN', 'SUPERVISOR'], passport.authenticate('jwt'), async (req, res) => {
     this.get('/:id', ['PUBLIC'], async (req, res) => {
-      getById(req, res);
+      findById(req, res);
     });
 
-    //     this.get('/:email', ['INSPECTOR', 'ADMIN', 'SUPERVISOR'], async (req, res) => {
-    //       getUserByEmail(req, res);
-    //     }); 
+    this.get('/', ['PUBLIC'], async (req, res) => {
+      findAll(req, res);
+    });
+
+    this.get('/emailOrUsername/:some', ['PUBLIC'], async (req, res) => {
+      getByEmailORusername(req, res);
+    });
+
+    this.put('/:id', ['PUBLIC'], async (req, res) => {
+      updateUser(req, res);
+    });
+
+    this.delete('/:id', ['PUBLIC'], async (req, res) => {
+      deleteUser(req, res);
+    });
 
     //     this.get('/:username', ['INSPECTOR', 'ADMIN', 'SUPERVISOR'], async (req, res) => {
     //       getUserByUsername(req, res);
-    //     });
-
-    this.get('/',  ['PUBLIC'], async (req, res) => {
-      getAll(req, res);
-    });
-
-    //     this.put('/:id', ['INSPECTOR', 'ADMIN', 'SUPERVISOR'], async (req, res) => {
-    //       updateUser(req, res);
-    //     });
-
-    //     this.delete('/:id', ['ADMIN', 'SUPERVISOR'], async (req, res) => {
-    //       deleteUser(req, res);
     //     });
 
     //     /**

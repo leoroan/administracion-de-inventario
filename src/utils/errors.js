@@ -40,11 +40,11 @@ export class SequelizeError {
     } else if (error.name === 'SequelizeUniqueConstraintError') {
       customError = new ClientError(`Duplicate Error: ${defaultMessage}, ${error.errors[0].message}`);
     } else {
-      customError = new InternalServerError(defaultMessage || 'Database Error');
+      customError = new InternalServerError(defaultMessage + ", " + error.message || 'Database Error');
     }
     devLogger.debug(`${error.name}: ${customError.message}, Stack: ${error.stack}`);
     return customError;
   }
-  
+
 }
 

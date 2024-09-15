@@ -84,17 +84,25 @@ export default class CustomRouter {
     });
   };
 
+  
+
   generateCustomResponses = (req, res, next) => {
+    const cleanMessage = (message) => {
+      return typeof message === 'string' ? message.replace(/\u001b\[\d+m/g, '') : message;
+    };
+
     res.sendSuccess = (payload) => res.status(200).send(payload);
     res.sendError = (error) => {
+      // const cleanErrorMessage = ;
+      
       if (error instanceof UnauthorizedError) {
-        res.status(error.statusCode).send(error.message);
+        res.status(error.statusCode).send(cleanMessage(error.message));
       } else if (error instanceof ForbiddenError) {
-        res.status(error.statusCode).send(error.message);
+        res.status(error.statusCode).send(cleanMessage(error.message));
       } else if (error instanceof ClientError) {
-        res.status(error.statusCode).send(error.message);
+        res.status(error.statusCode).send(cleanMessage(error.message));
       } else if (error instanceof InternalServerError) {
-        res.status(error.statusCode).send(error.message);
+        res.status(error.statusCode).send(cleanMessage(error.message));
       } else {
         res.status(500).send('Internal Server Error');
       }
