@@ -41,6 +41,16 @@ export default class EmpleadoController extends GenericController {
     }
   }
 
+  async findByEmail(req, res) {
+    try {
+      const user = await empleadoService.findByEmail(req.params.email);
+      return res.sendSuccess(user);
+    } catch (error) {
+      devLogger.error(error)
+      res.sendError(error);
+    }
+  }
+
 
 }
 

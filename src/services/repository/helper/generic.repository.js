@@ -17,16 +17,4 @@ export default class GenericRepository {
   delete = async (id) => {
     return await this.dao.delete(id);
   }
-  // findDeletedById = async (id) => {
-  //   return await this.dao.findDeletedBy(id);
-  // }
-  // getAllDeleted = async () => {
-  //   return await this.dao.getAllDeleted();
-  // }
-  // restoreById = async (id) => {
-  //   return await this.dao.restoreById(id);
-  // }
-  // insertInBulk = async (obj) => {
-  //   return await this.dao.insertInBulk(obj);
-  // }
 }

@@ -4,7 +4,6 @@ export default class GenericDAO {
     this.model = model;
   }
 
-  // Crear un nuevo registro
   async create(data) {
     let transaction;
     try {
@@ -18,7 +17,6 @@ export default class GenericDAO {
     }
   }
 
-  // Obtener un registro por su id
   async findById(id) {
     try {
       const record = await this.model.findByPk(id);
@@ -29,7 +27,6 @@ export default class GenericDAO {
     }
   }
 
-  // Obtener todos los registros
   async findAll(query = {}) {
     try {
       const records = await this.model.findAll({ where: query });
@@ -40,7 +37,6 @@ export default class GenericDAO {
     }
   }
 
-  // Actualizar un registro
   async update(id, data) {
     let transaction;
     try {
@@ -56,8 +52,6 @@ export default class GenericDAO {
     }
   }
 
-
-  // Eliminar un registro
   async delete(id) {
     let transaction;
     try {
