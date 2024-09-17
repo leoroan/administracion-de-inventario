@@ -4,8 +4,10 @@ import configureExpress from './config/server/express.config.js';
 import { sequelize } from './services/db/models/setup.db.js';
 import { devLogger } from './config/logger/logger.config.js';
 import { checkConnection } from './config/mail/nodemailer.config.js';
-import { createAdministrator } from './controllers/empleado.controller.js'
+import EmpleadoController from './controllers/empleado.controller.js'
+import { empleadoService } from './services/service.js';
 
+const empleadoController = new EmpleadoController(empleadoService);
 const app = express();
 configureExpress(app);
 
@@ -21,7 +23,7 @@ const connectWithRetry = () => {
       // console.log(sequelize.models)
       app.listen(process.env.PORT, () => {
         devLogger.info(`[Server]: Listening on port [${process.env.PORT}]`);
-        createAdministrator();
+        empleadoController.createAdministrator();
         checkConnection;
       });
     })
