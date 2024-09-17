@@ -1,5 +1,4 @@
-import { ClientError, SequelizeError } from "../../../utils/errors.js";
-import { Empleado } from "../models/Empleado.model.js";
+import { SequelizeError } from "../../../utils/errors.js";
 import GenericDAO from "./helper/generic.dao.js";
 import { Op } from 'sequelize';
 
@@ -11,6 +10,7 @@ export default class EmpleadoDAO extends GenericDAO {
   async findByEmail(email) {
     try {
       const record = await this.model.findOne({ where: { email } });
+      if (!record) throw new Error(`Employee not found`);
       return record;
     } catch (error) {
       throw SequelizeError.handleSequelizeError(error, `Error fetching Empleado by email`);
@@ -18,9 +18,9 @@ export default class EmpleadoDAO extends GenericDAO {
   }
 
   async findByEmailORusername(some) {
-    try {     
+    try {
       const record = await this.model.findOne({ where: { [Op.or]: [{ email: some }, { username: some }] } });
-      if (!record) throw new Error(`${this.model.name} not found`);
+      // if (!record) throw new Error(`Employee not found`);
       return record;
     } catch (error) {
       throw SequelizeError.handleSequelizeError(error, `Error fetching Empleado by email or username`);

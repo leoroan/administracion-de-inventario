@@ -1,4 +1,4 @@
-import { ClientError, SequelizeError } from '../../../../utils/errors.js';
+import { SequelizeError } from '../../../../utils/errors.js';
 export default class GenericDAO {
   constructor(model) {
     this.model = model;

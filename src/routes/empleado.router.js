@@ -1,13 +1,7 @@
 import CustomRouter from "../routes/custom/custom.router.js";
+import EmpleadoController from "../controllers/empleado.controller.js";
+import { empleadoService } from "../services/service.js";
 import passport from "passport";
-import {
-  create,
-  findAll,
-  findById,
-  updateUser,
-  deleteUser,
-  getByEmailORusername
-} from "../controllers/empleado.controller.js";
 
 export default class EmpleadoExtendRouter extends CustomRouter {
   /**
@@ -15,28 +9,31 @@ export default class EmpleadoExtendRouter extends CustomRouter {
    */
   init() {     // this.get('/:id', ['ADMIN', 'SUPERVISOR'], passport.authenticate('jwt'), async (req, res) => {
 
+    const empleadoController = new EmpleadoController(empleadoService);
+
     this.post('/', ['PUBLIC'], async (req, res) => {
-      create(req, res);
+      empleadoController.create(req, res);
+      // create(req, res);
     });
 
     this.get('/:id', ['PUBLIC'], async (req, res) => {
-      findById(req, res);
+      empleadoController.findById(req, res);
     });
 
     this.get('/', ['PUBLIC'], async (req, res) => {
-      findAll(req, res);
-    });
-
-    this.get('/emailOrUsername/:some', ['PUBLIC'], async (req, res) => {
-      getByEmailORusername(req, res);
+      empleadoController.findAll(req, res);
     });
 
     this.put('/:id', ['PUBLIC'], async (req, res) => {
-      updateUser(req, res);
+      empleadoController.update(req, res);
     });
 
     this.delete('/:id', ['PUBLIC'], async (req, res) => {
-      deleteUser(req, res);
+      empleadoController.delete(req, res);
+    });
+
+    this.get('/emailOrUsername/:some', ['PUBLIC'], async (req, res) => {
+      empleadoController.findByEmailORusername(req, res);
     });
 
     //     this.get('/:username', ['INSPECTOR', 'ADMIN', 'SUPERVISOR'], async (req, res) => {
