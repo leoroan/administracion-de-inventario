@@ -2,6 +2,9 @@ import { sequelize } from "../../../config/db/sequelize.config.js";
 import { Empleado } from "./Empleado.model.js";
 
 const establecerRelaciones = () => {
+  // Empleado - Session
+  // Empleado.hasOne(Session, { onDelete: 'CASCADE' });
+  // Session.belongsTo(Empleado);
   // Empleado - Oficina:
   // Empleado.belongsTo(Oficina); //Un Empleado pertenece a una Oficina
   // Oficina.hasMany(Empleado, { onDelete: 'RESTRICT' });   //Una Oficina tiene varios Empleados, No permite eliminar una oficina si tiene empleados asignados
