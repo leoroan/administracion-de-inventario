@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/db/sequelize.config.js";
-import { devLogger } from "../../../config/logger/logger.config.js";
 
 const toUpperCaseFields = async (instance) => {
   const fieldsToUpper = ['username', 'email', 'nombre', 'apellido'];

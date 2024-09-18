@@ -19,7 +19,7 @@ export default class EmpleadoDAO extends GenericDAO {
 
   async findByEmailORusername(some) {
     try {
-      const record = await this.model.findOne({ where: { [Op.or]: [{ email: some }, { username: some }] } });
+      const record = await this.model.findOne({ where: { [Op.or]: [{ email: some }, { username: some }] } });      
       if (!record) throw new Error(`Employee not found`);
       return record;
     } catch (error) {
