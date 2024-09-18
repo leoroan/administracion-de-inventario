@@ -12,16 +12,6 @@ const toUpperCaseFields = async (instance) => {
   });
 };
 
-const verifyBloquedUser = async (results) => {
-  if (Array.isArray(results)) {
-    for (const user of results) {
-      await user.desbloquearSiCorresponde();
-    }
-  } else if (results) {
-    await results.desbloquearSiCorresponde();
-  }
-}
-
 const Empleado = sequelize.define('Empleado', {
   username: {
     type: DataTypes.STRING,
@@ -61,31 +51,6 @@ const Empleado = sequelize.define('Empleado', {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
-  },
-  token: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  tokenExpiration: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  cantidadIntentosLoggin: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    defaultValue: 1
-  },
-  bloqueado: {
-    type: DataTypes.BOOLEAN,
-    allowNull: true,
-    defaultValue: false
-  },
-  bloqueoExpiration: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  ultimoIngreso: {
-    type: DataTypes.DATE,
   }
 }, {
   timestamps: true,
@@ -93,46 +58,7 @@ const Empleado = sequelize.define('Empleado', {
   hooks: {
     beforeCreate: toUpperCaseFields,
     beforeUpdate: toUpperCaseFields,
-    afterFind: verifyBloquedUser
   }
 });
-
-Empleado.prototype.intentarBloquearUsuario = async function () {
-  try {
-    await this.increment('cantidadIntentosLoggin');
-    const fechaActual = new Date();
-    const diferenciaEnMinutos = (fechaActual - this.updatedAt) / 60000;
-    if (diferenciaEnMinutos > 10) {
-      await this.update({
-        cantidadIntentosLoggin: 1
-      });
-    } else if (this.cantidadIntentosLoggin >= 2) {
-      await this.update({
-        bloqueado: true,
-        bloqueoExpiration: new Date()
-      });
-    }
-  } catch (error) {
-    devLogger.error('Error al bloquear al usuario:', error);
-  }
-};
-
-Empleado.prototype.desbloquearSiCorresponde = async function () {
-  try {
-    const fechaActual = new Date();
-    if (this.bloqueado && this.bloqueoExpiration && fechaActual > this.bloqueoExpiration) {
-      const diferenciaEnMinutos = (fechaActual - this.bloqueoExpiration) / 60000;
-      if (diferenciaEnMinutos >= 20) {
-        await this.update({
-          bloqueado: false,
-          cantidadIntentosLoggin: 0,
-          bloqueoExpiration: null
-        });
-      }
-    }
-  } catch (error) {
-    devLogger.error('Error al desbloquear al usuario:', error);
-  }
-};
 
 export { Empleado };

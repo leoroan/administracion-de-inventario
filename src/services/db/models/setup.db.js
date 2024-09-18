@@ -1,5 +1,6 @@
 import { sequelize } from "../../../config/db/sequelize.config.js";
 import { Empleado } from "./Empleado.model.js";
+import { Session } from "./Session.model.js";
 
 const establecerRelaciones = () => {
   // Empleado - Session
