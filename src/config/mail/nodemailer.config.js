@@ -18,9 +18,9 @@ const transporter = nodemailer.createTransport({
 
 const checkConnection = transporter.verify(function (error) {
   if (error) {
-    devLogger.warning("[Nodemailer]: Cannot establish connection to mail server: " + error.message);
+    devLogger.warning("[MAILING]: Cannot establish connection to mail server: " + error.message);
   } else {
-    devLogger.info(`[Nodemailer]: Ready, as: [${process.env.NODEMAILER_USER}]`);
+    devLogger.info(`[MAILING]: Ready, as: [${process.env.NODEMAILER_USER}]`);
   }
 });
 
