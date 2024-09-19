@@ -9,6 +9,7 @@ import errorHandler from '../../middlewares/errorHandler.middleware.js'
 import initializePassport from '../auth/passport.config.js'
 import EmpleadoExtendRouter from '../../routes/empleado.router.js'
 import MarcaExtendRouter from '../../routes/marca.router.js'
+import ModeloExtendRouter from '../../routes/modelo.router.js'
 // import sessionExtendRouter from '../../routes/session.router.js'
 
 export default function configureExpress(app) {
@@ -52,10 +53,12 @@ export default function configureExpress(app) {
   // routes
   const empleadoRouter = new EmpleadoExtendRouter();
   const marcaRouter = new MarcaExtendRouter();
+  const modeloRouter = new ModeloExtendRouter();
   // const sessionRouter = new sessionExtendRouter()
 
   app.use('/api/empleados', empleadoRouter.getRouter());
   app.use('/api/marcas', marcaRouter.getRouter());
+  app.use('/api/modelos', modeloRouter.getRouter());
   // app.use('/api/session', sessionRouter.getRouter())
 
   app.use(errorHandler);
