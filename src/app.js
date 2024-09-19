@@ -20,7 +20,7 @@ const connectWithRetry = () => {
     })
     .then(() => {
       devLogger.info(`[DB-Models]: Sincronized.`);
-      console.log(sequelize.models)
+      // console.log(sequelize.models)
       app.listen(process.env.PORT, () => {
         devLogger.info(`[Server]: Listening on port [${process.env.PORT}]`);
         empleadoController.createAdministrator();
