@@ -6,13 +6,13 @@ import passport from 'passport'
 import cookieParser from 'cookie-parser'
 import { addLogger } from '../../middlewares/logger.middleware.js'
 import errorHandler from '../../middlewares/errorHandler.middleware.js'
-import EmpleadoExtendRouter from '../../routes/empleado.router.js'
 import initializePassport from '../auth/passport.config.js'
-// import userExtendRouter from '../../routes/user.router.js'
+import EmpleadoExtendRouter from '../../routes/empleado.router.js'
+import MarcaExtendRouter from '../../routes/marca.router.js'
 // import sessionExtendRouter from '../../routes/session.router.js'
 
 export default function configureExpress(app) {
-  // initializePassport();
+  initializePassport();
 
   const allowedOrigins = [
     process.env.FRONTEND_ORIGIN,
@@ -51,9 +51,11 @@ export default function configureExpress(app) {
 
   // routes
   const empleadoRouter = new EmpleadoExtendRouter();
+  const marcaRouter = new MarcaExtendRouter();
   // const sessionRouter = new sessionExtendRouter()
 
-  app.use('/api/empleados', empleadoRouter.getRouter())
+  app.use('/api/empleados', empleadoRouter.getRouter());
+  app.use('/api/marcas', marcaRouter.getRouter());
   // app.use('/api/session', sessionRouter.getRouter())
 
   app.use(errorHandler);
