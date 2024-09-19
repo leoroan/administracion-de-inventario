@@ -1,13 +1,14 @@
 import { sequelize } from "../../../config/db/sequelize.config.js";
 import { Empleado } from "./Empleado.model.js";
-import { Session } from "./Session.model.js";
-import { Oficina } from "./Oficina.model.js";
+import { Session } from "./session.model.js";
+import { Oficina } from "./oficina.model.js";
 import { Edificio } from "./Edificio.model.js";
 import { EquipoInformatico } from "./EquipoInformatico.model.js";
-import { RegistroDeMantenimientoDeEquipo } from "./RegistroDeMantenimientoDeEquipo.model.js";
-import { Marca } from "./Marca.model.js";
-import { Modelo } from "./Modelo.model.js";
+import { RegistroDeMantenimientoDeEquipo } from "./registroDeMantenimientoDeEquipo.model.js";
+import { Modelo } from "./modelo.model.js";
+import { Marca } from "./marca.model.js";
 import { TipoEquipo } from "./tipoEquipo.model.js";
+import { Rol } from "./rol.model.js";
 
 const establecerRelaciones = () => {
   // Empleado - Session
@@ -39,8 +40,8 @@ const establecerRelaciones = () => {
   RegistroDeMantenimientoDeEquipo.belongsTo(EquipoInformatico, { foreignKey: 'equipoId' });
 
   // Marca - Modelo
-  Marca.hasMany(Modelo, { onUpdate: 'CASCADE', foreignKey: 'marcaId' });
   Modelo.belongsTo(Marca, { foreignKey: 'marcaId', onDelete: 'RESTRICT' });
+  Marca.hasMany(Modelo, { onUpdate: 'CASCADE', foreignKey: 'marcaId' });
 
   // Un EquipoInformatico tiene un tipo
   TipoEquipo.hasMany(EquipoInformatico, { onUpdate: 'CASCADE', foreignKey: 'tipoEquipoId' });
@@ -49,6 +50,10 @@ const establecerRelaciones = () => {
   // Un modelo tiene un tipo de equipo
   TipoEquipo.hasMany(Modelo, { foreignKey: 'tipoEquipoId' });
   Modelo.belongsTo(TipoEquipo, { foreignKey: 'tipoEquipoId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
+
+  // Un empleado tiene un rol
+  Empleado.belongsTo(Rol, { foreignKey: 'rolId' });
+  Rol.hasMany(Empleado, { foreignKey: 'rolId', onUpdate: 'CASCADE' });
 
   // // Empleado - Session
   // Empleado.hasOne(Session, { onDelete: 'CASCADE', onUpdate: 'CASCADE', foreignKey: 'empleadoId' });

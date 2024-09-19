@@ -93,8 +93,6 @@ export default class CustomRouter {
 
     res.sendSuccess = (payload) => res.status(200).send(payload);
     res.sendError = (error) => {
-      // const cleanErrorMessage = ;
-      
       if (error instanceof UnauthorizedError) {
         res.status(error.statusCode).send(cleanMessage(error.message));
       } else if (error instanceof ForbiddenError) {
