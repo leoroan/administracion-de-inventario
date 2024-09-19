@@ -1,16 +1,38 @@
 import passport from 'passport';
-import { generateJWToken } from "../utils/jwt.js";
 import CustomRouter from "./custom/custom.router.js";
+import SessionController from '../controllers/session.controller.js';
+import { devLogger } from '../config/logger/logger.config.js';
+import { sessionService } from '../services/service.js';
+import { generateJWToken } from "../utils/jwt.js";
 // import { registerMail } from '../controllers/nodemailer.controller.js';
 
 export default class SessionExtendRouter extends CustomRouter {
   init() {
-    this.post('/register', ["ADMIN", "SUPERVISOR"], passport.authenticate('register', {
-      failureRedirect: '/session/fail-register'
-    }), async (req, res) => {
-      // registerMail(req, res);
-      res.status(201).send({ status: "success", message: "User crated successfully" });
-    })
+    const sessionController = new SessionController(sessionService);
+
+    // this.post('/register', ["PUBLIC"], passport.authenticate('register', {
+    //   failureRedirect: '/session/fail-register', failureMessage: true
+    // }), async (req, res) => {
+    //   // registerMail(req, res);        
+    //   res.sendSuccess({ status: "success registration" });
+    // })
+
+    this.post('/register', ["PUBLIC"], (req, res, next) => {
+      passport.authenticate('register', (err, user, info) => {
+        
+        if (err) {
+          return res.status(500).json({ status: 'error', message: 'Internal server error: ' + err });
+        }
+
+        if (!user) {
+          // Use the message from `info` to return a meaningful response
+          return res.status(400).json({ status: 'error', message: info.message });
+        }
+
+        // Successful registration
+        res.status(200).json({ status: 'success', message: 'Registration successful' });
+      })(req, res, next);
+    });
 
     // this.post('/login', ['PUBLIC'], passport.authenticate('login', { failureRedirect: '/session/fail-login', failureMessage: true }), async (req, res) => {
     // this.post('/login', ['PUBLIC'], passport.authenticate('login', { failureMessage: true }), async (req, res) => {
@@ -30,30 +52,22 @@ export default class SessionExtendRouter extends CustomRouter {
 
     this.post('/login', ['PUBLIC'], async (req, res, next) => {
       passport.authenticate('login', (err, user, info) => {
-        if (err) {
-          return res.sendInternalServerError(info);
-        }
-        if (!user) {
-          return res.sendInternalServerError(info);
-        }
-
+        if (err) return res.sendError(info);
+        if (!user) return res.sendError(info);
         req.logIn(user, (err) => {
-          if (err) {
-            return res.sendInternalServerError("Error logging in");
-          }
-
-          // Generamos el token JWT
-          const { id, username, rol, nombre, apellido, email } = user;
+          if (err) return res.sendError("Error logging in");
+          const { id, username, rol, email } = user;
           try {
-            const access_token = generateJWToken({ id, username, rol, nombre, apellido, email });
+            const access_token = generateJWToken({ id, username, rol, email });
+            sessionController.initSession(user, access_token);
             res.cookie('jwtCookieToken', access_token, { httpOnly: true });
-            return res.status(201).send({ access_token: access_token });
+            return res.sendSuccess({ access_token: access_token });
           } catch (error) {
-            console.error('Error on logging in:', error);
-            return res.sendInternalServerError("Something went wrong, try again shortly!");
+            devLogger.error(error);
+            return res.sendError("Something went wrong, try again shortly!");
           }
         });
-      })(req, res, next); 
+      })(req, res, next);
     });
 
     this.post('/logout', ["PUBLIC"], async (req, res) => {

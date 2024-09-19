@@ -8,4 +8,18 @@ export default class SessionController extends GenericController {
     super(service);
   }
 
+  async initSession(user, token, req, res) {
+    try {
+      const newSession = await sessionService.create({
+        tokenSesion: token,
+        fechaInicio: new Date(),
+        usuarioId: user.id
+      });
+      return res.sendSuccess(newSession);
+    } catch (error) {
+      devLogger.debug(error)
+      return res.sendError(error);
+    }
+  }
+
 }
