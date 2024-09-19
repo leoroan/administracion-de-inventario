@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Router } from "express";
 import { PRIVATE_KEY } from "../../utils/jwt.js";
-import { ClientError, ForbiddenError, InternalServerError, UnauthorizedError } from "../../utils/errors.js";
+import { ClientError, ForbiddenError, InternalServerError, SequelizeError, UnauthorizedError } from "../../utils/errors.js";
 import { devLogger } from "../../config/logger/logger.config.js";
 
 export default class CustomRouter {
@@ -57,6 +57,8 @@ export default class CustomRouter {
     // const authHeader = req.cookies; //for postman
     // const authHeader = req.headers.authorization;  // for explorer
     const authHeader = conPostman ? req.cookies : req.headers.authorization;
+    console.log(authHeader);
+    
     // if (!authHeader) {
     //   return res.status(401).send({ error: "User not authenticated or missing token." });
     // }
@@ -84,7 +86,7 @@ export default class CustomRouter {
     });
   };
 
-  
+
 
   generateCustomResponses = (req, res, next) => {
     const cleanMessage = (message) => {
@@ -93,6 +95,7 @@ export default class CustomRouter {
 
     res.sendSuccess = (payload) => res.status(200).send(payload);
     res.sendError = (error) => {
+      // console.log(error);
       if (error instanceof UnauthorizedError) {
         res.status(error.statusCode).send(cleanMessage(error.message));
       } else if (error instanceof ForbiddenError) {

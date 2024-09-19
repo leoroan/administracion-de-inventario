@@ -14,8 +14,8 @@ export default class SessionController extends GenericController {
         tokenSesion: token,
         fechaInicio: new Date(),
         usuarioId: user.id
-      });
-      return res.sendSuccess(newSession);
+      });    
+      return newSession;
     } catch (error) {
       devLogger.debug(error)
       return res.sendError(error);

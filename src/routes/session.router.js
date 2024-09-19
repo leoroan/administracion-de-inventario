@@ -10,28 +10,12 @@ export default class SessionExtendRouter extends CustomRouter {
   init() {
     const sessionController = new SessionController(sessionService);
 
-    // this.post('/register', ["PUBLIC"], passport.authenticate('register', {
-    //   failureRedirect: '/session/fail-register', failureMessage: true
-    // }), async (req, res) => {
-    //   // registerMail(req, res);        
-    //   res.sendSuccess({ status: "success registration" });
-    // })
-
     this.post('/register', ["PUBLIC"], (req, res, next) => {
       passport.authenticate('register', (err, user, info) => {
-        
-        if (err) {
-          return res.status(500).json({ status: 'error', message: 'Internal server error: ' + err });
-        }
-
-        if (!user) {
-          // Use the message from `info` to return a meaningful response
-          return res.status(400).json({ status: 'error', message: info.message });
-        }
-
-        // Successful registration
-        res.status(200).json({ status: 'success', message: 'Registration successful' });
-      })(req, res, next);
+        if (err) return res.status(500).json({ status: 'error', message: 'Internal server error: ' + err });
+        if (!user) return res.status(400).json({ status: 'error', message: info.message });
+        res.sendSuccess({ status: 'success', message: 'Registration successful' });
+      })(req, res);
     });
 
     // this.post('/login', ['PUBLIC'], passport.authenticate('login', { failureRedirect: '/session/fail-login', failureMessage: true }), async (req, res) => {
@@ -54,20 +38,21 @@ export default class SessionExtendRouter extends CustomRouter {
       passport.authenticate('login', (err, user, info) => {
         if (err) return res.sendError(info);
         if (!user) return res.sendError(info);
-        req.logIn(user, (err) => {
+
+        req.logIn(user, async (err) => {          
           if (err) return res.sendError("Error logging in");
           const { id, username, rol, email } = user;
           try {
             const access_token = generateJWToken({ id, username, rol, email });
-            sessionController.initSession(user, access_token);
+            await sessionController.initSession(user, access_token);
             res.cookie('jwtCookieToken', access_token, { httpOnly: true });
-            return res.sendSuccess({ access_token: access_token });
+            return res.sendSuccess({ access_token });
           } catch (error) {
             devLogger.error(error);
             return res.sendError("Something went wrong, try again shortly!");
           }
         });
-      })(req, res, next);
+      })(req, res);
     });
 
     this.post('/logout', ["PUBLIC"], async (req, res) => {

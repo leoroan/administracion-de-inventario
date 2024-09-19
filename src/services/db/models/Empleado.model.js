@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/db/sequelize.config.js";
 
 const toUpperCaseFields = async (instance) => {
-  const fieldsToUpper = ['username', 'email', 'nombre', 'apellido'];
+  const fieldsToUpper = ['email', 'nombre', 'apellido'];
 
   fieldsToUpper.forEach((field) => {
     if (instance.dataValues[field]) {

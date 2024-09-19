@@ -7,6 +7,7 @@ import { PRIVATE_KEY } from '../../utils/jwt.js';
 import { devLogger } from '../logger/logger.config.js';
 import { Rol } from '../../services/db/models/rol.model.js';
 import { Op } from 'sequelize';
+import { SequelizeError } from '../../utils/errors.js';
 
 //  Declaramos estrategia
 const localStrategy = passportLocal.Strategy;
@@ -31,15 +32,14 @@ const initializePassport = () => {
       const { nombre, apellido, dni, email } = req.body;
       try {
         const exist = await Empleado.findOne({ where: { [Op.or]: [{ email: email }, { username: username }] } });
-        if (exist) {
-          return done(null, false, { message: 'Username or email already exists.' });
-        }
+        if (exist) return done(null, false, { message: 'Username or email already exists.' });
         const [rolEmpleado] = await Rol.findOrCreate({ where: { nombre: 'EMPLEADO' }, defaults: { nivel: 7 } });
         const employee = { username, password: createHash(password), nombre, apellido, dni, email, rolId: rolEmpleado.id }
         const result = await Empleado.create(employee);
         return done(null, result)
       } catch (error) {
-        return done("Registration ERROR " + error);
+        const customError = SequelizeError.handleSequelizeError(error, 'Error trying to register');
+        return done(customError);
       }
     }
   ))
@@ -59,9 +59,9 @@ const initializePassport = () => {
         const userDTO = {
           id: employee.dataValues.id,
           username: employee.dataValues.username,
-          rol: employee.dataValues.rol,
+          rol: employee.dataValues.rolId,
           email: employee.email
-        };
+        };        
         return done(null, userDTO);
       } catch (error) {
         return done(error);
@@ -69,24 +69,24 @@ const initializePassport = () => {
     })
   );
 
-  // passport.serializeUser((employee, done) => {
-  //   if (!employee || !employee.id) {
-  //     return done(new Error('User serialization failed: Invalid user data'));
-  //   }
-  //   done(null, employee.id);
-  // });
+  passport.serializeUser((employee, done) => {
+    if (!employee || !employee.id) {
+      return done(new Error('User serialization failed: Invalid user data'));
+    }
+    done(null, employee.id);
+  });
 
-  // passport.deserializeUser(async (id, done) => {
-  //   try {
-  //     const employee = await Empleado.findByPk(id);
-  //     if (!employee) {
-  //       return done(new Error('User not found'));
-  //     }
-  //     done(null, employee);
-  //   } catch (error) {
-  //     done(error);
-  //   }
-  // });
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const employee = await Empleado.findByPk(id);
+      if (!employee) {
+        return done(new Error('User not found'));
+      }
+      done(null, employee);
+    } catch (error) {
+      done(error);
+    }
+  });
 };
 
 const cookieExtractor = req => {
