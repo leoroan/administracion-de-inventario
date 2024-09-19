@@ -1,6 +1,5 @@
 import { devLogger } from '../config/logger/logger.config.js';
 import { empleadoService } from '../services/service.js';
-import { createHash } from '../utils/bcrypt.js';
 import GenericController from './helper/generic.controller.js';
 
 // Crear un nuevo usuario
