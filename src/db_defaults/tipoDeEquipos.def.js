@@ -40,6 +40,10 @@ export const tiposDeEquiposPredeterminados = [
     descripcion: "Sistema de alimentación ininterrumpida para protección de equipos"
   },
   {
+    nombre: "Monitor",
+    descripcion: "Dispositivo para visualizar imágenes y videos"
+  },
+  {
     nombre: "Otros",
     descripcion: "Otro tipo de equipo no especificado"
   }
