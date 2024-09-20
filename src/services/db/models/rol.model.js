@@ -11,6 +11,8 @@ const Rol = sequelize.define('Rol', {
     type: DataTypes.INTEGER,
     allowNull: false
   }
+}, {
+  tableName: 'roles'
 });
 
 export { Rol };

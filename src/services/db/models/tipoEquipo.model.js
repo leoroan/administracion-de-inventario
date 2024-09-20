@@ -22,6 +22,7 @@ const TipoEquipo = sequelize.define('TipoEquipo', {
     defaultValue: 'SIN ESPECIFICAR'
   },
 }, {
+  tableName: 'tiposDeEquipos',
   timestamps: true,
   paranoid: true,
   hooks: {

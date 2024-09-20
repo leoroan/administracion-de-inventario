@@ -30,6 +30,7 @@ const RegistroDeMantenimientoDeEquipo = sequelize.define('RegistroDeMantenimient
     type: DataTypes.TEXT,
   },
 }, {
+  tableName: 'registrosDeMantenimientoDeEquipos',
   timestamps: true,
   paranoid: true,
   hooks: {

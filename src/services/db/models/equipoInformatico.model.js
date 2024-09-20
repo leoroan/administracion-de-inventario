@@ -50,6 +50,7 @@ const EquipoInformatico = sequelize.define('EquipoInformatico', {
     defaultValue: 'SIN DATOS'
   }
 }, {
+  tableName: 'equiposInformaticos',
   timestamps: true,
   paranoid: true,
   hooks: {
