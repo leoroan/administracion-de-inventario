@@ -1,9 +1,11 @@
 import { marcasPredeterminadas } from "../../db_defaults/marcasYmodelos.def.js";
 import { rolesPredeterminados } from "../../db_defaults/roles.def.js";
+import { tiposDeEquiposPredeterminados } from "../../db_defaults/tipoDeEquipos.def.js";
 import { Empleado } from "../../services/db/models/Empleado.model.js";
 import { Marca } from "../../services/db/models/marca.model.js";
 import { Modelo } from "../../services/db/models/modelo.model.js";
 import { Rol } from "../../services/db/models/rol.model.js";
+import { TipoEquipo } from "../../services/db/models/tipoEquipo.model.js";
 import { createHash } from "../../utils/bcrypt.js";
 import { devLogger } from "../logger/logger.config.js";
 
@@ -11,6 +13,7 @@ export const afterSync = async (param) => {
   await addAdmin();
   await addMarcas();
   await addRoles();
+  await addTipos();
   devLogger.info('[DB-DEFAULT-SYNC]: Ready.');
 }
 
@@ -50,3 +53,10 @@ export const addRoles = async () => {
     await Rol.findOrCreate({ where: { nombre: rol.nombre }, defaults: rol });
   }
 }
+
+export const addTipos = async () => {
+  for (const tipo of tiposDeEquiposPredeterminados) {
+    await TipoEquipo.findOrCreate({ where: { nombre: tipo.nombre }, defaults: tipo });
+  }
+}
+
