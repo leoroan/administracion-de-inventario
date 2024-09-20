@@ -4,11 +4,12 @@ import { devLogger } from './logger/logger.config.js';
 dotenv.config();
 
 if (
-  !process.env.ENV_MODE || !process.env.BDD_MODE || !process.env.DB_HOST ||
-  !process.env.DB_USER || !process.env.DB_PASSWORD || !process.env.DB_DATABASE ||
-  !process.env.DB_PORT || !process.env.PORT || !process.env.NODEMAILER_HOST ||
-  !process.env.NODEMAILER_PORT || !process.env.NODEMAILER_USER || !process.env.NODEMAILER_PASS ||
-  !process.env.MAILING_BASE_URL || !process.env.FRONTEND_ORIGIN
+  !process.env.ADMIN_USER || !process.env.ADMIN_PASS || !process.env.ADMIN_EMAIL ||
+  !process.env.USE_POSTMAN || !process.env.ENV_MODE || !process.env.BDD_MODE ||
+  !process.env.DB_DATABASE || !process.env.DB_USER || !process.env.DB_PASSWORD ||
+  !process.env.DB_HOST || !process.env.DB_PORT || !process.env.PORT ||
+  !process.env.MAILING_BASE_URL || !process.env.FRONTEND_ORIGIN || !process.env.NODEMAILER_HOST ||
+  !process.env.NODEMAILER_PORT || !process.env.NODEMAILER_USER || !process.env.NODEMAILER_PASS
 ) {
   devLogger.error('Faltan variables de entorno necesarias O archivo ".env" en la raiz del sistema, comprobar y reintentar');
   process.exit(1);
