@@ -47,7 +47,7 @@ const initializePassport = () => {
   passport.use('login', new localStrategy({ passReqToCallback: true, usernameField: 'username' },
     async (req, username, password, done) => {
       try {
-        const employee = await Empleado.findOne({ where: { username } });
+        const employee = await Empleado.findOne({ where: { [Op.or]: [{ email: username }, { username: username }] }, include: { model: Rol } });
         if (!employee) {
           devLogger.warning("User doesn't exists with username: " + username);
           return done(null, false);
@@ -59,9 +59,9 @@ const initializePassport = () => {
         const userDTO = {
           id: employee.dataValues.id,
           username: employee.dataValues.username,
-          rol: employee.dataValues.rolId,
+          rol: employee.dataValues.Rol.dataValues.nivel,
           email: employee.email
-        };        
+        };
         return done(null, userDTO);
       } catch (error) {
         return done(error);
