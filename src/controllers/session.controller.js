@@ -2,8 +2,8 @@ import { devLogger } from '../config/logger/logger.config.js';
 import { sessionService } from '../services/service.js';
 import GenericController from './helper/generic.controller.js';
 import { Session } from '../services/db/models/session.model.js';
+import { ClientError } from '../utils/errors.js';
 
-// Crear un nuevo usuario
 export default class SessionController extends GenericController {
   constructor(service) {
     super(service);
@@ -21,10 +21,14 @@ export default class SessionController extends GenericController {
           empleadoId: user.id
         });
         return newSession;
+      }            
+      if (!sesionExistente.dataValues.tokenSesion) {
+        throw new ClientError("The session expires, re login please");
       }
       return sesionExistente;
     } catch (error) {
       devLogger.debug(error)
+      
       return res.sendError(error);
     }
   }
