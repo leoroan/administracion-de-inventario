@@ -24,8 +24,12 @@ export default class EmpleadoExtendRouter extends CustomRouter {
       empleadoController.findAll(req, res);
     });
 
-    this.get('/test/1', ['1'], async (req, res) => {
-      res.send('test role lvl  1');
+    this.get('/test/1', [1], async (req, res) => {
+      res.send('test role lvl 1 passed');
+    });
+
+    this.get('/test/4', [4], async (req, res) => {
+      res.send('test role lvl 4 passed');
     });
 
     this.put('/:id', ['PUBLIC'], async (req, res) => {
