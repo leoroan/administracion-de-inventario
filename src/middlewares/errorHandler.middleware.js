@@ -1,7 +1,6 @@
 import { devLogger } from "../config/logger/logger.config.js";
 
 const errorHandler = (err, req, res, next) => {
-  devLogger.info("from midd-ERROR:errorHandler");
   // Verifica si el error es personalizado y tiene un statusCode
   if (err.statusCode) {
     return res.status(err.statusCode).json({
