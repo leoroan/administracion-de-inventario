@@ -14,7 +14,7 @@ export default class EmpleadoController extends GenericController {
       return res.sendSuccess(user);
     } catch (error) {
       devLogger.error(error)
-      res.sendError(error);
+      return res.sendError(error);
     }
   }
 
@@ -24,7 +24,7 @@ export default class EmpleadoController extends GenericController {
       return res.sendSuccess(user);
     } catch (error) {
       devLogger.error(error)
-      res.sendError(error);
+      return res.sendError(error);
     }
   }
 
