@@ -1,5 +1,4 @@
 # Proyecto inventory management
----
 ## Dependencias del proyecto
 *Librerías de Seguridad y Gestión de Sesiones*
 - bcryptjs: Encriptación de contraseñas usando el algoritmo bcrypt.
@@ -36,7 +35,6 @@
 - inventory-management-mintrp: Probablemente una librería personalizada o un módulo de proyecto.
 - picocolors: Coloreado de texto en la consola.
 - reflect-metadata: Decoradores para metadatos.
----
 
 ## Patrones Principales Implicados
 *Patrón Modelo-Vista-Controlador (MVC):* -Sin implementacion de la vista
@@ -62,8 +60,7 @@ Permite realizar múltiples operaciones sobre diferentes entidades y luego confi
 - Testabilidad: Permite realizar pruebas unitarias de forma aislada.
 - Escalabilidad: La aplicación puede adaptarse a cambios en los requisitos.
 
-___
-[^1]: DAO (Data Access Object): Actúa como una capa de acceso a datos más baja, a menudo directamente interactúa con la base de datos.
-
-## version
+#### version
 v2.0.0
+
+[^1]: DAO (Data Access Object): Actúa como una capa de acceso a datos más baja, a menudo directamente interactúa con la base de datos.
