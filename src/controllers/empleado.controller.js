@@ -7,7 +7,7 @@ export default class EmpleadoController extends GenericController {
   constructor(service) {
     super(service);
   }
-  
+
   async findByEmailORusername(req, res) {
     try {
       const user = await empleadoService.findByEmailORusername(req.params.some);
@@ -27,8 +27,7 @@ export default class EmpleadoController extends GenericController {
       return res.sendError(error);
     }
   }
-
-
+  
 }
 
 

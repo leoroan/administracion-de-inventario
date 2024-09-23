@@ -18,7 +18,7 @@ const initializePassport = () => {
 
   passport.use('jwt', new JwtStrategy({ jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), secretOrKey: PRIVATE_KEY },
     async (jwt_payload, done) => {
-      try {
+      try {        
         return done(null, jwt_payload.user);
       } catch (error) {
         devLogger.error(error);
@@ -45,7 +45,7 @@ const initializePassport = () => {
   ))
 
   passport.use('login', new localStrategy({ passReqToCallback: true, usernameField: 'username' },
-    async (req, username, password, done) => {
+    async (req, username, password, done) => {      
       try {
         const employee = await Empleado.findOne({ where: { [Op.or]: [{ email: username }, { username: username }] }, include: { model: Rol } });
         if (!employee) {

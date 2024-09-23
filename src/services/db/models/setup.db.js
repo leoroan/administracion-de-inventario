@@ -54,38 +54,6 @@ const establecerRelaciones = () => {
   // Un empleado tiene un rol
   Empleado.belongsTo(Rol, { foreignKey: 'rolId' });
   Rol.hasMany(Empleado, { foreignKey: 'rolId', onUpdate: 'CASCADE' });
-
-  // // Empleado - Session
-  // Empleado.hasOne(Session, { onDelete: 'CASCADE', onUpdate: 'CASCADE', foreignKey: 'empleadoId' });
-  // Session.belongsTo(Empleado, { foreignKey: 'empleadoId' });
-  // // Empleado - Oficina:
-  // Empleado.belongsTo(Oficina); //Un Empleado pertenece a una Oficina
-  // Oficina.hasMany(Empleado, { onDelete: 'RESTRICT', onUpdate: 'CASCADE' });   //Una Oficina tiene varios Empleados, No permite eliminar una oficina si tiene empleados asignados
-  // // Oficina - EquipoInformatico:
-  // Oficina.hasMany(EquipoInformatico, { onUpdate: 'CASCADE' }); //Una Oficina tiene varios EquiposInformaticos
-  // // Un EquipoInformatico puede pertenecer a una Oficina o a un Empleado (relación exclusiva):
-  // EquipoInformatico.belongsTo(Oficina, { foreignKey: 'oficinaId', allowNull: true, onDelete: 'RESTRICT' });
-  // EquipoInformatico.belongsTo(Empleado, { foreignKey: 'empleadoId', allowNull: true, onDelete: 'RESTRICT' });
-  // // Oficina - Edificio:
-  // Oficina.belongsTo(Edificio, { onDelete: 'RESTRICT' }); //Una Oficina pertenece a un Edificio
-  // Edificio.hasMany(Oficina, { onUpdate: 'CASCADE' });  //Un Edificio tiene varias Oficinas
-  // // Oficina - Dependencias/Suboficinas:
-  // Oficina.hasMany(Oficina, { as: 'Dependencias', foreignKey: 'oficinaPadreId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
-  // Oficina.belongsTo(Oficina, { as: 'OficinaPadre', foreignKey: 'oficinaPadreId' });
-  // // Empleado - EquipoInformatico:
-  // Empleado.hasMany(EquipoInformatico, { onUpdate: 'CASCADE' }); //Un Empleado puede tener varios EquiposInformaticos:
-  // // EquipoInformatico - RegistroDeMantenimientoDeEquipo:
-  // EquipoInformatico.hasMany(RegistroDeMantenimientoDeEquipo, { onUpdate: 'CASCADE' });
-  // RegistroDeMantenimientoDeEquipo.belongsTo(EquipoInformatico);
-  // // Marca - Modelo:
-  // Marca.hasMany(Modelo, { onUpdate: 'CASCADE' }); //Una Marca tiene varios Modelos
-  // Modelo.belongsTo(Marca, { onDelete: 'RESTRICT' }); //Un Modelo pertenece a una Marca
-  // // Un EquipoInformatico tiene un tipo:
-  // TipoEquipo.hasMany(EquipoInformatico, { onUpdate: 'CASCADE' });
-  // EquipoInformatico.belongsTo(TipoEquipo, { onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
-  // // Un modelo tiene un tipo de equipo:
-  // TipoEquipo.hasMany(Modelo);
-  // Modelo.belongsTo(TipoEquipo, { onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
 }
 
 establecerRelaciones();

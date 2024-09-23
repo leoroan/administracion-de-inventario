@@ -69,7 +69,7 @@ export default class CustomRouter {
       return typeof message === 'string' ? message.replace(/\u001b\[\d+m/g, '') : message;
     };
     res.sendSuccess = (payload) => res.status(200).send(payload);
-    res.sendError = (error) => {      
+    res.sendError = (error) => {
       if (error instanceof UnauthorizedError) {
         res.status(error.statusCode).send(cleanMessage(error.message));
       } else if (error instanceof ForbiddenError) {
