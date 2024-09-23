@@ -5,8 +5,12 @@ export default class EquipoInformaticoRepository extends GenericRepository {
     super(EquipoInformaticoDAO);
   }
 
-  // findByEmailORusername = async (some) => {
-  //   return await this.dao.findByEmailORusername(some);
-  // }
+  findById_withEmpleadoDTO = async (some) => {
+    return await this.dao.findById_withEmpleadoDTO(some);
+  }
 
+  findAll_withEmpleadoDTO = async (some) => {
+    return await this.dao.findAll_withEmpleadoDTO(some);
+  }
+  
 }
