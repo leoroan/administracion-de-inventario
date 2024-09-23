@@ -13,7 +13,6 @@ export default class EmpleadoExtendRouter extends CustomRouter {
 
     this.post('/', ['PUBLIC'], async (req, res) => {
       empleadoController.create(req, res);
-      // create(req, res);
     });
 
     this.get('/:id', ['PUBLIC'], async (req, res) => {

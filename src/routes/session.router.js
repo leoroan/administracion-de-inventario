@@ -18,33 +18,22 @@ export default class SessionExtendRouter extends CustomRouter {
       })(req, res);
     });
 
-    // this.post('/login', ['PUBLIC'], passport.authenticate('login', { failureRedirect: '/session/fail-login', failureMessage: true }), async (req, res) => {
-    // this.post('/login', ['PUBLIC'], passport.authenticate('login', { failureMessage: true }), async (req, res) => {
-    //   const user = req.user;
-    //   if (!user) return res.status(401).send({ status: "error", error: "Wrong user/password credentials" });
-    //   const { id, username, rol, nombre, apellido, email } = user;
-    //   try {
-    //     const access_token = generateJWToken({ id, username, rol, nombre, apellido, email });
-    //     // req.session.user = { id, username, rol };
-    //     res.cookie('jwtCookieToken', access_token, { httpOnly: true });//{ httpOnly: true, secure: true, sameSite: "strict", maxAge: 1800000, });
-    //     res.status(201).send({ access_token: access_token });
-    //   } catch (error) {
-    //     console.error('Error on logging in:', error);
-    //     res.status(500).send({ error: "Something went wrong, try again shortly!" });
-    //   }
-    // });
-
     this.post('/login', ['PUBLIC'], async (req, res, next) => {
       passport.authenticate('login', (err, user, info) => {
-        if (err) return res.sendError(info);
-        if (!user) return res.sendError(info);
-
-        req.logIn(user, async (err) => {          
-          if (err) return res.sendError("Error logging in");
+        if (err) {
+          return res.sendError("Authentication error");
+        }
+        if (!user) {
+          return res.sendError(info.message || "User not found");
+        }
+        req.logIn(user, async (err) => {
+          if (err) {
+            return res.sendError("Error logging in");
+          }
           const { id, username, rol, email } = user;
+          const access_token = generateJWToken({ id, username, rol, email });
           try {
-            const access_token = generateJWToken({ id, username, rol, email });
-            await sessionController.initSession(user, access_token);
+            await sessionController.evaluateSession(user, access_token);
             res.cookie('jwtCookieToken', access_token, { httpOnly: true });
             return res.sendSuccess({ access_token });
           } catch (error) {
@@ -52,7 +41,7 @@ export default class SessionExtendRouter extends CustomRouter {
             return res.sendError("Something went wrong, try again shortly!");
           }
         });
-      })(req, res);
+      })(req, res, next);
     });
 
     this.post('/logout', ["PUBLIC"], async (req, res) => {

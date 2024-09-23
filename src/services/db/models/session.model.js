@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/db/sequelize.config.js";
 import { devLogger } from "../../../config/logger/logger.config.js"; 3
 
-const calcularMaximoTiempoSesionHistorico = async (instance) => {  
+const calcularMaximoTiempoSesionHistorico = async (instance) => {
   if (instance.fechaExpiracion) {
     const tiempoSesion = Math.floor(
       (new Date(instance.fechaExpiracion) - new Date(instance.fechaInicio)) / 1000 //lo convierto a segundos
@@ -14,22 +14,11 @@ const calcularMaximoTiempoSesionHistorico = async (instance) => {
   }
 }
 
-const establecerFechaExpiracion = async (instance) => {
-  const ultimaConexion = new Date(Session.ultimaConexion);
-  const fechaExpiracion = new Date(Session.fechaExpiracion);  
-  if (ultimaConexion > fechaExpiracion) {
-    devLogger.error('La última conexión es posterior a la fecha de expiración.');
-    instance.tokenSesion = "null";
-  }
-}
-
 const calcularExpiracionDeSesion = async (instance) => {
-  console.log("changed?");
-  console.log(instance.changed('fechaExpiracion'));
-  if (instance.changed('fechaExpiracion')) {
-    const fechaActual = new Date();
-    const fechaExpiracion = new Date(fechaActual.getTime() + 3600000); // 1 hora
-    instance.fechaExpiracion = fechaExpiracion;
+  if (instance.changed('ultimaConexion')) {
+    if (instance.ultimaConexion > instance.fechaExpiracion) {
+      instance.fechaExpiracion = null;
+    }
   }
 }
 
@@ -52,7 +41,6 @@ const Session = sequelize.define('Sesion', {
   fechaInicio: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW,
   },
   fechaExpiracion: {
     type: DataTypes.DATE,
@@ -115,9 +103,11 @@ const Session = sequelize.define('Sesion', {
   timestamps: true,
   paranoid: true,
   hooks: {
-    afterUpdate: calcularExpiracionDeSesion,
-    beforeCreate: establecerFechaExpiracion,
-    beforeUpdate: calcularMaximoTiempoSesionHistorico,
+    beforeUpdate: [
+      calcularMaximoTiempoSesionHistorico,
+      calcularExpiracionDeSesion
+    ],
+    // afterUpdate: calcularExpiracionDeSesion,
     afterFind: verifyBloquedUser
   }
 });

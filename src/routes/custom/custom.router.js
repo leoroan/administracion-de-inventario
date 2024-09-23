@@ -68,10 +68,8 @@ export default class CustomRouter {
     const cleanMessage = (message) => {
       return typeof message === 'string' ? message.replace(/\u001b\[\d+m/g, '') : message;
     };
-
     res.sendSuccess = (payload) => res.status(200).send(payload);
-    res.sendError = (error) => {
-      // console.log(error);
+    res.sendError = (error) => {      
       if (error instanceof UnauthorizedError) {
         res.status(error.statusCode).send(cleanMessage(error.message));
       } else if (error instanceof ForbiddenError) {
@@ -81,7 +79,7 @@ export default class CustomRouter {
       } else if (error instanceof InternalServerError) {
         res.status(error.statusCode).send(cleanMessage(error.message));
       } else {
-        res.status(500).send('Internal Server Error');
+        res.status(500).send(`Internal Server Error, ${error ? error : ""}`);
       }
     };
     next();
