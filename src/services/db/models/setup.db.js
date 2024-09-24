@@ -45,7 +45,12 @@ const establecerRelaciones = () => {
 
   // Un EquipoInformatico tiene un tipo
   TipoEquipo.hasMany(EquipoInformatico, { onUpdate: 'CASCADE', foreignKey: 'tipoEquipoId' });
-  EquipoInformatico.belongsTo(TipoEquipo, { foreignKey: 'tipoEquipoId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
+  EquipoInformatico.belongsTo(TipoEquipo, { as: 'TipoEquipo', foreignKey: 'tipoEquipoId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
+
+  // Modelo - EquipoInformatico
+  EquipoInformatico.belongsTo(Modelo, { as: 'Modelo', foreignKey: 'modeloId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
+  Modelo.hasMany(EquipoInformatico, { foreignKey: 'modeloId', onUpdate: 'CASCADE' });
+
 
   // Un modelo tiene un tipo de equipo
   TipoEquipo.hasMany(Modelo, { foreignKey: 'tipoEquipoId' });

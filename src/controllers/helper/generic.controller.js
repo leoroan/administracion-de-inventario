@@ -65,8 +65,8 @@ export default class GenericController {
 
   async update(req, res) {
     try {
-      const updatedRecord = await this.service.update(req.params.id, req.body);
-      return res.sendSuccess(updatedRecord);
+      await this.service.update(req.params.id, req.body);
+      return res.sendSuccess('success');
     } catch (error) {
       devLogger.error(error)
       return res.sendError(error);
@@ -76,8 +76,8 @@ export default class GenericController {
   // Eliminar un registro por ID
   async delete(req, res) {
     try {
-      const deletedRecord = await this.service.delete(req.params.id);
-      return res.sendSuccess(deletedRecord);
+      await this.service.delete(req.params.id);
+      return res.sendSuccess('success');
     } catch (error) {
       devLogger.error(error)
       return res.sendError(error);
