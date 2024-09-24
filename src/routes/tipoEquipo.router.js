@@ -7,7 +7,7 @@ export default class TipoEquipoExtendRouter extends CustomRouter {
   /**
    * api:/api/tipoEquipos
    */
-  init() {     // this.get('/:id', ['ADMIN', 'SUPERVISOR'], passport.authenticate('jwt'), async (req, res) => {
+  init() {
 
     const tipoEquipoController = new TipoEquipoController(tipoEquipoService);
 

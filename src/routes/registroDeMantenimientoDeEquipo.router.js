@@ -11,23 +11,23 @@ export default class registroDeMantenimientoExtendRouter extends CustomRouter {
 
     const registroDeMantenimientoController = new RegistroDeMantenimientoDeEquipoController(registroDeMantenimientoDeEquipoService);
 
-    this.post('/', [4], passport.authenticate('jwt'), async (req, res) => {
+    this.post('/', [3], passport.authenticate('jwt'), async (req, res) => {
       registroDeMantenimientoController.create(req, res);
     });
 
-    this.get('/:id', [4], passport.authenticate('jwt'), async (req, res) => {
+    this.get('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
       registroDeMantenimientoController.findById(req, res);
     });
 
-    this.get('/', [4], passport.authenticate('jwt'), async (req, res) => {
+    this.get('/', [3], passport.authenticate('jwt'), async (req, res) => {
       registroDeMantenimientoController.findAll(req, res);
     });
 
-    this.put('/:id', [4], passport.authenticate('jwt'), async (req, res) => {
+    this.put('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
       registroDeMantenimientoController.update(req, res);
     });
 
-    this.delete('/:id', [4], passport.authenticate('jwt'), async (req, res) => {
+    this.delete('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
       registroDeMantenimientoController.delete(req, res);
     });
 

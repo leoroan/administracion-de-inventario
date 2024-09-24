@@ -15,11 +15,11 @@ export default class OficinaExtendRouter extends CustomRouter {
       oficinaController.create(req, res);
     });
 
-    this.get('/:id', [4], passport.authenticate('jwt'), async (req, res) => {
+    this.get('/:id', [6], passport.authenticate('jwt'), async (req, res) => {
       oficinaController.findById(req, res);
     });
 
-    this.get('/', [4], passport.authenticate('jwt'), async (req, res) => {
+    this.get('/', [6], passport.authenticate('jwt'), async (req, res) => {
       oficinaController.findAll(req, res);
     });
 

@@ -15,11 +15,11 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
       equipoInformaticoController.create(req, res);
     });
 
-    this.get('/:id', [4], passport.authenticate('jwt'), async (req, res) => {
+    this.get('/:id', [6], passport.authenticate('jwt'), async (req, res) => {
       equipoInformaticoController.findById(req, res);
     });
 
-    this.get('/', [4], passport.authenticate('jwt'), async (req, res) => {
+    this.get('/', [5], passport.authenticate('jwt'), async (req, res) => {
       equipoInformaticoController.findAll(req, res);
     });
 
@@ -31,9 +31,6 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
       equipoInformaticoController.delete(req, res);
     });
 
-    /**
-     * QUERYs /asignar/equipo?uid=12345&eid=6789:
-     */
     this.post('/asignar/equipo', [3], passport.authenticate('jwt'), async (req, res) => {
       equipoInformaticoController.addEquipo(req, res);
     });

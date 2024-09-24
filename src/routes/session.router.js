@@ -10,7 +10,7 @@ export default class SessionExtendRouter extends CustomRouter {
   init() {
     const sessionController = new SessionController(sessionService);
 
-    this.post('/register', ["PUBLIC"], (req, res, next) => {
+    this.post('/register', [3], (req, res, next) => {
       passport.authenticate('register', (err, user, info) => {
         if (err) return res.status(500).json({ status: 'error', message: 'Internal server error: ' + err });
         if (!user) return res.status(400).json({ status: 'error', message: info.message });
