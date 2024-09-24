@@ -35,6 +35,14 @@ export default class EmpleadoExtendRouter extends CustomRouter {
       empleadoController.findByEmailORusername(req, res);
     });
 
+    this.post('/asignar/oficina', [3], passport.authenticate('jwt'), async (req, res) => {
+      empleadoController.addOficina(req, res);
+    });
+
+    this.post('/remover/oficina', [3], passport.authenticate('jwt'), async (req, res) => {
+      empleadoController.removeOficina(req, res);
+    });
+
     // TESTES
     this.get('/test/1', [1], passport.authenticate('jwt'), async (req, res) => {
       res.send('test role lvl 1 passed');

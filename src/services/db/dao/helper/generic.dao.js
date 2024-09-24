@@ -17,23 +17,23 @@ export default class GenericDAO {
     }
   }
 
-  async findById(id) {
+  async findById(id, options = {}) {
     try {
-      const record = await this.model.findByPk(id);
-      if (!record) throw new Error(`${this.model.name} not found`);
+      const record = await this.model.findByPk(id, options);
+      if (!record) throw new Error(`${this.model.name} no encontrado`);
       return record;
     } catch (error) {
-      throw SequelizeError.handleSequelizeError(error, `Error fetching ${this.model.name}`);
+      throw SequelizeError.handleSequelizeError(error, `Error buscando ${this.model.name}`);
     }
   }
 
-  async findAll(query = {}) {
-    try {
-      const records = await this.model.findAll({ where: query });
-      if (!records) throw new Error(`${this.model.name}s not found`);
+  async findAll(options = {}) {
+    try {      
+      const records = await this.model.findAll(options);
+      if (!records) throw new Error(`${this.model.name}s no encontrado`);
       return records;
     } catch (error) {
-      throw SequelizeError.handleSequelizeError(error, `Error fetching ${this.model.name}`);
+      throw SequelizeError.handleSequelizeError(error, `Error buscando ${this.model.name}`);
     }
   }
 
@@ -42,13 +42,13 @@ export default class GenericDAO {
     try {
       transaction = await this.model.sequelize.transaction();
       const record = await this.model.findByPk(id);
-      if (!record) throw new Error(`${this.model.name} not found`)
+      if (!record) throw new Error(`${this.model.name} no encontrado`)
       const updatedRecord = await record.update(data, { transaction });
       await transaction.commit();
       return updatedRecord.get({ plain: true });
     } catch (error) {
       if (transaction) await transaction.rollback();
-      throw SequelizeError.handleSequelizeError(error, `Error updating ${this.model.name}`);
+      throw SequelizeError.handleSequelizeError(error, `Error actualizando ${this.model.name}`);
     }
   }
 
@@ -57,13 +57,13 @@ export default class GenericDAO {
     try {
       transaction = await this.model.sequelize.transaction();
       const record = await this.model.findByPk(id);
-      if (!record) throw new Error(`${this.model.name} not found`);
+      if (!record) throw new Error(`${this.model.name} no encontrado`);
       await record.destroy({ transaction });
       await transaction.commit();
       return (`${this.model.name} deleted`);
     } catch (error) {
       if (transaction) await transaction.rollback();
-      throw SequelizeError.handleSequelizeError(error, `Error deleting ${this.model.name}`);
+      throw SequelizeError.handleSequelizeError(error, `Error borrando ${this.model.name}`);
     }
   }
 }

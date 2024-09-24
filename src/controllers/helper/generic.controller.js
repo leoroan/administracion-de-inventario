@@ -8,7 +8,7 @@ export default class GenericController {
   async create(req, res) {
     try {
       const newRecord = await this.service.create(req.body);
-      return res.sendSuccess(`New record created with id:${newRecord.id}`);
+      return res.sendSuccess(`Nuevo registro creado con el ID:${newRecord.id}`);
     } catch (error) {
       devLogger.debug(error)
       return res.sendError(error);
@@ -17,7 +17,19 @@ export default class GenericController {
 
   async findById(req, res) {
     try {
-      const record = await this.service.findById(req.params.id);
+      const { model = '', att = '', alias = '' } = req.query
+      let options = {}; //
+      if (model) {
+        options = {
+          include: {
+            association: model,
+            as: alias,
+            attributes: Array.isArray(att) ? att : [att],
+          },
+        };
+      }
+      const record = await this.service.findById(id, options);
+      if (!record) return res.sendError(error);
       return res.sendSuccess(record);
     } catch (error) {
       devLogger.debug(error);
@@ -27,7 +39,19 @@ export default class GenericController {
 
   async findAll(req, res) {
     try {
-      const records = await this.service.findAll();
+      const { model = '', att = '', alias = '' } = req.query
+      let options = {}; //
+      if (model) {
+        options = {
+          include: {
+            association: model,
+            as: alias,
+            attributes: Array.isArray(att) ? att : [att],
+          },
+        };
+      }
+      const records = await this.service.findAll(options);
+      if (!records) return res.sendError(error);
       return res.sendSuccess(records);
     } catch (error) {
       devLogger.error(error)

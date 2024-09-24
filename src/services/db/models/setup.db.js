@@ -13,22 +13,22 @@ import { Rol } from "./rol.model.js";
 const establecerRelaciones = () => {
   // Empleado - Session
   Empleado.hasOne(Session, { onDelete: 'CASCADE', onUpdate: 'CASCADE', foreignKey: 'empleadoId' });
-  Session.belongsTo(Empleado, { foreignKey: 'empleadoId' });
+  Session.belongsTo(Empleado, { as: 'Empleado', foreignKey: 'empleadoId' });
 
   // Empleado - Oficina
-  Empleado.belongsTo(Oficina, { foreignKey: 'oficinaId' }); // Un Empleado pertenece a una Oficina
+  Empleado.belongsTo(Oficina, { as: 'Oficina', foreignKey: 'oficinaId' }); // Un Empleado pertenece a una Oficina
   Oficina.hasMany(Empleado, { onDelete: 'RESTRICT', onUpdate: 'CASCADE', foreignKey: 'oficinaId' }); // Una Oficina tiene varios Empleados
 
   // Oficina - EquipoInformatico
   Oficina.hasMany(EquipoInformatico, { onUpdate: 'CASCADE', foreignKey: 'oficinaId' });
-  EquipoInformatico.belongsTo(Oficina, { foreignKey: 'oficinaId', allowNull: true, onDelete: 'RESTRICT' });
+  EquipoInformatico.belongsTo(Oficina, { as: 'Oficina', foreignKey: 'oficinaId', allowNull: true, onDelete: 'RESTRICT' });
 
   // Empleado - EquipoInformatico
-  EquipoInformatico.belongsTo(Empleado, { foreignKey: 'empleadoId', allowNull: true, onDelete: 'RESTRICT' });
+  EquipoInformatico.belongsTo(Empleado, { as: 'Empleado', foreignKey: 'empleadoId', allowNull: true, onDelete: 'RESTRICT' });
   Empleado.hasMany(EquipoInformatico, { onUpdate: 'CASCADE', foreignKey: 'empleadoId' });
 
   // Oficina - Edificio
-  Oficina.belongsTo(Edificio, { foreignKey: 'edificioId', onDelete: 'RESTRICT' });
+  Oficina.belongsTo(Edificio, { as: 'Edificio', foreignKey: 'edificioId', onDelete: 'RESTRICT' });
   Edificio.hasMany(Oficina, { onUpdate: 'CASCADE', foreignKey: 'edificioId' });
 
   // Oficina - Dependencias/Suboficinas
@@ -40,7 +40,7 @@ const establecerRelaciones = () => {
   RegistroDeMantenimientoDeEquipo.belongsTo(EquipoInformatico, { foreignKey: 'equipoId' });
 
   // Marca - Modelo
-  Modelo.belongsTo(Marca, { foreignKey: 'marcaId', onDelete: 'RESTRICT' });
+  Modelo.belongsTo(Marca, { as: 'Marca', foreignKey: 'marcaId', onDelete: 'RESTRICT' });
   Marca.hasMany(Modelo, { onUpdate: 'CASCADE', foreignKey: 'marcaId' });
 
   // Un EquipoInformatico tiene un tipo
@@ -49,10 +49,10 @@ const establecerRelaciones = () => {
 
   // Un modelo tiene un tipo de equipo
   TipoEquipo.hasMany(Modelo, { foreignKey: 'tipoEquipoId' });
-  Modelo.belongsTo(TipoEquipo, { foreignKey: 'tipoEquipoId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
+  Modelo.belongsTo(TipoEquipo, { as: 'TipoEquipo', foreignKey: 'tipoEquipoId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
 
   // Un empleado tiene un rol
-  Empleado.belongsTo(Rol, { foreignKey: 'rolId' });
+  Empleado.belongsTo(Rol, { as: 'Rol', foreignKey: 'rolId' });
   Rol.hasMany(Empleado, { foreignKey: 'rolId', onUpdate: 'CASCADE' });
 }
 

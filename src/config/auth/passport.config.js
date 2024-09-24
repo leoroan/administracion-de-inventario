@@ -5,9 +5,9 @@ import { Empleado } from '../../services/db/models/Empleado.model.js';
 import { createHash, isValidPassword } from '../../utils/bcrypt.js';
 import { PRIVATE_KEY } from '../../utils/jwt.js';
 import { devLogger } from '../logger/logger.config.js';
-import { Rol } from '../../services/db/models/rol.model.js';
 import { Op } from 'sequelize';
 import { SequelizeError } from '../../utils/errors.js';
+import { Rol } from '../../services/db/models/rol.model.js';
 
 //  Declaramos estrategia
 const localStrategy = passportLocal.Strategy;
@@ -47,11 +47,11 @@ const initializePassport = () => {
   passport.use('login', new localStrategy({ passReqToCallback: true, usernameField: 'username' },
     async (req, username, password, done) => {      
       try {
-        const employee = await Empleado.findOne({ where: { [Op.or]: [{ email: username }, { username: username }] }, include: { model: Rol } });
+        const employee = await Empleado.findOne({ where: { [Op.or]: [{ email: username }, { username: username }] }, include: { association: 'Rol' } });
         if (!employee) {
           devLogger.warning("User doesn't exists with username: " + username);
           return done(null, false);
-        }
+        }        
         if (!isValidPassword(employee.dataValues, password)) {
           devLogger.warning("Invalid credentials for employee: " + username);
           return done(null, false);

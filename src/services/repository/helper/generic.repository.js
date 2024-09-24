@@ -5,11 +5,11 @@ export default class GenericRepository {
   create = async (data) => {
     return await this.dao.create(data);
   }
-  findById = async (id) => {
-    return await this.dao.findById(id);
+  findById = async (id, opt) => {
+    return await this.dao.findById(id, opt);
   }
-  findAll = async () => {
-    return await this.dao.findAll();
+  findAll = async (opt) => {
+    return await this.dao.findAll(opt);
   }
   update = async (id, updatedData) => {
     return await this.dao.update(id, updatedData);

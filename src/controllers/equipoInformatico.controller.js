@@ -9,61 +9,53 @@ export default class EquipoInformaticoController extends GenericController {
     super(service);
   }
 
-  async obtenerTodosLosEquiposConSusEmpleados(req, res) {
+  async addEquipo(req, res) {
+    const { userId = null, oficinaId = null, equipoId = null } = req.query;
     try {
-      const equipos = await equipoInformaticoService.findAll_withEmpleadoDTO();
-      res.sendSuccess(equipos);
+      const equipo = await equipoInformaticoService.findById(equipoId);
+      if (!equipo) {
+        return res.sendError({ message: 'Equipo no encontrado' });
+      }
+      if (equipo.estado == 'DISPONIBLE') {
+        userId ? await equipo.setEmpleado(userId) : await equipo.setOficina(oficinaId);
+        equipo.estado = 'ASIGNADO';
+        await equipo.save();
+        res.sendSuccess(equipo);
+      }
+      res.sendError({ message: 'El equipo ya se encuentra asignado' });
     } catch (error) {
-      res.sendError({ message: 'Error al obtener equipos con empleados' });
+      res.sendError({ message: 'Error al querer asignar equipo el equipo' });
     }
   }
 
-  async obtenerUnEquipoConSuEmpleadoPorEquipoId(req, res) {
+  async removeEquipo(req, res) {
     const equipoId = req.query.eid;
     try {
-      const equipo = await equipoInformaticoService.findById_withEmpleadoDTO(equipoId);
+      const equipo = await equipoInformaticoService.findById(equipoId);
+      if (!equipo) {
+        return res.sendError({ message: 'Equipo no encontrado' });
+      }
+      await equipo.setEmpleado(null);
+      await equipo.setOficina(null);
+      equipo.estado = 'DISPONIBLE';
+
+      await equipo.save();
       res.sendSuccess(equipo);
     } catch (error) {
-      res.sendError({ message: 'Error al obtener el equipo del empleado' });
+      res.sendError({ message: 'Error al querer remover el equipo' });
     }
   }
 
-  async addEquipoToEmpleado(req, res) {
-    const userId = req.query.uid;
+  async setEstadoBaja(req, res) {
+    // const { nuevoEstado = 'BAJA' } = req.query.estado; //ENUM: 'ASIGNADO', 'DISPONIBLE', 'BAJA'
     const equipoId = req.query.eid;
     try {
-      const equipo = await equipoInformaticoService.findById(equipoId);
-      if (!equipo) {
-        return res.sendError({ message: 'Equipo no encontrado' });
-      }
-      if (!equipo.oficinaId) {
-        equipo.empleadoId = userId;
-        await equipo.save();
-        res.sendSuccess(equipo);
-      }
-      res.sendError({ message: 'El equipo ya esta asignado a una oficina' });
-
+      await equipoInformaticoService.update(equipoId, { estado: 'BAJA' });
+      res.sendSuccess({ message: 'Estado actualizado' });
     } catch (error) {
-      res.sendError({ message: 'Error al querer asignar equipo al empleado' });
+      res.sendError({ message: 'Error al actualizar el estado' });
     }
   }
 
-  async addEquipoToOficina(req, res) {
-    const oficinaId = req.query.oid;
-    const equipoId = req.query.eid;
-    try {
-      const equipo = await equipoInformaticoService.findById(equipoId);
-      if (!equipo) {
-        return res.sendError({ message: 'Equipo no encontrado' });
-      }
-      if (!equipo.empleadoId) {
-        equipo.oficinaId = oficinaId;
-        await equipo.save();
-        res.sendSuccess(equipo);
-      }
-      res.sendError({ message: 'El equipo ya esta asignado a un empleado' });
-    } catch (error) {
-      res.sendError({ message: 'Error al querer asignar equipo a la oficina' });
-    }
-  }
+
 }
