@@ -12,20 +12,20 @@ export default class EquipoInformaticoController extends GenericController {
     const { userId = null, oficinaId = null, equipoId = null } = req.query;
     try {
       const equipo = await equipoInformaticoService.findById(equipoId);
-      if (equipo.estado == 'DISPONIBLE') {
-        userId ? await equipo.setEmpleado(userId) : await equipo.setOficina(oficinaId);
-        equipo.estado = 'ASIGNADO';
-        await equipo.save();
-        res.sendSuccess('success');
+      if (equipo.estado !== 'DISPONIBLE') {
+        throw new Error(`El equipo ya se encuentra asignado`);
       }
-      res.sendError(`El equipo ya se encuentra asignado, ${error}`);
+      userId ? await equipo.setEmpleado(userId) : await equipo.setOficina(oficinaId);
+      equipo.estado = 'ASIGNADO';
+      await equipo.save();
+      res.sendSuccess('success');
     } catch (error) {
-      res.sendError(`Error al querer asignar equipo el equipo, ${error}`);
+      res.sendError(`al querer asignar el equipo, ${error}`);
     }
   }
 
   async removeEquipo(req, res) {
-    const equipoId = req.query.eid;
+    const { equipoId } = req.query;
     try {
       const equipo = await equipoInformaticoService.findById(equipoId);
       await equipo.setEmpleado(null);
@@ -34,18 +34,18 @@ export default class EquipoInformaticoController extends GenericController {
       await equipo.save();
       res.sendSuccess('success');
     } catch (error) {
-      res.sendError(`Error al querer remover el equipo, ${error}`);
+      res.sendError(`al querer remover el equipo, ${error}`);
     }
   }
 
   async setEstadoBaja(req, res) {
     // const { nuevoEstado = 'BAJA' } = req.query.estado; //ENUM: 'ASIGNADO', 'DISPONIBLE', 'BAJA'
-    const equipoId = req.query.eid;
+    const { equipoId } = req.query;
     try {
       await equipoInformaticoService.update(equipoId, { estado: 'BAJA' });
       res.sendSuccess('success');
     } catch (error) {
-      res.sendError(`Error al querer actualizar el equipo, ${error}`);
+      res.sendError(`al querer actualizar el equipo, ${error}`);
     }
   }
 

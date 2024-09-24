@@ -19,15 +19,15 @@ export default class GenericController {
     try {
       const { model = '', att = '', alias = '' } = req.query //alias lo usas x ej con oficina por "dependencias" o "oficinaPadre"...
       let options = {}; //
-      if (model !== 'ALL') {
+      if (model && att) {
         options = {
           include: {
             association: model,
             as: alias,
-            attributes: Array.isArray(att) ? att : [att],
+            attributes: Array.isArray(att) ? att : att.split(',')
           },
         };
-      } else {
+      } else if (model === 'ALL') {
         options = { include: { all: true } }
       }
       const record = await this.service.findById(req.params.id, options);
@@ -41,16 +41,18 @@ export default class GenericController {
 
   async findAll(req, res) {
     try {
-      const { model = '', att = '', alias = '' } = req.query
+      const { model = '', att = '', alias = '' } = req.query //alias lo usas x ej con oficina por "dependencias" o "oficinaPadre"...
       let options = {}; //
-      if (model) {
+      if (model && att) {
         options = {
           include: {
             association: model,
             as: alias,
-            attributes: Array.isArray(att) ? att : [att],
+            attributes: Array.isArray(att) ? att : att.split(',')
           },
         };
+      } else if (model === 'ALL') {
+        options = { include: { all: true } }
       }
       const records = await this.service.findAll(options);
       if (!records) return res.sendError(error);

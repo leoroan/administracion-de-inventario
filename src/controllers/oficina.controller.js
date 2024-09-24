@@ -21,7 +21,7 @@ export default class OficinaController extends GenericController {
   }
 
   async removeEdificio(req, res) {
-    const oficinaId = req.query.oid;
+    const { oficinaId } = req.query;
     try {
       const oficina = await oficinaService.findById(oficinaId);
       await oficina.setEdificio(null);
@@ -45,7 +45,7 @@ export default class OficinaController extends GenericController {
   }
 
   async removeOficinaPadre(req, res) {
-    const oficinaId = req.query.oid;
+    const { oficinaId } = req.query;
     try {
       const oficina = await oficinaService.findById(oficinaId);
       await oficina.setOficinaPadre(null);

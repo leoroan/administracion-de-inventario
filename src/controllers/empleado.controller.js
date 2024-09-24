@@ -41,7 +41,7 @@ export default class EmpleadoController extends GenericController {
   }
 
   async removeOficina(req, res) {
-    const userId = req.query.userId;
+    const { userId } = req.query;
     try {
       const empleado = await empleadoService.findById(userId);
       await empleado.setOficina(null);

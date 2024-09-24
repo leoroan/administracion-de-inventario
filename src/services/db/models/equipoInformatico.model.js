@@ -32,7 +32,7 @@ const EquipoInformatico = sequelize.define('EquipoInformatico', {
   },
   observacion: {
     type: DataTypes.TEXT,
-    allowNull: true
+    defaultValue: "SIN OBSERVACIONES"
   },
   especificacionesTecnicas: {
     type: DataTypes.TEXT,
