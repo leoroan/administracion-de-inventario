@@ -17,9 +17,9 @@ export default class GenericController {
 
   async findById(req, res) {
     try {
-      const { model = '', att = '', alias = '' } = req.query
+      const { model = '', att = '', alias = '' } = req.query //alias lo usas x ej con oficina por "dependencias" o "oficinaPadre"...
       let options = {}; //
-      if (model) {
+      if (model !== 'ALL') {
         options = {
           include: {
             association: model,
@@ -27,8 +27,10 @@ export default class GenericController {
             attributes: Array.isArray(att) ? att : [att],
           },
         };
+      } else {
+        options = { include: { all: true } }
       }
-      const record = await this.service.findById(id, options);
+      const record = await this.service.findById(req.params.id, options);
       if (!record) return res.sendError(error);
       return res.sendSuccess(record);
     } catch (error) {

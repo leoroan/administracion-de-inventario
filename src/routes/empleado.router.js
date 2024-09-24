@@ -43,14 +43,5 @@ export default class EmpleadoExtendRouter extends CustomRouter {
       empleadoController.removeOficina(req, res);
     });
 
-    // TESTES
-    this.get('/test/1', [1], passport.authenticate('jwt'), async (req, res) => {
-      res.send('test role lvl 1 passed');
-    });
-
-    this.get('/test/4', [4], passport.authenticate('jwt'), async (req, res) => {
-      res.send('test role lvl 4 passed');
-    });
-
   }
 }
