@@ -11,6 +11,12 @@ import EmpleadoExtendRouter from '../../routes/empleado.router.js'
 import MarcaExtendRouter from '../../routes/marca.router.js'
 import ModeloExtendRouter from '../../routes/modelo.router.js'
 import SessionExtendRouter from '../../routes/session.router.js'
+import EdificioExtendRouter from '../../routes/edificio.router.js'
+import EquipoInformaticoExtendRouter from '../../routes/equipoInformatico.router.js'
+import OficinaExtendedRouter from '../../routes/oficina.router.js'
+import RegistroDeMantenimientoExtendRouter from '../../routes/registroDeMantenimientoDeEquipo.router.js'
+import TipoEquipoExtendRouter from '../../routes/tipoEquipo.router.js'
+
 
 export default function configureExpress(app) {
   initializePassport();
@@ -55,11 +61,21 @@ export default function configureExpress(app) {
   const marcaRouter = new MarcaExtendRouter();
   const modeloRouter = new ModeloExtendRouter();
   const sessionRouter = new SessionExtendRouter()
+  const edificioRouter = new EdificioExtendRouter();
+  const equipoInformaticoRouter = new EquipoInformaticoExtendRouter();
+  const oficinaRouter = new OficinaExtendedRouter();
+  const registroDeMantenimientoDeEquipoRouter = new RegistroDeMantenimientoExtendRouter();
+  const tipoEquipoRouter = new TipoEquipoExtendRouter();
 
   app.use('/api/empleados', empleadoRouter.getRouter());
   app.use('/api/marcas', marcaRouter.getRouter());
   app.use('/api/modelos', modeloRouter.getRouter());
-  app.use('/api/session', sessionRouter.getRouter())
+  app.use('/api/session', sessionRouter.getRouter());
+  app.use('/api/edificios', edificioRouter.getRouter());
+  app.use('/api/oficinas', oficinaRouter.getRouter());
+  app.use('/api/equipos', equipoInformaticoRouter.getRouter());
+  app.use('/api/registrosDeMantenimiento', registroDeMantenimientoDeEquipoRouter.getRouter());
+  app.use('/api/tipoEquipos', tipoEquipoRouter.getRouter());
 
   app.use(errorHandler);
 

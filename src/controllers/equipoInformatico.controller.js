@@ -1,7 +1,6 @@
 import { where } from 'sequelize';
 import { equipoInformaticoService } from '../services/service.js';
 import GenericController from './helper/generic.controller.js';
-import { Empleado } from '../services/db/models/Empleado.model.js';
 
 // Crear un nuevo usuario
 export default class EquipoInformaticoController extends GenericController {
@@ -13,18 +12,15 @@ export default class EquipoInformaticoController extends GenericController {
     const { userId = null, oficinaId = null, equipoId = null } = req.query;
     try {
       const equipo = await equipoInformaticoService.findById(equipoId);
-      if (!equipo) {
-        return res.sendError({ message: 'Equipo no encontrado' });
-      }
       if (equipo.estado == 'DISPONIBLE') {
         userId ? await equipo.setEmpleado(userId) : await equipo.setOficina(oficinaId);
         equipo.estado = 'ASIGNADO';
         await equipo.save();
-        res.sendSuccess(equipo);
+        res.sendSuccess('success');
       }
-      res.sendError({ message: 'El equipo ya se encuentra asignado' });
+      res.sendError(`El equipo ya se encuentra asignado, ${error}`);
     } catch (error) {
-      res.sendError({ message: 'Error al querer asignar equipo el equipo' });
+      res.sendError(`Error al querer asignar equipo el equipo, ${error}`);
     }
   }
 
@@ -32,17 +28,13 @@ export default class EquipoInformaticoController extends GenericController {
     const equipoId = req.query.eid;
     try {
       const equipo = await equipoInformaticoService.findById(equipoId);
-      if (!equipo) {
-        return res.sendError({ message: 'Equipo no encontrado' });
-      }
       await equipo.setEmpleado(null);
       await equipo.setOficina(null);
       equipo.estado = 'DISPONIBLE';
-
       await equipo.save();
-      res.sendSuccess(equipo);
+      res.sendSuccess('success');
     } catch (error) {
-      res.sendError({ message: 'Error al querer remover el equipo' });
+      res.sendError(`Error al querer remover el equipo, ${error}`);
     }
   }
 
@@ -51,9 +43,9 @@ export default class EquipoInformaticoController extends GenericController {
     const equipoId = req.query.eid;
     try {
       await equipoInformaticoService.update(equipoId, { estado: 'BAJA' });
-      res.sendSuccess({ message: 'Estado actualizado' });
+      res.sendSuccess('success');
     } catch (error) {
-      res.sendError({ message: 'Error al actualizar el estado' });
+      res.sendError(`Error al querer actualizar el equipo, ${error}`);
     }
   }
 

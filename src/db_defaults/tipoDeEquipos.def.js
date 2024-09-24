@@ -16,6 +16,10 @@ export const tiposDeEquiposPredeterminados = [
     descripcion: "Dispositivo para imprimir documentos y gráficos"
   },
   {
+    nombre: "Tonner",
+    descripcion: "Suministro de tinta tipo tonner, para impresiones en general."
+  },
+  {
     nombre: "Router",
     descripcion: "Equipo para dirigir el tráfico de red entre dispositivos"
   },

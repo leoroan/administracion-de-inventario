@@ -11,23 +11,23 @@ export default class OficinaExtendRouter extends CustomRouter {
 
     const oficinaController = new OficinaController(oficinaService);
 
-    this.post('/', [3], async (req, res) => {
+    this.post('/', [3], passport.authenticate('jwt'), async (req, res) => {
       oficinaController.create(req, res);
     });
 
-    this.get('/:id', [4], async (req, res) => {
+    this.get('/:id', [4], passport.authenticate('jwt'), async (req, res) => {
       oficinaController.findById(req, res);
     });
 
-    this.get('/', [4], async (req, res) => {
+    this.get('/', [4], passport.authenticate('jwt'), async (req, res) => {
       oficinaController.findAll(req, res);
     });
 
-    this.put('/:id', [3], async (req, res) => {
+    this.put('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
       oficinaController.update(req, res);
     });
 
-    this.delete('/:id', [3], async (req, res) => {
+    this.delete('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
       oficinaController.delete(req, res);
     });
 
@@ -39,5 +39,12 @@ export default class OficinaExtendRouter extends CustomRouter {
       oficinaController.removeOficinaPadre(req, res);
     });
 
+    this.post('/asignar/edificio', [3], passport.authenticate('jwt'), async (req, res) => {
+      oficinaController.addEdificio(req, res);
+    });
+
+    this.post('/remover/edificio', [3], passport.authenticate('jwt'), async (req, res) => {
+      oficinaController.removeEdificio(req, res);
+    });
   }
 }

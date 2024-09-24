@@ -13,7 +13,7 @@ export default class GenericDAO {
       return newRecord;
     } catch (error) {
       if (transaction) await transaction.rollback();
-      throw SequelizeError.handleSequelizeError(error, `Error creating ${this.model.name}`);
+      throw SequelizeError.handleSequelizeError(error, `Error creando ${this.model.name}`);
     }
   }
 
@@ -23,17 +23,17 @@ export default class GenericDAO {
       if (!record) throw new Error(`${this.model.name} no encontrado`);
       return record;
     } catch (error) {
-      throw SequelizeError.handleSequelizeError(error, `Error buscando ${this.model.name}`);
+      throw SequelizeError.handleSequelizeError(error, `buscando ${this.model.name}`);
     }
   }
 
   async findAll(options = {}) {
-    try {      
+    try {
       const records = await this.model.findAll(options);
       if (!records) throw new Error(`${this.model.name}s no encontrado`);
       return records;
     } catch (error) {
-      throw SequelizeError.handleSequelizeError(error, `Error buscando ${this.model.name}`);
+      throw SequelizeError.handleSequelizeError(error, `buscando ${this.model.name}`);
     }
   }
 
@@ -48,7 +48,7 @@ export default class GenericDAO {
       return updatedRecord.get({ plain: true });
     } catch (error) {
       if (transaction) await transaction.rollback();
-      throw SequelizeError.handleSequelizeError(error, `Error actualizando ${this.model.name}`);
+      throw SequelizeError.handleSequelizeError(error, `actualizando ${this.model.name}`);
     }
   }
 
@@ -63,7 +63,7 @@ export default class GenericDAO {
       return (`${this.model.name} deleted`);
     } catch (error) {
       if (transaction) await transaction.rollback();
-      throw SequelizeError.handleSequelizeError(error, `Error borrando ${this.model.name}`);
+      throw SequelizeError.handleSequelizeError(error, `borrando ${this.model.name}`);
     }
   }
 }

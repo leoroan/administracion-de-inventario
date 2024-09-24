@@ -1,6 +1,8 @@
 import { marcasPredeterminadas } from "../../db_defaults/marcasYmodelos.def.js";
 import { rolesPredeterminados } from "../../db_defaults/roles.def.js";
 import { tiposDeEquiposPredeterminados } from "../../db_defaults/tipoDeEquipos.def.js";
+import { oficinasPredeterminadas } from "../../db_defaults/oficinasYdependencias.js";
+import { Oficina } from "../../services/db/models/oficina.model.js";
 import { Empleado } from "../../services/db/models/Empleado.model.js";
 import { Marca } from "../../services/db/models/marca.model.js";
 import { Modelo } from "../../services/db/models/modelo.model.js";
@@ -10,6 +12,7 @@ import { createHash } from "../../utils/bcrypt.js";
 import { devLogger } from "../logger/logger.config.js";
 
 export const afterSync = async (param) => {
+  await addOficinas();
   await addAdmin();
   await addMarcas();
   await addRoles();
@@ -32,6 +35,20 @@ const addAdmin = async () => {
     }
   });
   devLogger.info('[ADMIN]: Ready.');
+}
+
+const addOficinas = async () => {
+  for (const oficina of oficinasPredeterminadas) {
+    const [oficinaCreada] = await Oficina.findOrCreate({ where: { nombre: oficina.nombre } });
+    for (const nombreDependencia of oficina.dependencias) {
+      await Oficina.findOrCreate({
+        where: {
+          nombre: nombreDependencia,
+          oficinaPadreId: oficinaCreada.id
+        }
+      });
+    }
+  }
 }
 
 const addMarcas = async () => {

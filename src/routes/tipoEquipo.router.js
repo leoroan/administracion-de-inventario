@@ -1,34 +1,34 @@
 import CustomRouter from "../routes/custom/custom.router.js";
-import MarcaController from "../controllers/marca.controller.js"; 
-import { marcaService } from "../services/service.js";
+import TipoEquipoController from "../controllers/tipoEquipo.controller.js";
+import { tipoEquipoService } from "../services/service.js";
 import passport from "passport";
 
-export default class MarcaExtendRouter extends CustomRouter {
+export default class TipoEquipoExtendRouter extends CustomRouter {
   /**
-   * api:/api/empleados
+   * api:/api/tipoEquipos
    */
   init() {     // this.get('/:id', ['ADMIN', 'SUPERVISOR'], passport.authenticate('jwt'), async (req, res) => {
 
-    const marcaController = new MarcaController(marcaService);
+    const tipoEquipoController = new TipoEquipoController(tipoEquipoService);
 
     this.post('/', [3], passport.authenticate('jwt'), async (req, res) => {
-      marcaController.create(req, res);
+      tipoEquipoController.create(req, res);
     });
 
     this.get('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
-      marcaController.findById(req, res);
+      tipoEquipoController.findById(req, res);
     });
 
     this.get('/', [3], passport.authenticate('jwt'), async (req, res) => {
-      marcaController.findAll(req, res);
+      tipoEquipoController.findAll(req, res);
     });
 
     this.put('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
-      marcaController.update(req, res);
+      tipoEquipoController.update(req, res);
     });
 
     this.delete('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
-      marcaController.delete(req, res);
+      tipoEquipoController.delete(req, res);
     });
 
   }

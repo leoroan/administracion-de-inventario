@@ -8,18 +8,39 @@ export default class OficinaController extends GenericController {
     super(service);
   }
 
+  async addEdificio(req, res) {
+    const { edificioId = null, oficinaId = null } = req.query;
+    try {
+      const oficina = await oficinaService.findById(oficinaId);
+      await oficina.setEdificio(edificioId);
+      await oficina.save();
+      res.sendSuccess('success');
+    } catch (error) {
+      res.sendError(`Error al querer asignarle un edificio a la oficina, ${error}`);
+    }
+  }
+
+  async removeEdificio(req, res) {
+    const oficinaId = req.query.oid;
+    try {
+      const oficina = await oficinaService.findById(oficinaId);
+      await oficina.setEdificio(null);
+      await oficina.save();
+      res.sendSuccess('success');
+    } catch (error) {
+      res.sendError(`Error al querer remover el edificio de la oficina, ${error}`);
+    }
+  }
+
   async addOficinaPadre(req, res) {
     const { oficinaPadreId = null, oficinaId = null } = req.query;
     try {
       const oficina = await oficinaService.findById(oficinaId);
-      if (!oficina) {
-        return res.sendError({ message: 'Oficina no encontrada' });
-      }
       await oficina.setOficinaPadre(oficinaPadreId);
       await oficina.save();
-      res.sendSuccess(oficina);
+      res.sendSuccess('success');
     } catch (error) {
-      res.sendError({ message: 'Error al querer asignarle oficina al oficina' });
+      res.sendError(`Error al querer asignarle oficina a la oficina, ${error}`);
     }
   }
 
@@ -27,18 +48,15 @@ export default class OficinaController extends GenericController {
     const oficinaId = req.query.oid;
     try {
       const oficina = await oficinaService.findById(oficinaId);
-      if (!oficina) {
-        return res.sendError({ message: 'Oficina no encontrada' });
-      }
       await oficina.setOficinaPadre(null);
       await oficina.save();
-      res.sendSuccess(oficina);
+      res.sendSuccess('success');
     } catch (error) {
-      res.sendError({ message: 'Error al querer remover al oficina de la oficina' });
+      res.sendError(`Error al querer remover la oficina "padre" de la oficina, ${error}`);
     }
   }
 
-  async eliminarOficinaPadre(req, res) {
+  async eliminarOficinaPadre(req, res) { // proyecto de borrado con arrastre de "hijos" o dependencias del modelo
     try {
       const { oficinaId } = req.params;
 
@@ -51,7 +69,7 @@ export default class OficinaController extends GenericController {
       });
 
       if (!oficina) {
-        return res.sendError({ message: 'Oficina no encontrada' });
+        return res.sendError('Oficina no encontrada');
       }
 
       // 2. Si tiene dependencias, reasignarlas
@@ -71,9 +89,9 @@ export default class OficinaController extends GenericController {
       // 3. Eliminar la oficina
       await oficina.destroy();
 
-      res.sendSuccess({ message: 'Oficina eliminada correctamente y dependencias reasignadas' });
+      res.sendSuccess('success');
     } catch (error) {
-      res.sendError({ message: 'Error al eliminar la oficina', error });
+      res.sendError('Error al eliminar la oficina');
     }
   };
 

@@ -32,29 +32,23 @@ export default class EmpleadoController extends GenericController {
     const { userId = null, oficinaId = null } = req.query;
     try {
       const empleado = await empleadoService.findById(userId);
-      if (!empleado) {
-        return res.sendError({ message: 'Empleado no encontrado' });
-      }
       await empleado.setOficina(oficinaId);
       await empleado.save();
-      res.sendSuccess(empleado);
+      res.sendSuccess('success');
     } catch (error) {
-      res.sendError({ message: 'Error al querer asignarle oficina al empleado' });
+      res.sendError(`al querer asignarle oficina al empleado, ${error}`);
     }
   }
 
   async removeOficina(req, res) {
-    const userId = req.query.eid;
+    const userId = req.query.userId;
     try {
       const empleado = await empleadoService.findById(userId);
-      if (!empleado) {
-        return res.sendError({ message: 'Empleado no encontrado' });
-      }
       await empleado.setOficina(null);
       await empleado.save();
-      res.sendSuccess(empleado);
+      res.sendSuccess('success');
     } catch (error) {
-      res.sendError({ message: 'Error al querer remover al empleado de la oficina' });
+      res.sendError(`al querer remover la oficina al empleado, ${error}`);
     }
   }
 
