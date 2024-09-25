@@ -70,7 +70,7 @@ const addMarcas = async () => {
 
 const addEdificios = async () => {
   for (const edificio of edificiosPredeterminados) {
-    await Edificio.findOrCreate({ where: { nombre: edificio.nombre } });
+    await Edificio.findOrCreate({ where: { nombre: edificio.nombre, direccion: edificio.direccion } });
   }
 }
 

@@ -37,7 +37,7 @@ const establecerRelaciones = () => {
 
   // EquipoInformatico - RegistroDeMantenimientoDeEquipo
   EquipoInformatico.hasMany(RegistroDeMantenimientoDeEquipo, { onUpdate: 'CASCADE', foreignKey: 'equipoId' });
-  RegistroDeMantenimientoDeEquipo.belongsTo(EquipoInformatico, { foreignKey: 'equipoId' });
+  RegistroDeMantenimientoDeEquipo.belongsTo(EquipoInformatico, { as: 'RegistroDeMantenimientoDeEquipos', foreignKey: 'equipoId' });
 
   // Marca - Modelo
   Modelo.belongsTo(Marca, { as: 'Marca', foreignKey: 'marcaId', onDelete: 'RESTRICT' });

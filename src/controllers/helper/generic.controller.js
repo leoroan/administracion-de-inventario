@@ -17,20 +17,8 @@ export default class GenericController {
 
   async findById(req, res) {
     try {
-      const { model = '', att = '', alias = '' } = req.query //alias lo usas x ej con oficina por "dependencias" o "oficinaPadre"...
-      let options = {}; //
-      if (model && att) {
-        options = {
-          include: {
-            association: model,
-            as: alias,
-            attributes: Array.isArray(att) ? att : att.split(',')
-          },
-        };
-      } else if (model === 'ALL') {
-        options = { include: { all: true } }
-      }
-      const record = await this.service.findById(req.params.id, options);
+      const { scope } = req.query
+      const record = await this.service.findById(req.params.id, scope);
       if (!record) return res.sendError(error);
       return res.sendSuccess(record);
     } catch (error) {
@@ -41,20 +29,8 @@ export default class GenericController {
 
   async findAll(req, res) {
     try {
-      const { model = '', att = '', alias = '' } = req.query //alias lo usas x ej con oficina por "dependencias" o "oficinaPadre"...
-      let options = {}; //
-      if (model && att) {
-        options = {
-          include: {
-            association: model,
-            as: alias,
-            attributes: Array.isArray(att) ? att : att.split(',')
-          },
-        };
-      } else if (model === 'ALL') {
-        options = { include: { all: true } }
-      }
-      const records = await this.service.findAll(options);
+      const { scope } = req.query
+      const records = await this.service.findAll(scope);
       if (!records) return res.sendError(error);
       return res.sendSuccess(records);
     } catch (error) {

@@ -17,9 +17,10 @@ export default class GenericDAO {
     }
   }
 
-  async findById(id, options = {}) {
+  async findById(id, scope = 'defaultScope') {
+    scope = Array.isArray(scope) ? scope : scope.split(',');
     try {
-      const record = await this.model.findByPk(id, options);
+      const record = scope ? await this.model.scope(scope).findByPk(id) : await this.model.findByPk(id);
       if (!record) throw new Error(`${this.model.name} no encontrado`);
       return record;
     } catch (error) {
@@ -27,9 +28,10 @@ export default class GenericDAO {
     }
   }
 
-  async findAll(options = {}) {
+  async findAll(scope = 'defaultScope') {
+    scope = Array.isArray(scope) ? scope : scope.split(',');
     try {
-      const records = await this.model.findAll(options);
+      const records = scope ? await this.model.scope(scope).findAll() : await this.model.findAll();
       if (!records) throw new Error(`${this.model.name}s no encontrado`);
       return records;
     } catch (error) {
