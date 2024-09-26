@@ -1,122 +1,73 @@
-import { Edificio } from "../models/Edificio.model.js";
 import { Empleado } from "../models/Empleado.model.js";
+import { Edificio } from "../models/Edificio.model.js";
 import { Marca } from "../models/marca.model.js";
 import { Modelo } from "../models/modelo.model.js";
 import { Oficina } from "../models/oficina.model.js";
 import { RegistroDeMantenimientoDeEquipo } from "../models/registroDeMantenimientoDeEquipo.model.js";
 import { TipoEquipo } from "../models/tipoEquipo.model.js";
+import { EquipoInformatico } from "../models/EquipoInformatico.model.js";
 
 export const equipoInformaticoScope = {
   defaultScope: {
-    attributes: ['id', 'mt', 'numeroDeSerie', 'numeroDePatrimonio', 'estado'],
+    attributes: ['id', 'mt', 'numeroDeSerie', 'numeroDePatrimonio', 'estado', 'createdAt', 'updatedAt', 'deletedAt'],
     include: [
       {
         model: Modelo,
         as: 'Modelo',
-        attributes: ['nombre'],
+        attributes: ['id', 'nombre'],
         include: [
           {
             model: Marca,
             as: 'Marca',
-            attributes: ['nombre', 'descripcion']
+            attributes: ['id', 'nombre', 'descripcion']
           }
         ],
       },
       {
         model: TipoEquipo,
         as: 'TipoEquipo',
-        attributes: ['nombre', 'descripcion']
-      },
-      {
-        model: RegistroDeMantenimientoDeEquipo,
-        as: 'RegistroDeMantenimientoDeEquipos',
-        attributes: ['id', 'tipoMantenimiento', 'tecnicoResponsable', 'createdAt']
-      },
+        attributes: ['id', 'nombre', 'descripcion']
+      }
     ]
-  },
-  scopes: {
-    fullConEmpleado: {
-      include: [
-        {
-          model: Empleado,
-          as: 'Empleado',
-          attributes: ['nombre', 'apellido', 'email'],
-          include: [
-            {
-              model: Oficina,
-              as: 'Oficina',
-              attributes: ['nombre', 'descripcion', 'email', 'telefono'],
-              include: [
-                {
-                  model: Edificio,
-                  as: 'Edificio',
-                  attributes: ['nombre', 'direccion', 'coordenadas']
-                }
-              ]
-            }
-          ]
-        },
-        {
-          model: Modelo,
-          as: 'Modelo',
-          attributes: ['nombre'],
-          include: [
-            {
-              model: Marca,
-              as: 'Marca',
-              attributes: ['nombre', 'descripcion']
-            }
-          ],
-        },
-        {
-          model: TipoEquipo,
-          as: 'TipoEquipo',
-          attributes: ['nombre', 'descripcion']
-        },
-        {
-          model: RegistroDeMantenimientoDeEquipo,
-          as: 'RegistroDeMantenimientoDeEquipos',
-          attributes: ['id', 'tipoMantenimiento', 'tecnicoResponsable', 'createdAt']
-        },
-      ]
-    },
-    fullConOficina: {
+  }
+}
+
+export const defineEquipoInformaticoScopes = () => {
+  EquipoInformatico.addScope('conEmpleado', {
+    // attributes: ['id', 'mt', 'numeroDeSerie', 'numeroDePatrimonio', 'estado'],
+    include: [
+      {
+        model: Empleado,
+        as: 'Empleado',
+        attributes: ['id', 'nombre', 'apellido', 'email'],
+      },
+    ],
+  }),
+    EquipoInformatico.addScope('conOficina', {
+      // attributes: ['id', 'mt', 'numeroDeSerie', 'numeroDePatrimonio', 'estado'],
       include: [
         {
           model: Oficina,
           as: 'Oficina',
-          attributes: ['nombre', 'descripcion', 'email', 'telefono'],
+          attributes: ['id', 'nombre'],
           include: [
             {
               model: Edificio,
               as: 'Edificio',
-              attributes: ['nombre', 'direccion', 'coordenadas']
+              attributes: ['id', 'nombre', 'direccion']
             }
           ]
-        },
-        {
-          model: Modelo,
-          as: 'Modelo',
-          attributes: ['nombre'],
-          include: [
-            {
-              model: Marca,
-              as: 'Marca',
-              attributes: ['nombre', 'descripcion']
-            }
-          ],
-        },
-        {
-          model: TipoEquipo,
-          as: 'TipoEquipo',
-          attributes: ['nombre', 'descripcion']
-        },
+        }
+      ]
+    }),
+    EquipoInformatico.addScope('conRegistrosDeMantenimiento', {
+      // attributes: ['id', 'mt', 'numeroDeSerie', 'numeroDePatrimonio', 'estado'],
+      include: [
         {
           model: RegistroDeMantenimientoDeEquipo,
           as: 'RegistroDeMantenimientoDeEquipos',
-          attributes: ['id', 'tipoMantenimiento', 'tecnicoResponsable', 'createdAt']
-        },
+          attributes: ['id', 'tipoMantenimiento', 'tecnicoResponsable', 'createdAt', 'updatedAt']
+        }
       ]
-    }
-  }
-}
+    })
+};

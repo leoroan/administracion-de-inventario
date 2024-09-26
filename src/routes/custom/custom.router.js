@@ -74,7 +74,7 @@ export default class CustomRouter {
       const response = {
         status: 'error',
         message: cleanErrorMessage,
-        Requester: user.username,
+        Requester: user?.username || 'none',
       };
       if (error instanceof UnauthorizedError) {
         return res.status(error.statusCode).send(response);

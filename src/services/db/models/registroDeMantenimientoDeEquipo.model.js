@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/db/sequelize.config.js";
+import { registroDeMantenimientoDeEquipoScope } from "../scopes/registroDeMantenimientoDeEquipo.model.scope.js";
 
 const toUpperCaseFields = async (instance) => {
   const fieldsToUpper = ['observaciones', 'tecnicoResponsable'];
@@ -36,7 +37,8 @@ const RegistroDeMantenimientoDeEquipo = sequelize.define('RegistroDeMantenimient
   hooks: {
     beforeCreate: toUpperCaseFields,
     beforeUpdate: toUpperCaseFields,
-  }
+  },
+  scopes: registroDeMantenimientoDeEquipoScope.defaultScope
 });
 
 

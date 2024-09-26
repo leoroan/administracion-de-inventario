@@ -59,7 +59,6 @@ const EquipoInformatico = sequelize.define('EquipoInformatico', {
     beforeUpdate: toUpperCaseFields,
   },
   defaultScope: equipoInformaticoScope.defaultScope,
-  scopes: equipoInformaticoScope.scopes,
 });
 
 export { EquipoInformatico }

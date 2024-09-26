@@ -30,7 +30,7 @@ export default class SessionExtendRouter extends CustomRouter {
           if (err) {
             return res.sendError("Error logging in");
           }          
-          const { id, username, rol, email } = user;
+          const { id, username, rol, email } = user;          
           const access_token = generateJWToken({ id, username, rol, email });
           try {
             await sessionController.evaluateSession(user, access_token);

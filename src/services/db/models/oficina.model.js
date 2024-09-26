@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/db/sequelize.config.js";
+import { oficinaScope } from "../scopes/oficina.scope.js";
 
 const toUpperCaseFields = async (instance) => {
   const fieldsToUpper = ['nombre', 'descripcion', 'email'];
@@ -41,7 +42,8 @@ const Oficina = sequelize.define('Oficina', {
   hooks: {
     beforeCreate: toUpperCaseFields,
     beforeUpdate: toUpperCaseFields,
-  }
+  },
+  defaultScope: oficinaScope.defaultScope
 });
 
 export { Oficina };

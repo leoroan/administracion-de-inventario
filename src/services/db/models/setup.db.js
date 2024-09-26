@@ -10,6 +10,12 @@ import { Marca } from "./marca.model.js";
 import { TipoEquipo } from "./tipoEquipo.model.js";
 import { Rol } from "./rol.model.js";
 
+import { defineEquipoInformaticoScopes } from "../scopes/equipoInformatico.scope.js";
+import { defineEmpleadoScope } from "../scopes/empleado.scope.js";
+import { defineOficinaScope } from "../scopes/oficina.scope.js";
+import { defineEdificioScope } from "../scopes/edificio.scope.js";
+import { defineRegistroDeMantenimientoDeEquipoScope } from "../scopes/registroDeMantenimientoDeEquipo.model.scope.js";
+
 const establecerRelaciones = () => {
   // Empleado - Session
   Empleado.hasOne(Session, { onDelete: 'CASCADE', onUpdate: 'CASCADE', foreignKey: 'empleadoId' });
@@ -61,7 +67,18 @@ const establecerRelaciones = () => {
   Rol.hasMany(Empleado, { foreignKey: 'rolId', onUpdate: 'CASCADE' });
 }
 
+const establecerScopes = () => {
+  defineEmpleadoScope();
+  defineEquipoInformaticoScopes();
+  defineOficinaScope();
+  defineEdificioScope();
+  defineRegistroDeMantenimientoDeEquipoScope();
+
+}
+
 establecerRelaciones();
+establecerScopes();
+
 export { sequelize };
 
 
