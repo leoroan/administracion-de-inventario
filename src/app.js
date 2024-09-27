@@ -19,6 +19,10 @@ const connectWithRetry = () => {
     .then(() => {
       devLogger.info(`[DB-MODELS]: Sincronized.`);
       afterSync();
+      process.env.USE_POSTMAN === 'true'
+        ? devLogger.warning(`[HEADERS]: desde POSTMAN`)
+        : devLogger.warning(`[HEADERS]: desde el NAVEGADOR`);
+        checkConnection;
       // console.log(sequelize.models)
       app.listen(process.env.PORT, () => {
         devLogger.info(`[SERVER]: Listening on port [${process.env.PORT}]`);
