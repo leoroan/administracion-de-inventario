@@ -34,7 +34,7 @@ export default class SessionExtendRouter extends CustomRouter {
           const access_token = generateJWToken({ id, username, rol, email });
           try {
             await sessionController.evaluateSession(user, access_token);
-            res.cookie('jwtCookieToken', access_token, { httpOnly: true, signed: true, maxAge: Number(process.env.SESSION_COOKIE_VTO) });
+            res.cookie('jwtCookieToken', access_token, { httpOnly: true });//maxAge: Number(process.env.SESSION_COOKIE_VTO) }); // signed: true?? 
             return res.sendSuccess({ access_token });
           } catch (error) {
             devLogger.error(error);

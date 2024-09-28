@@ -91,7 +91,7 @@ const initializePassport = () => {
 
 const cookieExtractor = req => {
   let token = null;
-  if (process.env.USE_POSTMAN === 'True') {
+  if (process.env.USE_POSTMAN === 'true') {
     if (req && req.cookies) { // this for postman
       token = req.cookies['jwtCookieToken'];
     }
