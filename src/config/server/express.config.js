@@ -50,7 +50,7 @@ export default function configureExpress(app) {
       httpOnly: true,
       secure: process.env.ENV_MODE === "DESARROLLO" ? false : true, //  en producción cambiar esto a true
       // sameSite: "strict",
-      maxAge: 3600000
+      maxAge: Number(process.env.SESSION_COOKIE_VTO)
     }
   }))
   app.use(passport.initialize())

@@ -26,15 +26,15 @@ export default class SessionExtendRouter extends CustomRouter {
         if (!user) {
           return res.sendError(info.message || "User not found");
         }
-        req.logIn(user, async (err) => {          
+        req.logIn(user, async (err) => {
           if (err) {
             return res.sendError("Error logging in");
-          }          
-          const { id, username, rol, email } = user;          
+          }
+          const { id, username, rol, email } = user;
           const access_token = generateJWToken({ id, username, rol, email });
           try {
             await sessionController.evaluateSession(user, access_token);
-            res.cookie('jwtCookieToken', access_token, { httpOnly: true });
+            res.cookie('jwtCookieToken', access_token, { httpOnly: true, signed: true, maxAge: Number(process.env.SESSION_COOKIE_VTO) });
             return res.sendSuccess({ access_token });
           } catch (error) {
             devLogger.error(error);
