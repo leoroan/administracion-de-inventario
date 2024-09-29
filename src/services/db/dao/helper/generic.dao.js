@@ -20,7 +20,8 @@ export default class GenericDAO {
   async findById(id, scope = 'defaultScope') {
     scope = Array.isArray(scope) ? scope : scope.split(',');
     try {
-      const record = scope ? await this.model.scope(scope).findByPk(id) : await this.model.findByPk(id);
+      // const record = scope ? await this.model.scope(scope).findByPk(id) : await this.model.findByPk(id);
+      const record = await this.model.scope(scope).findByPk(id)
       if (!record) throw new Error(`${this.model.name} no encontrado`);
       return record;
     } catch (error) {
@@ -28,9 +29,23 @@ export default class GenericDAO {
     }
   }
 
-  async findAll(scope = 'defaultScope') {
+  async findAll({ scope = 'defaultScope', page, pageSize }) {
+    page = parseInt(page);
+    pageSize = parseInt(pageSize);
     scope = Array.isArray(scope) ? scope : scope.split(',');
     try {
+      if (page && pageSize) {
+        const { rows: resultados, count: totalElementos } = await this.model.scope(scope).findAndCountAll({
+          offset: (page - 1) * pageSize,
+          limit: pageSize,
+          // order: [
+          //   ['nombre', 'ASC'],
+          //   ['zona', 'ASC'],
+          //   ['estacion', 'ASC'],
+          // ]
+        });
+        return { rows: resultados, count: totalElementos };
+      }
       const records = scope ? await this.model.scope(scope).findAll() : await this.model.findAll();
       if (!records) throw new Error(`${this.model.name}s no encontrado`);
       return records;

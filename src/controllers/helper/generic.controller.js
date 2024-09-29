@@ -29,8 +29,8 @@ export default class GenericController {
 
   async findAll(req, res) {
     try {
-      const { scope } = req.query
-      const records = await this.service.findAll(scope);
+      const { scope, page, pageSize } = req.query
+      const records = await this.service.findAll({ scope, page, pageSize });
       if (!records) return res.sendError(error);
       return res.sendSuccess(records);
     } catch (error) {
