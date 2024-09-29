@@ -9,12 +9,14 @@ import { Modelo } from "./modelo.model.js";
 import { Marca } from "./marca.model.js";
 import { TipoEquipo } from "./tipoEquipo.model.js";
 import { Rol } from "./rol.model.js";
+import { Trazabilidad } from "./trazabilidad.model.js";
 
 import { defineEquipoInformaticoScopes } from "../scopes/equipoInformatico.scope.js";
 import { defineEmpleadoScope } from "../scopes/empleado.scope.js";
 import { defineOficinaScope } from "../scopes/oficina.scope.js";
 import { defineEdificioScope } from "../scopes/edificio.scope.js";
 import { defineRegistroDeMantenimientoDeEquipoScope } from "../scopes/registroDeMantenimientoDeEquipo.model.scope.js";
+import { defineTrazabilidadScope } from "../scopes/trazabilidad.scope.js";
 
 const establecerRelaciones = () => {
   // Empleado - Session
@@ -65,6 +67,10 @@ const establecerRelaciones = () => {
   // Un empleado tiene un rol
   Empleado.belongsTo(Rol, { as: 'Rol', foreignKey: 'rolId' });
   Rol.hasMany(Empleado, { foreignKey: 'rolId', onUpdate: 'CASCADE' });
+
+  //un equipo tiene una trazabilidad
+  EquipoInformatico.hasMany(Trazabilidad, { foreignKey: 'equipoId', onDelete: 'RESTRICT', });
+  Trazabilidad.belongsTo(EquipoInformatico, { foreignKey: 'equipoId', onDelete: 'RESTRICT' });
 }
 
 const establecerScopes = () => {
@@ -73,6 +79,7 @@ const establecerScopes = () => {
   defineOficinaScope();
   defineEdificioScope();
   defineRegistroDeMantenimientoDeEquipoScope();
+  defineTrazabilidadScope();
 
 }
 
