@@ -7,7 +7,6 @@ const username = config.db.user;
 const password = config.db.password;
 const host = config.db.host;
 const port = config.db.db_port;
-// const environment = config.environment;
 
 const sequelize = new Sequelize(database, username, password, {
   host: host,

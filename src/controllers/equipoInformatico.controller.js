@@ -18,7 +18,7 @@ export default class EquipoInformaticoController extends GenericController {
       userId ? await equipo.setEmpleado(userId) : await equipo.setOficina(oficinaId);
       equipo.estado = 'ASIGNADO';
       await equipo.save();
-      await trazabilidadService.addTraza(userId, oficinaId, equipoId);
+      await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE ASIGNO');
 
       res.sendSuccess('success');
     } catch (error) {
@@ -29,11 +29,14 @@ export default class EquipoInformaticoController extends GenericController {
   async removeEquipo(req, res) {
     const { equipoId } = req.query;
     try {
-      const equipo = await equipoInformaticoService.findById(equipoId);
+      const equipo = await equipoInformaticoService.findById(equipoId, 'conEmpleado,conOficina');
       await equipo.setEmpleado(null);
       await equipo.setOficina(null);
       equipo.estado = 'DISPONIBLE';
       await equipo.save();
+      const userId = equipo.dataValues.Empleado?.id || null;
+      const oficinaId = equipo.dataValues.Oficina?.id || null;
+      await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE RETIRÓ, EN DISPONIBILIDAD.');
       res.sendSuccess('success');
     } catch (error) {
       res.sendError(`al querer remover el equipo, ${error}`);

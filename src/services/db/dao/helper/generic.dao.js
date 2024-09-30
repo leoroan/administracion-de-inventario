@@ -1,4 +1,5 @@
 import { SequelizeError } from '../../../../utils/errors.js';
+import { parseQuery } from './parseQuerys.js';
 export default class GenericDAO {
   constructor(model) {
     this.model = model;
@@ -29,24 +30,27 @@ export default class GenericDAO {
     }
   }
 
-  async findAll({ scope = 'defaultScope', page, pageSize }) {
+  async findAll({ scope = 'defaultScope', page, pageSize, query = "" }) {
     page = parseInt(page);
     pageSize = parseInt(pageSize);
     scope = Array.isArray(scope) ? scope : scope.split(',');
+    const querys = parseQuery(query);
+
     try {
       if (page && pageSize) {
         const { rows: resultados, count: totalElementos } = await this.model.scope(scope).findAndCountAll({
           offset: (page - 1) * pageSize,
           limit: pageSize,
+          where: querys,
           // order: [
           //   ['nombre', 'ASC'],
           //   ['zona', 'ASC'],
           //   ['estacion', 'ASC'],
-          // ]
+          // ]  
         });
         return { rows: resultados, count: totalElementos };
       }
-      const records = scope ? await this.model.scope(scope).findAll() : await this.model.findAll();
+      const records = scope ? await this.model.scope(scope).findAll({ where: querys }) : await this.model.findAll({ where: querys });
       if (!records) throw new Error(`${this.model.name}s no encontrado`);
       return records;
     } catch (error) {

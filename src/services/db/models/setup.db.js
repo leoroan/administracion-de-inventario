@@ -69,8 +69,8 @@ const establecerRelaciones = () => {
   Rol.hasMany(Empleado, { foreignKey: 'rolId', onUpdate: 'CASCADE' });
 
   //un equipo tiene una trazabilidad
-  EquipoInformatico.hasMany(Trazabilidad, { foreignKey: 'equipoId', onDelete: 'RESTRICT', });
-  Trazabilidad.belongsTo(EquipoInformatico, { foreignKey: 'equipoId', onDelete: 'RESTRICT' });
+  EquipoInformatico.hasMany(Trazabilidad, { foreignKey: 'equipoId', onDelete: 'RESTRICT' });
+  Trazabilidad.belongsTo(EquipoInformatico, { foreignKey: 'equipoId' });
 }
 
 const establecerScopes = () => {

@@ -7,7 +7,7 @@ export default class TrazabilidadDAO extends GenericDAO {
     super(Trazabilidad);
   }
 
-  async addTraza(userId, oficinaId, equipoId) {
+  async addTraza(userId, oficinaId, equipoId, tipoMovimiento) {
     let result;
     try {
       const equipo = await equipoInformaticoService.findById(equipoId, 'conRegistrosDeMantenimiento');
@@ -20,11 +20,11 @@ export default class TrazabilidadDAO extends GenericDAO {
           const nombreEmpleado = user.dataValues.nombre + " " + user.dataValues.apellido;
           const dniEmpleado = user.dataValues.dni;
           const nombreOficina = user.dataValues.Oficina ? user.dataValues.Oficina.nombre : "sin definir al momento de la asignacion";
-          result = this.model.create({ nombreEmpleado: nombreEmpleado, dniEmpleado: dniEmpleado, mtEquipo: mtEquipo, idEquipo: equipId, nombreOficina: nombreOficina, registroDeMantenimientoDeEquipoId: registroId, estado: 'SE ASIGNO', equipoId: equipoId });
+          result = this.model.create({ nombreEmpleado: nombreEmpleado, dniEmpleado: dniEmpleado, mtEquipo: mtEquipo, idEquipo: equipId, nombreOficina: nombreOficina, registroDeMantenimientoDeEquipoId: registroId, estado: tipoMovimiento, equipoId: equipoId });
         } else {
           const oficina = await oficinaService.findById(oficinaId);
           const nombreOficina = oficina.dataValues.nombre;
-          result = this.model.create({ nombreEmpleado: null, dniEmpleado: null, mtEquipo: mtEquipo, idEquipo: equipId, nombreOficina: nombreOficina, registroDeMantenimientoDeEquipoId: registroId, estado: 'SE ASIGNO', equipoId: equipoId });
+          result = this.model.create({ nombreEmpleado: null, dniEmpleado: null, mtEquipo: mtEquipo, idEquipo: equipId, nombreOficina: nombreOficina, registroDeMantenimientoDeEquipoId: registroId, estado: tipoMovimiento, equipoId: equipoId });
         }
       }
       return result;

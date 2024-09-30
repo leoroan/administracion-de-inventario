@@ -11,25 +11,25 @@ export default class TrazabilidadExtendRouter extends CustomRouter {
 
     const trazabilidadController = new TrazabilidadController(trazabilidadService);
 
-    this.post('/', [3], passport.authenticate('jwt'), async (req, res) => {
-      trazabilidadController.create(req, res);
-    });
+    // this.post('/', [3], passport.authenticate('jwt'), async (req, res) => {
+    //   trazabilidadController.create(req, res);
+    // });
 
-    this.get('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
-      trazabilidadController.findById(req, res);
-    });
+    // this.get('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
+    //   trazabilidadController.findById(req, res);
+    // });
 
     this.get('/', [3], passport.authenticate('jwt'), async (req, res) => {
       trazabilidadController.findAll(req, res);
     });
 
-    this.put('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
-      trazabilidadController.update(req, res);
-    });
+    // this.put('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
+    //   trazabilidadController.update(req, res);
+    // });
 
-    this.delete('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
-      trazabilidadController.delete(req, res);
-    });
+    // this.delete('/:id', [3], passport.authenticate('jwt'), async (req, res) => {
+    //   trazabilidadController.delete(req, res);
+    // });
 
   }
 }
