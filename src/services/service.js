@@ -7,6 +7,7 @@ import { Oficina } from "./db/models/oficina.model.js";
 import { RegistroDeMantenimientoDeEquipo } from "./db/models/registroDeMantenimientoDeEquipo.model.js";
 import { TipoEquipo } from "./db/models/tipoEquipo.model.js";
 import { Session } from "./db/models/session.model.js";
+import { Trazabilidad } from "./db/models/trazabilidad.model.js";
 
 import EdificioDAO from "./db/dao/edificio.dao.js";
 import EmpleadoDAO from "./db/dao/empleado.dao.js";
@@ -17,6 +18,7 @@ import OficinaDAO from "./db/dao/oficina.dao.js";
 import RegistroDeMantenimientoDeEquipoDAO from "./db/dao/registroDeMantenimientoDeEquipo.dao.js";
 import TipoEquipoDAO from "./db/dao/tipoEquipo.dao.js";
 import SessionDAO from "./db/dao/session.dao.js";
+import TrazabilidadDAO from "./db/dao/trazabilidad.dao.js";
 
 import EdificioRepository from "./repository/edificio.repository.js";
 import EmpleadoRepository from "./repository/empleado.repository.js";
@@ -27,6 +29,7 @@ import OficinaRepository from "./repository/oficina.repository.js";
 import RegistroDeMantenimientoDeEquipoRepository from "./repository/registroDeMantenimientoDeEquipo.repository.js";
 import TipoEquipoRepository from "./repository/tipoEquipo.repository.js";
 import SessionRepository from "./repository/session.repository.js";
+import TrazabilidadRepository from "./repository/trazabilidad.repository.js";
 
 const edificioDAO = new EdificioDAO(Edificio);
 const empleadoDAO = new EmpleadoDAO(Empleado);
@@ -37,6 +40,7 @@ const oficinaDAO = new OficinaDAO(Oficina);
 const registroDeMantenimientoDeEquipoDAO = new RegistroDeMantenimientoDeEquipoDAO(RegistroDeMantenimientoDeEquipo);
 const tipoEquipoDAO = new TipoEquipoDAO(TipoEquipo);
 const sessionDAO = new SessionDAO(Session);
+const trazabilidadDAO = new TrazabilidadDAO(Trazabilidad);
 
 export const edificioService = new EdificioRepository(edificioDAO);
 export const empleadoService = new EmpleadoRepository(empleadoDAO);
@@ -47,3 +51,4 @@ export const oficinaService = new OficinaRepository(oficinaDAO);
 export const registroDeMantenimientoDeEquipoService = new RegistroDeMantenimientoDeEquipoRepository(registroDeMantenimientoDeEquipoDAO);
 export const tipoEquipoService = new TipoEquipoRepository(tipoEquipoDAO);
 export const sessionService = new SessionRepository(sessionDAO);
+export const trazabilidadService = new TrazabilidadRepository(trazabilidadDAO);

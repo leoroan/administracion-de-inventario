@@ -40,7 +40,7 @@ export const defineEmpleadoScope = () => {
       ]
     }),
     Empleado.addScope('conOficina', {
-      // attributes: ['id', 'username', 'telefono', 'email', 'nombre', 'apellido', 'dni'],
+      attributes: ['id', 'username', 'telefono', 'email', 'nombre', 'apellido', 'dni'],
       include: [
         {
           model: Oficina,

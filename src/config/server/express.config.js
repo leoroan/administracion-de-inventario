@@ -16,6 +16,7 @@ import EquipoInformaticoExtendRouter from '../../routes/equipoInformatico.router
 import OficinaExtendedRouter from '../../routes/oficina.router.js'
 import RegistroDeMantenimientoExtendRouter from '../../routes/registroDeMantenimientoDeEquipo.router.js'
 import TipoEquipoExtendRouter from '../../routes/tipoEquipo.router.js'
+import TrazabilidadExtendRouter from '../../routes/trazabilidad.router.js'
 
 
 export default function configureExpress(app) {
@@ -66,6 +67,7 @@ export default function configureExpress(app) {
   const oficinaRouter = new OficinaExtendedRouter();
   const registroDeMantenimientoDeEquipoRouter = new RegistroDeMantenimientoExtendRouter();
   const tipoEquipoRouter = new TipoEquipoExtendRouter();
+  const trazabilidadRouter = new TrazabilidadExtendRouter();
 
   app.use('/api/empleados', empleadoRouter.getRouter());
   app.use('/api/marcas', marcaRouter.getRouter());
@@ -76,6 +78,7 @@ export default function configureExpress(app) {
   app.use('/api/equipos', equipoInformaticoRouter.getRouter());
   app.use('/api/registrosDeMantenimiento', registroDeMantenimientoDeEquipoRouter.getRouter());
   app.use('/api/tipoEquipos', tipoEquipoRouter.getRouter());
+  app.use('/api/trazabilidad', trazabilidadRouter.getRouter());
 
   app.use(errorHandler);
 

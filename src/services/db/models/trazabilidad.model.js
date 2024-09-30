@@ -15,20 +15,34 @@ const toUpperCaseFields = async (instance) => {
 const Trazabilidad = sequelize.define('Trazabilidad', {
   nombreEmpleado: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   dniEmpleado: {
     type: DataTypes.STRING,
-
-    unique: true
+    allowNull: false,
+  },
+  mtEquipo: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  idEquipo: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   nombreOficina: {
     type: DataTypes.STRING,
+    allowNull: true,
+  },
+  registroDeMantenimientoDeEquipoId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
   },
   estado: {
-    type: DataTypes.ENUM('ASIGNADO', 'DISPONIBLE', 'BAJA'),
-    defaultValue: 'DISPONIBLE'
+    type: DataTypes.STRING,
+    allowNull: false,
   }
 }, {
+  tableName: 'trazabilidades',
   timestamps: true,
   paranoid: true,
   hooks: {

@@ -1,5 +1,5 @@
 import { where } from 'sequelize';
-import { equipoInformaticoService } from '../services/service.js';
+import { equipoInformaticoService, trazabilidadService } from '../services/service.js';
 import GenericController from './helper/generic.controller.js';
 
 // Crear un nuevo usuario
@@ -18,6 +18,8 @@ export default class EquipoInformaticoController extends GenericController {
       userId ? await equipo.setEmpleado(userId) : await equipo.setOficina(oficinaId);
       equipo.estado = 'ASIGNADO';
       await equipo.save();
+      await trazabilidadService.addTraza(userId, oficinaId, equipoId);
+
       res.sendSuccess('success');
     } catch (error) {
       res.sendError(`al querer asignar el equipo, ${error}`);
