@@ -36,7 +36,9 @@ export default class EquipoInformaticoController extends GenericController {
       await equipo.save();
       const userId = equipo.dataValues.Empleado?.id || null;
       const oficinaId = equipo.dataValues.Oficina?.id || null;
-      await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE RETIRÓ, EN DISPONIBILIDAD.');
+      const some = await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE RETIRÓ, EN DISPONIBILIDAD.');
+      console.log(some);
+      
       res.sendSuccess('success');
     } catch (error) {
       res.sendError(`al querer remover el equipo, ${error}`);

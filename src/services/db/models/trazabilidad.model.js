@@ -3,7 +3,7 @@ import { sequelize } from "../../../config/db/sequelize.config.js";
 import { trazabilidadScope } from "../scopes/trazabilidad.scope.js";
 
 const toUpperCaseFields = async (instance) => {
-  const fieldsToUpper = ['nombreEmpleado', 'nombreOficina'];
+  const fieldsToUpper = ['nombreEmpleado', 'nombreOficina', 'estado'];
 
   fieldsToUpper.forEach((field) => {
     if (instance.dataValues[field]) {
@@ -16,10 +16,12 @@ const Trazabilidad = sequelize.define('Trazabilidad', {
   nombreEmpleado: {
     type: DataTypes.STRING,
     allowNull: false,
+    
   },
   dniEmpleado: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: false, 
   },
   mtEquipo: {
     type: DataTypes.INTEGER,
