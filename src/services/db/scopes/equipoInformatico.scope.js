@@ -39,7 +39,21 @@ export const defineEquipoInformaticoScopes = () => {
       {
         model: Empleado,
         as: 'Empleado',
-        attributes: ['id', 'nombre', 'apellido', 'email'],
+        attributes: ['id', 'nombre', 'apellido', 'email', 'telefono'],
+        include: [
+          {
+            model: Oficina,
+            as: 'Oficina',
+            attributes: ['id', 'nombre'],
+            include: [
+              {
+                model: Edificio,
+                as: 'Edificio',
+                attributes: ['id', 'nombre', 'direccion']
+              }
+            ]
+          }
+        ]
       },
     ],
   }),

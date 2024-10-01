@@ -16,7 +16,7 @@ export default class TrazabilidadDAO extends GenericDAO {
         const mtEquipo = equipo.dataValues.mt;
         const registroId = equipo.dataValues.registroDeMantenimientoDeEquipo?.id;
         if (userId) {
-          const user = await empleadoService.findById(userId, 'conOficina');          
+          const user = await empleadoService.findById(userId, 'conOficina');
           const nombreEmpleado = user.dataValues.nombre + " " + user.dataValues.apellido;
           const dniEmpleado = user.dataValues.dni;
           const nombreOficina = user.dataValues.Oficina ? user.dataValues.Oficina.nombre : "sin definir al momento de la asignacion";
@@ -24,7 +24,7 @@ export default class TrazabilidadDAO extends GenericDAO {
         } else {
           const oficina = await oficinaService.findById(oficinaId);
           const nombreOficina = oficina.dataValues.nombre;
-          result = this.model.create({ nombreEmpleado: null, dniEmpleado: null, mtEquipo: mtEquipo, idEquipo: equipId, nombreOficina: nombreOficina, registroDeMantenimientoDeEquipoId: registroId, estado: tipoMovimiento, equipoId: equipoId });
+          result = this.model.create({ nombreEmpleado: "no corresponde", dniEmpleado: "no corresponde", mtEquipo: mtEquipo, idEquipo: equipId, nombreOficina: nombreOficina, registroDeMantenimientoDeEquipoId: registroId, estado: tipoMovimiento, equipoId: equipoId });
         }
       }
       return result;
