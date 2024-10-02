@@ -18,7 +18,7 @@ export default class EquipoInformaticoController extends GenericController {
       userId ? await equipo.setEmpleado(userId) : await equipo.setOficina(oficinaId);
       equipo.estado = 'ASIGNADO';
       await equipo.save();
-      await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE ASIGNO');
+      await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE ASIGNÓ');
 
       res.sendSuccess('success');
     } catch (error) {

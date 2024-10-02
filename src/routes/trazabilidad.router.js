@@ -19,7 +19,7 @@ export default class TrazabilidadExtendRouter extends CustomRouter {
     //   trazabilidadController.findById(req, res);
     // });
 
-    this.get('/', [3], passport.authenticate('jwt'), async (req, res) => {
+    this.get('/', [5], passport.authenticate('jwt'), async (req, res) => {
       trazabilidadController.findAll(req, res);
     });
 

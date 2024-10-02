@@ -24,7 +24,7 @@ export default class TrazabilidadDAO extends GenericDAO {
         } else {
           const oficina = await oficinaService.findById(oficinaId);
           const nombreOficina = oficina.dataValues.nombre;
-          result = await this.model.create({ nombreEmpleado: "NO CORRESPONDE", dniEmpleado: "NO CORRESPONDE", mtEquipo: mtEquipo, idEquipo: equipId, nombreOficina: nombreOficina, registroDeMantenimientoDeEquipoId: registroId, estado: tipoMovimiento, equipoId: equipoId });
+          result = await this.model.create({ nombreEmpleado: "ES OFICINA", dniEmpleado: "NO CORRESPONDE", mtEquipo: mtEquipo, idEquipo: equipId, nombreOficina: nombreOficina, registroDeMantenimientoDeEquipoId: registroId, estado: tipoMovimiento, equipoId: equipoId });
         }
       }
       return result;
