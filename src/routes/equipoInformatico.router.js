@@ -19,7 +19,7 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
       equipoInformaticoController.findById(req, res);
     });
 
-    this.get('/', [5], passport.authenticate('jwt'), async (req, res) => {
+    this.get('/', [6], passport.authenticate('jwt'), async (req, res) => {
       equipoInformaticoController.findAll(req, res);
     });
 

@@ -58,7 +58,7 @@ export default class CustomRouter {
     jwt.verify(token, PRIVATE_KEY, (err, decoded) => {
       if (err) throw new ForbiddenError('Invalid token');
       if (!(decoded.user.rol <= policies[0])) {
-        throw new ForbiddenError('User does not have access');
+        throw new ForbiddenError('User does not have access, rol level low');
       }
       next();
     });
