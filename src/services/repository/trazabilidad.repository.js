@@ -5,8 +5,8 @@ export default class TrazabilidadRepository extends GenericRepository {
     super(Trazabilidad);
   }
 
-  addTraza = async (userId, oficinaId, equipoId, tipoMovimiento) => {
-    return await this.dao.addTraza(userId, oficinaId, equipoId, tipoMovimiento);
+  addTraza = async (userId, oficinaId, equipoId, tipoMovimiento, originario) => {
+    return await this.dao.addTraza(userId, oficinaId, equipoId, tipoMovimiento, originario);
   }
 
 }

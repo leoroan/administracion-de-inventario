@@ -4,7 +4,7 @@ import { Trazabilidad } from "../models/trazabilidad.model.js";
 
 export const trazabilidadScope = {
   defaultScope: {
-    attributes: ['id', 'nombreEmpleado', 'dniEmpleado', 'mtEquipo', 'idEquipo', 'nombreOficina', 'registroDeMantenimientoDeEquipoId', 'estado', 'createdAt'],
+    attributes: ['id', 'nombreEmpleado', 'dniEmpleado', 'mtEquipo', 'idEquipo', 'nombreOficina', 'registroDeMantenimientoDeEquipoId', 'estado', 'createdAt', 'originario'],
     // include: [
     //   {
     //     model: EquipoInformatico,
@@ -17,7 +17,7 @@ export const trazabilidadScope = {
 
 export const defineTrazabilidadScope = () => {
   Trazabilidad.addScope('full', {
-    attributes: ['id', 'nombreEmpleado', 'dniEmpleado', 'mtEquipo', 'idEquipo', 'nombreOficina', 'registroDeMantenimientoDeEquipoId', 'estado', 'createdAt'],
+    attributes: ['id', 'nombreEmpleado', 'dniEmpleado', 'mtEquipo', 'idEquipo', 'nombreOficina', 'registroDeMantenimientoDeEquipoId', 'estado', 'createdAt', 'originario'],
     include: [
       {
         model: EquipoInformatico,

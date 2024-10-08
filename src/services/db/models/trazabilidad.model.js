@@ -16,12 +16,11 @@ const Trazabilidad = sequelize.define('Trazabilidad', {
   nombreEmpleado: {
     type: DataTypes.STRING,
     allowNull: false,
-    
   },
   dniEmpleado: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: false, 
+    unique: false,
   },
   mtEquipo: {
     type: DataTypes.INTEGER,
@@ -40,6 +39,10 @@ const Trazabilidad = sequelize.define('Trazabilidad', {
     allowNull: true,
   },
   estado: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  originario: {
     type: DataTypes.STRING,
     allowNull: false,
   }
