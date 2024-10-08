@@ -42,11 +42,9 @@ export default class GenericDAO {
           offset: (page - 1) * pageSize,
           limit: pageSize,
           where: querys,
-          // order: [
-          //   ['nombre', 'ASC'],
-          //   ['zona', 'ASC'],
-          //   ['estacion', 'ASC'],
-          // ]  
+          order: [ //por defecto orden de creado primero toBe developed
+            ['createdAt', 'DESC'],
+          ]  
         });
         return { rows: resultados, count: totalElementos };
       }

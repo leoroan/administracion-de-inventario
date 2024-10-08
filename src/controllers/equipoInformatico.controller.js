@@ -1,6 +1,6 @@
-import { where } from 'sequelize';
 import { equipoInformaticoService, trazabilidadService } from '../services/service.js';
 import GenericController from './helper/generic.controller.js';
+import { crearTestPdf } from './pdfme.controller.js';
 
 // Crear un nuevo usuario
 export default class EquipoInformaticoController extends GenericController {
@@ -11,7 +11,7 @@ export default class EquipoInformaticoController extends GenericController {
   async addEquipo(req, res) {
     const { userId = null, oficinaId = null, equipoId = null } = req.query;
     try {
-      const equipo = await equipoInformaticoService.findById(equipoId);
+      const equipo = await equipoInformaticoService.findById(equipoId, 'conEmpleado,conOficina');      
       if (equipo.estado !== 'DISPONIBLE') {
         throw new Error(`El equipo ya se encuentra asignado`);
       }
@@ -19,8 +19,7 @@ export default class EquipoInformaticoController extends GenericController {
       equipo.estado = 'ASIGNADO';
       await equipo.save();
       await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE ASIGNÓ');
-
-      res.sendSuccess('success');
+      res.sendSuccess(equipo);
     } catch (error) {
       res.sendError(`al querer asignar el equipo, ${error}`);
     }
@@ -29,7 +28,7 @@ export default class EquipoInformaticoController extends GenericController {
   async removeEquipo(req, res) {
     const { equipoId } = req.query;
     try {
-      const equipo = await equipoInformaticoService.findById(equipoId, 'conEmpleado,conOficina');
+      const equipo = await equipoInformaticoService.findById(equipoId, 'conEmpleado,conOficina');      
       await equipo.setEmpleado(null);
       await equipo.setOficina(null);
       equipo.estado = 'DISPONIBLE';
@@ -37,8 +36,7 @@ export default class EquipoInformaticoController extends GenericController {
       const userId = equipo.dataValues.Empleado?.id || null;
       const oficinaId = equipo.dataValues.Oficina?.id || null;
       const some = await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE RETIRÓ, EN DISPONIBILIDAD.');
-      console.log(some);
-      
+      crearTestPdf();
       res.sendSuccess('success');
     } catch (error) {
       res.sendError(`al querer remover el equipo, ${error}`);
