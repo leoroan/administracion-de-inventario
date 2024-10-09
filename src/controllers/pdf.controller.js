@@ -1,9 +1,15 @@
-import { createPDFDocument } from "../config/pdf/pdfConfig";
-import { generateReportTemplate } from "../config/pdf/pdfTemplates";
 import fs from 'fs';
+import path from "path";
+import { createPDFDocument } from "../config/pdf/pdfConfig.js";
+import { generateReportTemplate } from "../config/pdf/pdfTemplates.js";
 
 export function generateAndDowloadPDF(req, res) {
   // Simulación de datos dinámicos de la API (deberían venir desde req.body, req.params, etc.)
+
+  const docTitle = 'Asignacion de equipo';
+  const docAuthor = req.user.username;
+  const docSubject = 'Asignacion de equipo';
+
   const data1 = {
     nombre: 'Juan Perez',
     edad: 30,
@@ -17,10 +23,15 @@ export function generateAndDowloadPDF(req, res) {
   };
 
   // Crear el documento PDF
-  const doc = createPDFDocument();
+  const doc = createPDFDocument(docTitle, docAuthor, docSubject);
 
   // Ruta donde se guardará el archivo temporalmente
-  const filePath = './output/reporte.pdf';
+  const outputDir = './output/';
+  const filePath = path.join(outputDir, 'reporte.pdf');
+
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+  }
 
   // Guardar el archivo PDF en el sistema de archivos
   const stream = fs.createWriteStream(filePath);
@@ -31,7 +42,7 @@ export function generateAndDowloadPDF(req, res) {
 
   // Enviar el PDF una vez generado
   stream.on('finish', () => {
-    res.download(filePath, 'reporte.pdf', (err) => {
+    res.download(filePath, (err) => {
       if (err) {
         res.status(500).send('Error al generar el PDF');
       } else {
