@@ -8,7 +8,7 @@
  */
 export function generateReportTemplate(doc, data1, data2) {
   // Encabezado
-  doc.fontSize(20).text('Reporte de Datos', { align: 'center' }).moveDown(1);
+  doc.fontSize(20).text('Asignacion de equipo', { align: 'center' }).moveDown(1);
 
   // Bloque de datos 1
   doc.fontSize(16).text('Datos 1:', 50, 100);

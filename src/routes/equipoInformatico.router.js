@@ -2,6 +2,7 @@ import CustomRouter from "../routes/custom/custom.router.js";
 import EquipoInformaticoController from "../controllers/equipoInformatico.controller.js";
 import { equipoInformaticoService } from "../services/service.js";
 import passport from "passport";
+import { generateAndDowloadPDF } from "../controllers/pdf.controller.js";
 
 export default class EquipoInformaticoExtendRouter extends CustomRouter {
   /**
@@ -41,6 +42,10 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
 
     this.post('/set/baja', [3], passport.authenticate('jwt'), async (req, res) => {
       equipoInformaticoController.setEstadoBaja(req, res);
+    });
+
+    this.get('/pdf/dwn', [6], passport.authenticate('jwt'), async (req, res) => {
+      generateAndDowloadPDF(req, res);
     });
 
   }
