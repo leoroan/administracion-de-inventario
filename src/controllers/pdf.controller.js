@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from "path";
 import { createPDFDocument } from "../config/pdf/pdfConfig.js";
-import { generateReportTemplate } from "../config/pdf/pdfTemplates.js";
+import { generateReportTemplate } from "../config/pdf/templates/pdfTemplates.js";
 
 export function generateAndDowloadPDF(req, res) {
   // Simulación de datos dinámicos de la API (deberían venir desde req.body, req.params, etc.)
