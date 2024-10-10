@@ -51,12 +51,13 @@ export default class CustomRouter {
   handlePolicies = (policies) => (req, res, next) => {
     const conPostman = process.env.USE_POSTMAN === 'true';
     if (policies[0] === "PUBLIC") return next();
-    const authHeader = conPostman ? req.cookies : req.headers.authorization;
+    const authHeader = conPostman ? req.cookies : req.headers.authorization;    
     if (!authHeader) throw new UnauthorizedError();
     const token = conPostman ? authHeader['jwtCookieToken'] : authHeader.split(' ')[1];
     if (!token) throw new UnauthorizedError('Token missing');
     jwt.verify(token, PRIVATE_KEY, (err, decoded) => {
-      if (err) throw new ForbiddenError('Invalid token');
+      console.log(err);
+      if (err) throw new ForbiddenError('Invalid token: '+err);
       if (!(decoded.user.rol <= policies[0])) {
         throw new ForbiddenError('User does not have access, rol level low');
       }
