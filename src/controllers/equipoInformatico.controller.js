@@ -1,5 +1,6 @@
 import { equipoInformaticoService, trazabilidadService } from '../services/service.js';
 import GenericController from './helper/generic.controller.js';
+import { sendPDFViaEmail } from './pdf.controller.js';
 
 // Crear un nuevo usuario
 export default class EquipoInformaticoController extends GenericController {
@@ -17,8 +18,9 @@ export default class EquipoInformaticoController extends GenericController {
       userId ? await equipo.setEmpleado(userId) : await equipo.setOficina(oficinaId);
       equipo.estado = 'ASIGNADO';
       await equipo.save();
-      await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE ASIGNÓ', req.user.username);
-      res.sendSuccess(equipo);
+      const traza = await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE ASIGNÓ', req.user.username);
+      sendPDFViaEmail(req, res, traza);
+      // res.sendSuccess(equipo);
     } catch (error) {
       res.sendError(`al querer asignar el equipo, ${error}`);
     }

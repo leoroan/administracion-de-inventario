@@ -24,7 +24,7 @@ const Trazabilidad = sequelize.define('Trazabilidad', {
   },
   mtEquipo: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
   idEquipo: {
     type: DataTypes.INTEGER,

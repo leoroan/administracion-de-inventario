@@ -56,7 +56,6 @@ export default class CustomRouter {
     const token = conPostman ? authHeader['jwtCookieToken'] : authHeader.split(' ')[1];
     if (!token) throw new UnauthorizedError('Token missing');
     jwt.verify(token, PRIVATE_KEY, (err, decoded) => {
-      console.log(err);
       if (err) throw new ForbiddenError('Invalid token: '+err);
       if (!(decoded.user.rol <= policies[0])) {
         throw new ForbiddenError('User does not have access, rol level low');

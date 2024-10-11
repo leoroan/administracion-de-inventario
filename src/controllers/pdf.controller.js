@@ -1,115 +1,141 @@
 import fs from 'fs';
 import path from "path";
+import { devLogger } from '../config/logger/logger.config.js';
 import { createPDFDocument } from "../config/pdf/pdfConfig.js";
-import { generateReportTemplate } from "../config/pdf/templates/pdfTemplates.js";
+import { generateRemitoTenenciaEmpleadoTemplate } from '../config/pdf/templates/remitoTenenciaEmpleado.template.js';
+import { generateRemitoTenenciaOficinaTemplate } from '../config/pdf/templates/remitoTenenciaOficina.template.js';
+import { empleadoService, equipoInformaticoService, oficinaService } from '../services/service.js';
+import { sendPDFviaMail } from './mailer.controller.js';
 
-export function generateAndDowloadPDF(req, res) {
-  // Simulación de datos dinámicos de la API (deberían venir desde req.body, req.params, etc.)
+export async function generarAsignacionEquipo(req, res, traza) {
+  try {
+    const { userId = null, oficinaId = null, equipoId = null } = req.query;
+    const requester = req.user;
+    const trazabilidad = traza.dataValues;
 
-  const docTitle = 'Asignacion de equipo';
-  const docAuthor = req.user.username;
-  const docSubject = 'Asignacion de equipo';
+    const docTitle = 'Asignacion de equipo';
+    const docSubject = 'Asignacion de equipo';
+    const docAuthor = requester.username;
 
-  const data1 = {
-    nombre: 'Juan Perez',
-    edad: 30,
-    correo: 'juan.perez@example.com',
-  };
+    const doc = createPDFDocument(docTitle, docAuthor, docSubject);
 
-  const data2 = {
-    producto: 'Laptop',
-    precio: 1200,
-    cantidad: 2,
-  };
+    const outputDir = './output/';
+    const filePath = path.join(outputDir, 'reporte.pdf');
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir);
+    }
+    const stream = fs.createWriteStream(filePath);
+    doc.pipe(stream);
 
-  // Crear el documento PDF
-  const doc = createPDFDocument(docTitle, docAuthor, docSubject);
+    const equipo = await equipoInformaticoService.findById(equipoId);
 
-  // Ruta donde se guardará el archivo temporalmente
-  const outputDir = './output/';
-  const filePath = path.join(outputDir, 'reporte.pdf');
+    if (userId) {
+      const user = await empleadoService.findById(userId, 'conOficina');
+      generateRemitoTenenciaEmpleadoTemplate(doc, equipo, user, trazabilidad, requester);
 
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir);
-  }
+    } else if (oficinaId) {
+      const oficina = await oficinaService.findById(oficinaId);
+      generateRemitoTenenciaOficinaTemplate(doc, equipo, oficina, trazabilidad, requester);
+    }
 
-  // Guardar el archivo PDF en el sistema de archivos
-  const stream = fs.createWriteStream(filePath);
-  doc.pipe(stream);
-
-  // Usar el template para generar el contenido
-  generateReportTemplate(doc, data1, data2);
-
-  // Enviar el PDF una vez generado
-  stream.on('finish', () => {
-    res.download(filePath, (err) => {
-      if (err) {
-        res.status(500).send('Error al generar el PDF');
-      } else {
-        // Opcional: eliminar el archivo después de enviarlo
-        fs.unlinkSync(filePath);
-      }
+    stream.on('finish', () => {
+      res.download(filePath, (err) => {
+        if (err) {
+          res.sendError('Error al generar el PDF');
+        } else {
+          fs.unlinkSync(filePath);
+        }
+      });
     });
-  });
+  } catch (error) {
+    devLogger.error(error)
+    return res.sendError(error);
+  }
 }
 
+// export function generateAndDowloadPDF(req, res) {
 
-export async function sendPDFViaEmail(req, res) {
-  // Simulación de datos dinámicos (deberían venir de req.body o req.params)
-  const data1 = {
-    nombre: 'Juan Perez',
-    edad: 30,
-    correo: 'juan.perez@example.com',
-  };
+//   const docTitle = 'Asignacion de equipo';
+//   const docAuthor = req.user.username;
+//   const docSubject = 'Asignacion de equipo';
 
-  const data2 = {
-    producto: 'Laptop',
-    precio: 1200,
-    cantidad: 2,
-  };
+//   const data1 = {
+//     nombre: 'Juan Perez',
+//     edad: 30,
+//     correo: 'juan.perez@example.com',
+//   };
 
-  // Crear el documento PDF en memoria
-  const doc = createPDFDocument();
-  const buffers = [];
+//   const data2 = {
+//     producto: 'Laptop',
+//     precio: 1200,
+//     cantidad: 2,
+//   };
 
-  // Almacena el PDF en memoria en lugar de un archivo
-  doc.on('data', buffers.push.bind(buffers)); // Guarda cada chunk de datos
-  doc.on('end', async () => {
-    const pdfBuffer = Buffer.concat(buffers); // Combina los chunks en un solo buffer
+//   // Crear el documento PDF
+//   const doc = createPDFDocument(docTitle, docAuthor, docSubject);
 
-    // Configurar Nodemailer
-    const transporter = nodemailer.createTransport({
-      service: 'gmail', // o cualquier otro servicio de email
-      auth: {
-        user: 'tu-email@gmail.com',
-        pass: 'tu-contraseña',
-      },
+//   // Ruta donde se guardará el archivo temporalmente
+//   const outputDir = './output/';
+//   const filePath = path.join(outputDir, 'reporte.pdf');
+
+//   if (!fs.existsSync(outputDir)) {
+//     fs.mkdirSync(outputDir);
+//   }
+
+//   // Guardar el archivo PDF en el sistema de archivos
+//   const stream = fs.createWriteStream(filePath);
+//   doc.pipe(stream);
+
+//   // Usar el template para generar el contenido
+//   generateReportTemplate(doc, data1, data2);
+
+//   // Enviar el PDF una vez generado
+//   stream.on('finish', () => {
+//     res.download(filePath, (err) => {
+//       if (err) {
+//         res.status(500).send('Error al generar el PDF');
+//       } else {
+//         // Opcional: eliminar el archivo después de enviarlo
+//         fs.unlinkSync(filePath);
+//       }
+//     });
+//   });
+// }
+
+
+export async function sendPDFViaEmail(req, res, traza) {
+  const { userId = null, oficinaId = null, equipoId = null } = req.query;
+  const requester = req.user;
+  const trazabilidad = traza.dataValues;
+
+  const docTitle = 'Asignacion de equipo';
+  const docSubject = 'Asignacion de equipo';
+  const docAuthor = requester.username;
+
+  try {
+    // Crear el documento PDF en memoria
+    const doc = createPDFDocument(docTitle, docAuthor, docSubject);
+    const buffers = [];
+
+    // Almacena el PDF en memoria en lugar de un archivo
+    doc.on('data', buffers.push.bind(buffers)); // Guarda cada chunk de datos
+    doc.on('end', async () => {
+      const pdfBuffer = Buffer.concat(buffers); // Combina los chunks en un solo buffer
+      sendPDFviaMail(req, res, pdfBuffer);
     });
 
-    const mailOptions = {
-      from: '"Nombre del Remitente" <tu-email@gmail.com>',
-      to: 'destinatario@example.com',
-      subject: 'Adjunto: Reporte PDF',
-      text: 'Adjunto encontrarás el reporte en formato PDF.',
-      attachments: [
-        {
-          filename: 'reporte.pdf',
-          content: pdfBuffer, // El buffer generado por PDFKit
-          contentType: 'application/pdf',
-        },
-      ],
-    };
+    // Generar el contenido del PDF usando el template
+    const equipo = await equipoInformaticoService.findById(equipoId);
+    if (userId) {
+      const user = await empleadoService.findById(userId, 'conOficina');
+      generateRemitoTenenciaEmpleadoTemplate(doc, equipo, user, trazabilidad, requester);
 
-    try {
-      // Enviar el correo con Nodemailer
-      await transporter.sendMail(mailOptions);
-      res.status(200).send('Correo enviado con éxito con el PDF adjunto.');
-    } catch (error) {
-      res.status(500).send('Error al enviar el correo.');
+    } else if (oficinaId) {
+      const oficina = await oficinaService.findById(oficinaId);
+      generateRemitoTenenciaOficinaTemplate(doc, equipo, oficina, trazabilidad, requester);
     }
-  });
-
-  // Generar el contenido del PDF usando el template
-  generateReportTemplate(doc, data1, data2);
-  doc.end(); // Finaliza la generación del PDF
+  } catch (error) {
+    devLogger.error(error)
+    return res.sendError(error);
+  }
 }
