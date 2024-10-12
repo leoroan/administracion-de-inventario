@@ -44,13 +44,13 @@ export default class SessionExtendRouter extends CustomRouter {
       })(req, res, next);
     });
 
-    this.post('/logout', ["PUBLIC"], async (req, res) => {
+    this.post('/logout', ["PUBLIC"], passport.authenticate('jwt'), async (req, res) => {
       try {
         const user = req.user;
         if (!user) {
           return res.status(401).send({ status: "error", error: "There were no user authenticated" });
         }
-        res.clearCookie('jwtCookieToken');
+        res.clearCookie('jwtCookieToken', { httpOnly: true });
         req.session.destroy(error => {
           if (error) {
             console.error('Error logging out:', error);

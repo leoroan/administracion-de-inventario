@@ -44,7 +44,7 @@ export function generateRemitoTenenciaOficinaTemplate(doc, equipo, oficina, traz
   doc
     .text(`A LA OFICINA: ${oficina.dataValues.nombre}`, { align: 'left' })
     .moveDown(2)
-    .text(`RESPONSABLE DE GENERAR EL PEDIDO/ENTREGAR: ${requester.username.toUpperCase()}`, { align: 'right' })
+    .text(`RESPONSABLE DE GENERAR EL PEDIDO/ENTREGAR: ${trazabilidad.originario.toUpperCase()}`, { align: 'left' })
     .moveDown(2)
     .text(`TRAZA-CONTROL-NRO#: ${trazabilidad.id}`, { align: 'right' })
     .moveDown(2)

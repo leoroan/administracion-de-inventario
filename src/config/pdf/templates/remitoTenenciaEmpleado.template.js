@@ -24,7 +24,7 @@ export function generateRemitoTenenciaEmpleadoTemplate(doc, equipo, user, trazab
   // Cuerpo del texto
   doc
     .fontSize(12)
-    .text(`En el día de la fecha, yo, ${user.apellido}, ${user.nombre} he recibido del MINISTERIO DE TRANSPORTE de la Provincia de Buenos Aires el/los siguiente/s material/es para su uso exclusivo y excluyente en mis actividades laborales, comprometiéndome a utilizarlo/s estrictamente de acuerdo con el propósito indicado, y no para comunicaciones personales, ya que no es para beneficio personal. Asimismo, me comprometo a devolverlo/s a la primera solicitud o al término de mi relación jurídica con la misma.`,
+    .text(`Se deja en constancia que en el día de la fecha, ${user.apellido}, ${user.nombre} he recibido del MINISTERIO DE TRANSPORTE de la Provincia de Buenos Aires el/los siguiente/s material/es para su uso exclusivo y excluyente en mis actividades laborales, comprometiéndome a utilizarlo/s estrictamente de acuerdo con el propósito indicado, y no para comunicaciones personales, ya que no es para beneficio personal. Asimismo, me comprometo a devolverlo/s a la primera solicitud o al término de mi relación jurídica con la misma.`,
       {
         align: 'justify',
         height: 100
@@ -45,7 +45,7 @@ export function generateRemitoTenenciaEmpleadoTemplate(doc, equipo, user, trazab
   doc
     .text(`SECTOR AL QUE PERTENECE: ${trazabilidad.nombreOficina}`, { align: 'left' })
     .moveDown(2)
-    .text(`RESPONSABLE DE GENERAR EL PEDIDO/ENTREGAR: ${requester.username.toUpperCase()}`, { align: 'right' })
+    .text(`RESPONSABLE DE GENERAR EL PEDIDO/ENTREGAR: ${trazabilidad.originario.toUpperCase()}`, { align: 'left' })
     .moveDown(2)
     .text(`TRAZA-CONTROL-NRO#: ${trazabilidad.id}`, { align: 'right' })
     .moveDown(2)
