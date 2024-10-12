@@ -4,14 +4,13 @@ import { devLogger } from '../config/logger/logger.config.js';
 import { createPDFDocument } from "../config/pdf/pdfConfig.js";
 import { generateRemitoTenenciaEmpleadoTemplate } from '../config/pdf/templates/remitoTenenciaEmpleado.template.js';
 import { generateRemitoTenenciaOficinaTemplate } from '../config/pdf/templates/remitoTenenciaOficina.template.js';
-import { empleadoService, equipoInformaticoService, oficinaService } from '../services/service.js';
+import { empleadoService, equipoInformaticoService, oficinaService, trazabilidadService } from '../services/service.js';
 import { sendPDFviaMail } from './mailer.controller.js';
 
-export async function generarAsignacionEquipo(req, res, traza) {
+export async function generarAsignacionEquipo(req, res) {
   try {
-    const { userId = null, oficinaId = null, equipoId = null } = req.query;
+    const { userId = null, oficinaId = null, equipoId = null, trazaId= null } = req.query;
     const requester = req.user;
-    const trazabilidad = traza.dataValues;
 
     const docTitle = 'Asignacion de equipo';
     const docSubject = 'Asignacion de equipo';
@@ -28,6 +27,7 @@ export async function generarAsignacionEquipo(req, res, traza) {
     doc.pipe(stream);
 
     const equipo = await equipoInformaticoService.findById(equipoId);
+    const trazabilidad = await trazabilidadService.findById(trazaId);
 
     if (userId) {
       const user = await empleadoService.findById(userId, 'conOficina');

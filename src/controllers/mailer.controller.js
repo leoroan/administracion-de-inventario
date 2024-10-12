@@ -48,11 +48,11 @@ export async function sendPDFviaMail(req, res, pdfBuffer) {
       });
       return res.sendSuccess(result.messageId)
     }
-    return res.sendInternalServerError("empty message not allowed")
+    return res.sendError("empty message not allowed")
 
   } catch (error) {
     devLogger.error(error);
-    return res.sendInternalServerError(error);
+    return res.sendError(error);
   }
 }
 

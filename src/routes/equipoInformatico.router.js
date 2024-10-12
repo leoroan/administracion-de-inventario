@@ -44,7 +44,7 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
       equipoInformaticoController.setEstadoBaja(req, res);
     });
 
-    this.get('/pdf/dwn', [6], passport.authenticate('jwt'), async (req, res) => {
+    this.get('/pdf/remito-entrega', [6], passport.authenticate('jwt'), async (req, res) => {
       generarAsignacionEquipo(req, res);
     });
 

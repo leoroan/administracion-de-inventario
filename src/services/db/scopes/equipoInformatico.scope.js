@@ -6,6 +6,7 @@ import { Oficina } from "../models/oficina.model.js";
 import { RegistroDeMantenimientoDeEquipo } from "../models/registroDeMantenimientoDeEquipo.model.js";
 import { TipoEquipo } from "../models/tipoEquipo.model.js";
 import { EquipoInformatico } from "../models/EquipoInformatico.model.js";
+import { Trazabilidad } from "../models/trazabilidad.model.js";
 
 export const equipoInformaticoScope = {
   defaultScope: {
@@ -84,4 +85,16 @@ export const defineEquipoInformaticoScopes = () => {
         }
       ]
     })
+  EquipoInformatico.addScope('conTrazabilidad', {
+    // attributes: ['id', 'mt', 'numeroDeSerie', 'numeroDePatrimonio', 'estado'],
+    include: [
+      {
+        model: Trazabilidad,
+        as: 'Trazabilidads',
+        attributes: ['id', 'originario', 'createdAt'],
+        limit: 1,
+        order: [['createdAt', 'DESC']]
+      }
+    ]
+  })
 };
