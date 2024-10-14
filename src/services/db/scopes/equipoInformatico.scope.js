@@ -10,7 +10,7 @@ import { Trazabilidad } from "../models/trazabilidad.model.js";
 
 export const equipoInformaticoScope = {
   defaultScope: {
-    attributes: ['id', 'mt', 'numeroDeSerie', 'numeroDePatrimonio', 'estado', 'createdAt', 'updatedAt', 'deletedAt'],
+    attributes: ['id', 'mt', 'numeroDeSerie', 'numeroDePatrimonio', 'estado', 'createdAt', 'updatedAt', 'deletedAt', 'observacion'],
     include: [
       {
         model: Modelo,
