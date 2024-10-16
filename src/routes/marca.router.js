@@ -5,7 +5,7 @@ import passport from "passport";
 
 export default class MarcaExtendRouter extends CustomRouter {
   /**
-   * api:/api/empleados
+   * api:/api/marcas
    */
   init() {     // this.get('/:id', ['ADMIN', 'SUPERVISOR'], passport.authenticate('jwt'), async (req, res) => {
 
