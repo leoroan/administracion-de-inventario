@@ -17,6 +17,7 @@ import { defineOficinaScope } from "../scopes/oficina.scope.js";
 import { defineEdificioScope } from "../scopes/edificio.scope.js";
 import { defineRegistroDeMantenimientoDeEquipoScope } from "../scopes/registroDeMantenimientoDeEquipo.model.scope.js";
 import { defineTrazabilidadScope } from "../scopes/trazabilidad.scope.js";
+import { defineTipoEquipoScope } from "../scopes/tipoEquipo.scope.js";
 
 const establecerRelaciones = () => {
   // Empleado - Session
@@ -59,10 +60,13 @@ const establecerRelaciones = () => {
   EquipoInformatico.belongsTo(Modelo, { as: 'Modelo', foreignKey: 'modeloId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
   Modelo.hasMany(EquipoInformatico, { foreignKey: 'modeloId', onUpdate: 'CASCADE' });
 
-
   // Un modelo tiene un tipo de equipo
   TipoEquipo.hasMany(Modelo, { foreignKey: 'tipoEquipoId' });
   Modelo.belongsTo(TipoEquipo, { as: 'TipoEquipo', foreignKey: 'tipoEquipoId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
+
+  // TipoEquipo - Marca
+  TipoEquipo.belongsToMany(Marca, { through: 'MarcaTipoEquipo', foreignKey: 'tipoEquipoId', as: 'Marcas', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
+  Marca.belongsToMany(TipoEquipo, { through: 'MarcaTipoEquipo', as: 'TiposEquipo', foreignKey: 'marcaId', onDelete: 'RESTRICT', onUpdate: 'CASCADE' });
 
   // Un empleado tiene un rol
   Empleado.belongsTo(Rol, { as: 'Rol', foreignKey: 'rolId' });
@@ -80,6 +84,7 @@ const establecerScopes = () => {
   defineEdificioScope();
   defineRegistroDeMantenimientoDeEquipoScope();
   defineTrazabilidadScope();
+  defineTipoEquipoScope();
 
 }
 

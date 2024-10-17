@@ -49,16 +49,18 @@ export default class CustomRouter {
   };
 
   handlePolicies = (policies) => (req, res, next) => {
-    const conPostman = process.env.USE_POSTMAN === 'true';
+    // const conPostman = process.env.USE_POSTMAN === 'true';
     if (policies[0] === "PUBLIC") return next();
-    const authHeader = conPostman ? req.cookies : req.headers.authorization;    
-    if (!authHeader) throw new UnauthorizedError();
-    const token = conPostman ? authHeader['jwtCookieToken'] : authHeader.split(' ')[1];
+    // const authHeader = conPostman ? req.cookies : req.headers.authorization;
+    // console.log(authHeader);
+    // if (!authHeader) throw new UnauthorizedError();
+    // const token = conPostman ? authHeader['jwtCookieToken'] : authHeader.split(' ')[1];
+    const token = req.cookies?.jwtCookieToken || req.headers.authorization?.split(' ')[1];
     if (!token) throw new UnauthorizedError('Token missing');
     jwt.verify(token, PRIVATE_KEY, (err, decoded) => {
-      if (err) throw new ForbiddenError('Invalid token: '+err);
+      if (err) throw new ForbiddenError('Invalid token: ' + err);
       if (!(decoded.user.rol <= policies[0])) {
-        throw new ForbiddenError('User does not have access, rol level low');
+        throw new ForbiddenError(`User does not have access, rol level low (${decoded.user.rol} > ${policies[0]})`);
       }
       next();
     });
@@ -68,7 +70,7 @@ export default class CustomRouter {
     const cleanMessage = (message) => {
       return typeof message === 'string' ? message.replace(/\u001b\[\d+m/g, '') : message;
     };
-    res.sendSuccess = (payload, user = req.user) => res.status(200).send({ payload, Requester: user.username });
+    res.sendSuccess = (payload, user = req.user) => res.status(200).send({ payload, Requester: user?.username || 'def' });
     res.sendError = (error, user = req.user) => {
       const cleanErrorMessage = cleanMessage(error.message || error);
       const response = {

@@ -34,7 +34,7 @@ export default class SessionExtendRouter extends CustomRouter {
           const access_token = generateJWToken({ id, username, rol, email });
           try {
             await sessionController.evaluateSession(user, access_token);
-            res.cookie('jwtCookieToken', access_token, { httpOnly: true });//maxAge: Number(process.env.SESSION_COOKIE_VTO) }); // signed: true?? 
+            res.cookie('jwtCookieToken', access_token, { httpOnly: true, secure: process.env.ENV_MODE === 'PRODUCCION', maxAge: Number(process.env.SESSION_COOKIE_VTO) });
             return res.sendSuccess({ access_token });
           } catch (error) {
             devLogger.error(error);
@@ -53,14 +53,14 @@ export default class SessionExtendRouter extends CustomRouter {
         res.clearCookie('jwtCookieToken', { httpOnly: true });
         req.session.destroy(error => {
           if (error) {
-            console.error('Error logging out:', error);
-            return res.status(500).json({ error: 'Error logout', msg: "Error logging out" });
+            devLogger.error('Error logging out:', error);
+            return res.sendSuccess({ error: 'Error logout', msg: "Error logging out" });
           }
           res.status(200).send('Logged out correctly!');
         });
       } catch (error) {
-        console.error('Error al cerrar la sesión:', error);
-        res.status(500).send({ error: "Something went wrong, try again shortly!" });
+        devLogger.error('Error al cerrar la sesión:', error);
+        res.sendError({ error: "Something went wrong, try again shortly!" });
       }
     });
   }

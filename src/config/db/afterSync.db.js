@@ -56,21 +56,44 @@ const addOficinas = async () => {
 
 const addMarcas = async () => {
   for (const marca of marcasPredeterminadas) {
-    const [marcaCreada] = await Marca.findOrCreate({ where: { nombre: marca.nombre } });
-    for (const nombreModelo of marca.modelos) {
-      await Modelo.findOrCreate({
+    // Encontrar o crear la marca
+    const [marcaCreada] = await Marca.findOrCreate({
+      where: { nombre: marca.nombre },
+      defaults: {
+        descripcion: marca.descripcion,
+      }
+    });
+
+    // Crear los modelos asociados a la marca
+    for (const modelo of marca.modelos) {
+      const [modeloCreado] = await Modelo.findOrCreate({
         where: {
-          nombre: nombreModelo,
-          marcaId: marcaCreada.id
+          nombre: modelo.nombre,
+          marcaId: marcaCreada.id,  // Asocia el modelo con la marca
+          tipoEquipoId: modelo.tipoEquipoId
+        },
+        defaults: {
+          descripcion: modelo.descripcion
         }
       });
+
+      // Buscar el tipo de equipo correspondiente al modelo
+      const tipoEquipo = await TipoEquipo.findByPk(modelo.tipoEquipoId);
+      if (tipoEquipo) {
+        // Asociar la marca con el tipo de equipo (esto se hace en la tabla intermedia)
+        await marcaCreada.addTiposEquipo(tipoEquipo);
+      } else {
+        console.error(`Tipo de equipo con id ${modelo.tipoEquipoId} no encontrado`);
+      }
     }
   }
-}
+};
+
+
 
 const addEdificios = async () => {
   for (const edificio of edificiosPredeterminados) {
-    await Edificio.findOrCreate({ where: { nombre: edificio.nombre}, defaults: edificio });
+    await Edificio.findOrCreate({ where: { nombre: edificio.nombre }, defaults: edificio });
   }
 }
 

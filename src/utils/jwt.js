@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 export const PRIVATE_KEY = "usersPrivateKeyTest001";
 
 export const generateJWToken = (user) => {
-  return jwt.sign({ user }, PRIVATE_KEY, { expiresIn: process.env.SESSION_COOKIE_VTO+'h' })
+  return jwt.sign({ user }, PRIVATE_KEY, { expiresIn: process.env.JWT_EXPIRES_IN+'h' })
 }
 
 export const authToken = (req, res, next) => {

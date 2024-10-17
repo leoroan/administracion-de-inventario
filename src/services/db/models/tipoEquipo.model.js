@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/db/sequelize.config.js";
+import { tipoEquipoScope } from "../scopes/tipoEquipo.scope.js";
 
 const toUpperCaseFields = async (instance) => {
   const fieldsToUpper = ['nombre', 'descripcion'];
@@ -28,7 +29,8 @@ const TipoEquipo = sequelize.define('TipoEquipo', {
   hooks: {
     beforeCreate: toUpperCaseFields,
     beforeUpdate: toUpperCaseFields,
-  }
+  },
+  defaultScope: tipoEquipoScope.defaultScope,
 });
 
 export { TipoEquipo };

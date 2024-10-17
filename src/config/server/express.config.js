@@ -25,7 +25,6 @@ export default function configureExpress(app) {
 
   const allowedOrigins = [
     process.env.FRONTEND_ORIGIN,
-    // 'https://actasweb.vtv.gba.gob.ar',
   ];
   app.use(cors({
     origin: function (origin, callback) {
@@ -45,12 +44,12 @@ export default function configureExpress(app) {
   app.use(helmet());
 
   app.use(session({
-    secret: 'MinTrpInv@202X',
+    secret: 'InvtMT@202X',
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.ENV_MODE === "DESARROLLO" ? false : true, //  en producción cambiar esto a true
+      secure: process.env.ENV_MODE === 'PRODUCCION', //  en producción cambiar esto a true
       // sameSite: "strict",
       maxAge: Number(process.env.SESSION_COOKIE_VTO)
     }
