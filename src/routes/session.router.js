@@ -31,11 +31,11 @@ export default class SessionExtendRouter extends CustomRouter {
             return res.sendError("Error logging in");
           }
           const { id, username, rol, email } = user;
-          const access_token = generateJWToken({ id, username, rol, email });
+          const access_inv_token = generateJWToken({ id, username, rol, email });
           try {
-            await sessionController.evaluateSession(user, access_token);
-            res.cookie('jwtCookieToken', access_token, { httpOnly: true, secure: process.env.ENV_MODE === 'PRODUCCION', maxAge: Number(process.env.SESSION_COOKIE_VTO) });
-            return res.sendSuccess({ access_token });
+            await sessionController.evaluateSession(user, access_inv_token);
+            res.cookie('jwtCookieToken', access_inv_token, { httpOnly: true, secure: process.env.ENV_MODE === 'PRODUCCION', maxAge: Number(process.env.SESSION_COOKIE_VTO) });
+            return res.sendSuccess({ access_inv_token });
           } catch (error) {
             devLogger.error(error);
             return res.sendError("Something went wrong, try again shortly!");
@@ -50,7 +50,7 @@ export default class SessionExtendRouter extends CustomRouter {
         if (!user) {
           return res.status(401).send({ status: "error", error: "There were no user authenticated" });
         }
-        res.clearCookie('jwtCookieToken', { httpOnly: true });
+        res.clearCookie('jwtCookieToken', { httpOnly: true, secure: process.env.ENV_MODE === 'PRODUCCION' });
         req.session.destroy(error => {
           if (error) {
             devLogger.error('Error logging out:', error);
