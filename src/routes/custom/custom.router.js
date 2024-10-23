@@ -49,12 +49,7 @@ export default class CustomRouter {
   };
 
   handlePolicies = (policies) => (req, res, next) => {
-    // const conPostman = process.env.USE_POSTMAN === 'true';
     if (policies[0] === "PUBLIC") return next();
-    // const authHeader = conPostman ? req.cookies : req.headers.authorization;
-    // console.log(authHeader);
-    // if (!authHeader) throw new UnauthorizedError();
-    // const token = conPostman ? authHeader['jwtCookieToken'] : authHeader.split(' ')[1];
     const token = req.cookies?.jwtCookieToken || req.headers.authorization?.split(' ')[1];
     if (!token) throw new UnauthorizedError('Token missing');
     jwt.verify(token, PRIVATE_KEY, (err, decoded) => {

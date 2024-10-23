@@ -18,7 +18,7 @@ const initializePassport = () => {
 
   passport.use('jwt', new JwtStrategy({ jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), secretOrKey: PRIVATE_KEY },
     async (jwt_payload, done) => {
-      try {        
+      try {
         return done(null, jwt_payload.user);
       } catch (error) {
         devLogger.error(error);
@@ -90,19 +90,7 @@ const initializePassport = () => {
 };
 
 const cookieExtractor = req => {
-  let token = null;
-  if (process.env.USE_POSTMAN === 'true') {
-    if (req && req.cookies) { // this for postman
-      token = req.cookies['jwtCookieToken'];
-    }
-  } else {
-    if (req && req.headers) {  // this for browser
-      const authHeader = req.headers['authorization'];
-      if (authHeader) {
-        token = authHeader.split(' ')[1];
-      }
-    }
-  }
+  const token = req.cookies?.jwtCookieToken || req.headers?.authorization?.split(' ')[1];
   return token;
 };
 

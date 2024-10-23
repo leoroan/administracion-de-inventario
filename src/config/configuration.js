@@ -4,8 +4,7 @@ import { devLogger } from './logger/logger.config.js';
 dotenv.config();
 
 if (
-  !process.env.ADMIN_USER || !process.env.ADMIN_PASS || !process.env.ADMIN_EMAIL ||
-  !process.env.USE_POSTMAN || !process.env.ENV_MODE || !process.env.BDD_MODE ||
+  !process.env.ADMIN_USER || !process.env.ADMIN_PASS || !process.env.ADMIN_EMAIL || !process.env.ENV_MODE || !process.env.BDD_MODE ||
   !process.env.DB_DATABASE || !process.env.DB_USER || !process.env.DB_PASSWORD ||
   !process.env.DB_HOST || !process.env.DB_PORT || !process.env.PORT ||
   !process.env.MAILING_BASE_URL || !process.env.FRONTEND_ORIGIN || !process.env.NODEMAILER_HOST ||
