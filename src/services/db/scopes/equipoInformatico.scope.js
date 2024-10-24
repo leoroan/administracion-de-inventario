@@ -96,5 +96,16 @@ export const defineEquipoInformaticoScopes = () => {
         order: [['createdAt', 'DESC']]
       }
     ]
+  }),
+  EquipoInformatico.addScope('conTrazabilidadFull', {
+    // attributes: ['id', 'mt', 'numeroDeSerie', 'numeroDePatrimonio', 'estado'],
+    include: [
+      {
+        model: Trazabilidad,
+        as: 'Trazabilidads',
+        attributes: ['id', 'originario', 'createdAt'],
+        order: [['createdAt', 'DESC']]
+      }
+    ]
   })
 };

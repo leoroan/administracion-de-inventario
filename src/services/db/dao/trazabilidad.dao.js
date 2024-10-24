@@ -7,6 +7,11 @@ export default class TrazabilidadDAO extends GenericDAO {
     super(Trazabilidad);
   }
 
+  async trazaNuevoEquipo(equipo, originario) {
+    const result = await this.model.create({ nombreEmpleado: "ES NUEVO EQUIPO", dniEmpleado: "NO CORRESPONDE", nombreOficina: "AL INVENTARIO", mtEquipo: equipo.mt, idEquipo: equipo.id, estado: 'SE CREÓ', originario: originario.username });
+    return result;
+  }
+
   async addTraza(userId, oficinaId, equipoId, tipoMovimiento, originario) {
     let result;
     try {
