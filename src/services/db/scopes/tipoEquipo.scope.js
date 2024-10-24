@@ -15,7 +15,7 @@ export const defineTipoEquipoScope = () => {
       {
         model: Marca,
         as: 'Marcas',
-        through: { attributes: [] }, 
+        through: { attributes: [] },
         attributes: ['id', 'nombre', 'descripcion'],
         // include: [
         //   {
@@ -26,6 +26,23 @@ export const defineTipoEquipoScope = () => {
         // ]
       }
     ]
-  });
+  }),
+    TipoEquipo.addScope('conMarcaYmodelo', {
+      attributes: ['id', 'nombre', 'descripcion'],
+      include: [
+        {
+          model: Modelo,
+          as: 'Modelos',
+          attributes: ['id', 'nombre', 'descripcion'],
+          include: [
+            {
+              model: Marca,
+              as: 'Marca',
+              attributes: ['id', 'nombre', 'descripcion'],
+            }
+          ]
+        }
+      ]
+    })
 };
 

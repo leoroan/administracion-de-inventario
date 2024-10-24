@@ -38,7 +38,7 @@ export function generateRemitoTenenciaEmpleadoTemplate(doc, equipo, user, trazab
     .text(`MODELO: ${equipo.Modelo.dataValues.nombre}`).moveDown(0.5)
     .text(`MARCA: ${equipo.Modelo.Marca.nombre}`).moveDown(0.5)
     .text(`NUMERO DE SERIE: ${equipo.numeroDeSerie}`).moveDown(0.5)
-    .text(`NUMERO DE PATRIMONIO: ${equipo.numeroDePatrimonio}`).moveDown(0.5)
+    .text(`NUMERO DE PATRIMONIO: ${equipo.numeroDePatrimonio? equipo.numeroDePatrimonio : 'SIN DEFINIR AL MOMENTO DE LA ASIGNACION'}`).moveDown(0.5)
     .moveDown(1);
 
   // Espacio para la firma
