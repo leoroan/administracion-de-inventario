@@ -55,7 +55,7 @@ export default class EquipoInformaticoController extends GenericController {
       await equipo.save();
       const userId = equipo.dataValues.Empleado?.id || null;
       const oficinaId = equipo.dataValues.Oficina?.id || null;
-      await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE RETIRÓ, EN DISPONIBILIDAD.', req.user.username);
+      const traza = await trazabilidadService.addTraza(userId, oficinaId, equipoId, 'SE RETIRÓ, EN DISPONIBILIDAD.', req.user.username);
       sendPDFViaEmail(req, res, traza);
       // res.sendSuccess('success');
     } catch (error) {
