@@ -16,10 +16,10 @@ import { Edificio } from "../../services/db/models/Edificio.model.js";
 export const afterSync = async (param) => {
   await addEdificios();
   await addOficinas();
+  await addTipos();
   await addAdmin();
   await addMarcas();
   await addRoles();
-  await addTipos();
   devLogger.info('[DB-DEFAULT-SYNC]: Ready.');
 }
 
