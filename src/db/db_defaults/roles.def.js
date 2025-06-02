@@ -1,7 +1,7 @@
 
 export const rolesPredeterminados = [
   { nombre: 'ADMIN', nivel: 1 },
-  { nombre: 'ENCARGADO DE SISTEMAS NF.', nivel: 2 },
+  { nombre: 'ENCARGADO DE SISTEMAS INF.', nivel: 2 },
   { nombre: 'EMPLEADO DE SOPORTE INF.', nivel: 3 },
   { nombre: 'MINISTRO', nivel: 4 },
   { nombre: 'SECRETARIO', nivel: 4 },

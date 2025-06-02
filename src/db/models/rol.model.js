@@ -5,7 +5,7 @@ export default class Rol extends Model {
   static init(sequelize, DataTypes) {
     return super.init({
       nombre: {
-        type: DataTypes.STRING(25),
+        type: DataTypes.STRING(50),
       },
       nivel: {
         type: DataTypes.INTEGER,
