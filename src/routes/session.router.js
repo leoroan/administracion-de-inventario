@@ -1,66 +1,78 @@
 import passport from 'passport';
-import CustomRouter from "./custom/custom.router.js";
-import SessionController from '../controllers/session.controller.js';
-import { devLogger } from '../config/logger/logger.config.js';
-import { sessionService } from '../services/service.js';
 import { generateJWToken } from "../utils/jwt.js";
-// import { registerMail } from '../controllers/nodemailer.controller.js';
+import CustomRouter from "./custom/custom.router.js";
+import { devLogger } from '../config/logger/logger.config.js';
+import { Conflict, InternalServerError, Unauthorized } from '../config/error/errors.js';
 
-export default class SessionExtendRouter extends CustomRouter {
+
+export default class sessionExtendRouter extends CustomRouter {
+  constructor() {
+    super();
+  }
+
   init() {
-    const sessionController = new SessionController(sessionService);
+    super.init();
 
-    this.post('/register', [3], (req, res, next) => {
+    this.post('/register', ["DIRECTOR", "ADMIN"], passport.authenticate('jwt'), (req, res, next) => {
       passport.authenticate('register', (err, user, info) => {
-        if (err) return res.status(500).json({ status: 'error', message: 'Internal server error: ' + err });
-        if (!user) return res.status(400).json({ status: 'error', message: info.message });
-        res.sendSuccess({ status: 'success', message: 'Registration successful' });
-      })(req, res);
-    });
-
-    this.post('/login', ['PUBLIC'], async (req, res, next) => {
-      passport.authenticate('login', (err, user, info) => {
         if (err) {
-          return res.sendError("Authentication error");
+          devLogger.debug("Error en Passport Authenticate:", err);
+          return next(new Unauthorized('Error en la creación de nuevo usuario registrado', { details: err.message }));
         }
         if (!user) {
-          return res.sendError(info.message || "User not found");
+          return next(new Conflict(info.message));
         }
+        return res.sendSuccess({ message: 'Usuario registrado correctamente' });
+      })(req, res, next);
+    });
+
+    // LOGIN
+    this.post('/login', ['PUBLIC'], async (req, res, next) => {
+      passport.authenticate('login', async (err, user, info) => {
+        if (err) {
+          devLogger.debug("Error en Passport Authenticate:", err);
+          return next(new InternalServerError('Error en autenticación', { details: err.message }));
+        }
+        if (!user) {
+          return next(new Unauthorized('Usuario o contraseña incorrectos.'));
+        }
+
         req.logIn(user, async (err) => {
           if (err) {
-            return res.sendError("Error logging in");
+            devLogger.debug("Error al intentar iniciar sesión:", err);
+            return next(new InternalServerError('Error al iniciar sesión', { details: err.message }));
           }
-          const { id, username, rol, email } = user;
-          const access_inv_token = generateJWToken({ id, username, rol, email });
           try {
-            await sessionController.evaluateSession(user, access_inv_token);
-            res.cookie('jwtCookieToken', access_inv_token, { httpOnly: true, secure: process.env.ENV_MODE === 'PRODUCCION', maxAge: Number(process.env.SESSION_COOKIE_VTO) });
-            return res.sendSuccess({ access_inv_token });
+            const { id, username, nombre, apellido, email, rol } = user;
+            const access_token = generateJWToken({ id, username, nombre, apellido, email, rol });
+            res.cookie('jwtCookieToken', access_token, { httpOnly: true });
+            return res.sendSuccess({ token: access_token });
           } catch (error) {
-            devLogger.error(error);
-            return res.sendError("Something went wrong, try again shortly!");
+            devLogger.debug('Error al intentar loggearse:', error);
+            return next(new InternalServerError('Error al generar token de sesión', { details: error.message }));
           }
         });
       })(req, res, next);
     });
 
-    this.post('/logout', [6], passport.authenticate('jwt'), async (req, res) => {
+    // LOGOUT
+    this.post('/logout', ['PUBLIC'], passport.authenticate('jwt'), async (req, res, next) => {
       try {
-        const user = req.user;
-        if (!user) {
-          return res.status(401).send({ status: "error", error: "There were no user authenticated" });
+        if (!req.user) {
+          return next(new Unauthorized('No hay ningún usuario autenticado conectado.'));
         }
-        res.clearCookie('jwtCookieToken', { httpOnly: true, secure: process.env.ENV_MODE === 'PRODUCCION' });
-        req.session.destroy(error => {
-          if (error) {
-            devLogger.error('Error logging out:', error);
-            return res.sendSuccess({ error: 'Error logout', msg: "Error logging out" });
-          }
-          res.status(200).send('Logged out correctly!');
+        res.clearCookie('jwtCookieToken');
+        await new Promise((resolve, reject) => {
+          req.session.destroy((err) => {
+            if (err) { return reject(new InternalServerError('Error al cerrar sesión', { details: err.message })); }
+            resolve();
+          });
         });
+
+        return res.sendSuccess({ message: 'Desconectado correctamente' });
       } catch (error) {
-        devLogger.error('Error al cerrar la sesión:', error);
-        res.sendError({ error: "Something went wrong, try again shortly!" });
+        devLogger.debug('Error al cerrar sesión:', error);
+        return next(error);
       }
     });
   }

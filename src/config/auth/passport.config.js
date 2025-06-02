@@ -1,15 +1,12 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import jwtStrategy from 'passport-jwt';
-import { Empleado } from '../../services/db/models/Empleado.model.js';
+import { models } from "../../config/db/sequelize.config.js";
 import { createHash, isValidPassword } from '../../utils/bcrypt.js';
 import { PRIVATE_KEY } from '../../utils/jwt.js';
 import { devLogger } from '../logger/logger.config.js';
 import { Op } from 'sequelize';
-import { SequelizeError } from '../../utils/errors.js';
-import { Rol } from '../../services/db/models/rol.model.js';
 
-//  Declaramos estrategia
 const localStrategy = passportLocal.Strategy;
 const JwtStrategy = jwtStrategy.Strategy;
 const ExtractJWT = jwtStrategy.ExtractJwt;
@@ -29,38 +26,42 @@ const initializePassport = () => {
 
   passport.use('register', new localStrategy({ passReqToCallback: true },
     async (req, username, password, done) => {
-      const { nombre, apellido, dni, email } = req.body;
+      const { nombre, apellido, email } = req.body;
       try {
-        const exist = await Empleado.findOne({ where: { [Op.or]: [{ email: email }, { username: username }] } });
-        if (exist) return done(null, false, { message: 'Username or email already exists.' });
-        const [rolEmpleado] = await Rol.findOrCreate({ where: { nombre: 'EMPLEADO' }, defaults: { nivel: 7 } });
-        const employee = { username, password: createHash(password), nombre, apellido, dni, email, rolId: rolEmpleado.id }
-        const result = await Empleado.create(employee);
+        const exist = await models.Usuario.findOne({ where: { [Op.or]: [{ email: email }, { username: username }] } });
+        if (exist) return done(null, false, { message: 'Nombre de usuario o direccion de correo electronico ya existentes!' });
+        const [rolDefault] = await models.Rol.findOrCreate({ where: { nombre: 'ADMINISTRATIVO' } });
+        const user = { username, password: createHash(password), nombre, apellido, email, rolId: rolDefault.dataValues.id }
+        const result = await models.Usuario.create(user);
         return done(null, result)
       } catch (error) {
-        const customError = SequelizeError.handleSequelizeError(error, 'Error trying to register');
-        return done(customError);
+        return done(error);
       }
     }
   ))
 
   passport.use('login', new localStrategy({ passReqToCallback: true, usernameField: 'username' },
-    async (req, username, password, done) => {      
+    async (req, username, password, done) => {
       try {
-        const employee = await Empleado.scope('basic').findOne({ where: { [Op.or]: [{ email: username }, { username: username }] }, include: { association: 'Rol' } });
-        if (!employee) {
-          devLogger.warning("User doesn't exists with username: " + username);
-          return done(null, false);
-        }        
-        if (!isValidPassword(employee.dataValues, password)) {
-          devLogger.warning("Invalid credentials for employee: " + username);
+        const user = await models.Usuario.scope('loginScope').findOne({ where: { [Op.or]: [{ email: username }, { username: username }] } });
+        if (!user) {
+          devLogger.debug("No existe un usuario con este nombre de usuario: " + username);
           return done(null, false);
         }
+        if (!isValidPassword(user.dataValues, password)) {
+          devLogger.debug("Credenciales invalidas para el usuario: " + username);
+          return done(null, false);
+        }
+        await user.update({ cantidadIntentosLoggin: 1, ultimoIngreso: new Date().toISOString() });
         const userDTO = {
-          id: employee.dataValues.id,
-          username: employee.dataValues.username,
-          rol: employee.dataValues.Rol.dataValues.nivel,
-          email: employee.dataValues.email
+          id: user.dataValues.id,
+          username: user.dataValues.username,
+          nombre: user.dataValues.nombre,
+          apellido: user.dataValues.apellido,
+          email: user.dataValues.email,
+          rol: user.dataValues.rolPrincipal.dataValues.nombre,
+          bloqueado: user.dataValues.bloqueado,
+          ultimoIngreso: user.dataValues.ultimoIngreso
         };
         return done(null, userDTO);
       } catch (error) {
@@ -69,27 +70,27 @@ const initializePassport = () => {
     })
   );
 
-  passport.serializeUser((employee, done) => {
-    if (!employee || !employee.id) {
-      return done(new Error('User serialization failed: Invalid user data'));
+  passport.serializeUser((user, done) => {
+    if (!user || !user.id) {
+      return done(new Error('Error en la serialización del usuario: los datos del usuario no válidos'));
     }
-    done(null, employee.id);
+    done(null, user.id);
   });
 
   passport.deserializeUser(async (id, done) => {
     try {
-      const employee = await Empleado.findByPk(id);
-      if (!employee) {
-        return done(new Error('User not found'));
+      const user = await models.Usuario.findByPk(id);
+      if (!user) {
+        return done(new Error('Usuario no encontrado'));
       }
-      done(null, employee);
+      done(null, user);
     } catch (error) {
       done(error);
     }
   });
 };
 
-const cookieExtractor = req => {
+const cookieExtractor = (req) => {
   const token = req.cookies?.jwtCookieToken || req.headers?.authorization?.split(' ')[1];
   return token;
 };

@@ -1,66 +1,149 @@
-# Proyecto inventory management
-## Dependencias del proyecto
-*Librerías de Seguridad y Gestión de Sesiones*
-- bcryptjs: Encriptación de contraseñas usando el algoritmo bcrypt.
-- helmet: Protección contra vulnerabilidades comunes de HTTP.
-- http-errors: Manejo de errores HTTP.
-- passport: Framework de autenticación flexible.
-- passport-jwt: Estrategia de autenticación basada en tokens JWT.
-- passport-local: Estrategia de autenticación local basada en nombre de usuario y contraseña.
+# WebVTV-BackEnd
 
-*Librerías de Base de Datos*
-- mysql2: Conector para MySQL.
-- sequelize: ORM para trabajar con diferentes bases de datos.
+### Libererias agregadas:
+ - [http-errors](https://www.npmjs.com/package/http-errors) 
+ - [sqids](https://sqids.org/javascript) 
 
-*Librerías de Envío de Correo Electrónico*
-- nodemailer: Envío de correos electrónicos.
 
-*Librerías de Gestión de Archivos y Generación de PDF*
-- multer: Carga de archivos.
-- pdfkit: Generación de documentos PDF.
+# Especificaciones del Proyecto: Nueva Página Web de la VTV
 
-*Librerías de Utilidad y Logging*
-- commander: Creación de interfaces de línea de comandos.
-- cookie-parser: Análisis de cookies.
-- cors: Manejo de solicitudes CORS.
-- dotenv: Carga de variables de entorno desde un archivo .env.
-- express: Framework web para Node.js.
-- express-session: Gestión de sesiones HTTP.
-- jsonwebtoken: Generación y verificación de tokens JWT.
-- uuid: Generación de UUIDs (Universally Unique Identifiers).
-- winston: Logging de eventos.
-- winston-daily-rotate-file: Rotación diaria de archivos de log.
+---
 
-*Otras Librerías*
-- inventory-management-mintrp: Probablemente una librería personalizada o un módulo de proyecto.
-- picocolors: Coloreado de texto en la consola.
-- reflect-metadata: Decoradores para metadatos.
+## Tecnologías Principales
+- **Backend:** Node.js y Express + Sequelize(mysql)
+- **Base de Datos:** MySQL
+- **Email:** NodeMailer
+- **Contenedores:** Docker
 
-## Patrones Principales Implicados
-*Patrón Modelo-Vista-Controlador (MVC):* -Sin implementacion de la vista
-- Modelo: Corresponde a la capa de modelado (representando los datos y la lógica de negocio).
-- Vista: Se encarga de la interfaz de usuario. ( La vista se genera en un componente aparte)
-- Controlador: Maneja las solicitudes del usuario, interactúa con el modelo y actualiza la vista.
+---
 
-### Patrón Repositorio:
-Repositorio: Actúa como una interfaz entre la capa de dominio (modelo) y la capa de datos (DAOs[^1]).
-Abstrae el acceso a los datos, permitiendo cambios en la implementación de la base de datos sin afectar el resto de la aplicación.
+## Funcionalidades Clave
 
-### Patrón Capa de Servicio:
-Encapsulan la lógica de negocio, exponiendo operaciones que pueden ser invocadas por otros componentes.
-Ayudan a mantener la separación de preocupaciones y a crear una interfaz más granular para la capa de presentación.
+### Gestión de Usuarios
+- Registro y autenticación de usuarios.
+- Roles diferenciados: Administrador y Usuario.
+- Sistema de autorización basado en roles.
 
-### Patrón Unidad de Trabajo (Unit of Work):
-(Generalmente asociado con el patrón Repositorio) Maneja un conjunto de cambios en una transacción.
-Permite realizar múltiples operaciones sobre diferentes entidades y luego confirmarlas o deshacerlas como una sola unidad.
+### Gestión de Quejas y Reclamos
+- Recepción de quejas y reclamos.
+- Envío de confirmación por correo electrónico (NodeMailer).
+- Actualización y gestión del estado de las quejas/reclamos.
 
-### Beneficios de esta Arquitectura
-- Mantenibilidad: Facilita la modificación y ampliación del código.
-- Reutilización: Los componentes pueden ser reutilizados en diferentes partes de la aplicación.
-- Testabilidad: Permite realizar pruebas unitarias de forma aislada.
-- Escalabilidad: La aplicación puede adaptarse a cambios en los requisitos.
+### Gestión de Contenido Dinámico
+- FAQs administradas desde la base de datos, actualizables por los administradores o usuarios.
+- Manejo de precios de la VTV desde la base de datos, actualizables por los administradores o usuarios.
 
-#### version
-v2.0.0
+---
 
-[^1]: DAO (Data Access Object): Actúa como una capa de acceso a datos más baja, a menudo directamente interactúa con la base de datos.
+## Infraestructura y Configuración
+
+### Docker
+*(Pendiente de implementación)*  
+Contenerización de la aplicación para facilitar el despliegue y la gestión en diferentes entornos.
+
+### API Documentation
+*(Pendiente de implementación)*  
+Documentación de las rutas y endpoints de la API utilizando herramientas como Swagger o Postman.
+
+### Seguridad
+*(Pendiente de implementación)*  
+Implementar prácticas de seguridad para proteger la aplicación:
+- Validación de datos.
+- Cifrado de contraseñas.
+- Protección contra inyecciones SQL.
+
+---
+
+## Configuración de Variables de Entorno
+
+### ejemplo de ".env"
+```
+# Configuración estado de la aplicación
+ENV_MODE=DESARROLLO
+
+# Configuración del superusuario general
+ADMIN_USER=
+ADMIN_PASS=
+ADMIN_EMAIL=
+
+# Configuración de la base de datos
+BDD_MODE=CPU-MINISTERIO
+DB_DATABASE=
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+DB_PORT=
+DB_DIALECT=
+DB_ERASE=
+DB_ALTER=
+
+# Configuración del servidor express
+PORT=
+
+# Configuración de JWT
+JWT_PRIVATE_KEY=
+SESSION_COOKIE_VTO=
+JWT_EXPIRES_IN=
+
+# configuracion para el front
+MAILING_BASE_URL=
+FRONTEND_ORIGIN=
+
+# configuracion del nombre del sitio
+EMPRESA_NOMBRE=
+
+# configuracion de la api del microservicio de mensajeria
+URL_SERV_MAIL='http://localhost:7071'
+```
+---
+
+## 🔄 Carga dinámica de servicios y rutas
+
+Con el objetivo de reducir conflictos entre ramas y mejorar la escalabilidad del proyecto, se implementaron dos mejoras clave:
+
+### ✅ 1. `servicesLoader.js` dinámico
+
+Ya no es necesario editar manualmente el archivo `servicesLoader.js` cada vez que se agrega un nuevo DAO o Service.  
+El sistema ahora:
+
+- Escanea automáticamente todos los archivos en `/layers/daos` y `/layers/services`.
+- Empareja los DAOs con sus Services por convención (ej. `usuario.dao.js` y `usuario.service.js`).
+- Inyecta automáticamente el modelo de Sequelize correspondiente.
+- Exporta una instancia lista del service (ej: `usuarioService`).
+
+> 📦 Solo tenés que crear tus archivos DAO y Service, ¡y listo!
+
+---
+
+### 🚀 2. Rutas Express autoconfiguradas
+
+Tampoco hace falta registrar las rutas manualmente en `express.config.js`.  
+Ahora:
+
+- El sistema escanea todos los archivos `*.router.js` dentro de `/routes`.
+- Crea las rutas automáticamente en base al nombre del archivo (ej: `usuario.router.js` → `/api/usuarios`).
+- Instancia cada router y lo monta con `app.use(...)`.
+
+> 🔧 Cada uno solo créa su archivo `*.router.js`, y ya está disponible.
+
+---
+
+## Dependencias Principales
+*(Pendiente de implementación)*  
+Lista de las dependencias esenciales del proyecto (Express, Sequelize, NodeMailer, etc.).
+
+---
+
+## Licencia
+Este proyecto está bajo la **TBA**. Consulta el archivo `LICENSE` para más detalles.
+
+---
+
+## Autores
+Desarrollado por **Devs @ 2025**  
+**Ministerio de Transporte, Provincia de Buenos Aires**
+
+---
+
+## Versión
+**TBA**

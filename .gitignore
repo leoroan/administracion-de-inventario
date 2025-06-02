@@ -1,4 +1,5 @@
 # VSCode
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -21,15 +22,15 @@
 # Private Node Modules
 node_modules/
 creds.js
+downloadedFromSFTP/*
+uploadToSFTP/*
 
 # Private Files
-output
-*.csv
+output/
 *.csv.gz
 *.tsv
 *.tsv.gz
 *.xlsx
-
 
 # Mac/OSX
 .DS_Store

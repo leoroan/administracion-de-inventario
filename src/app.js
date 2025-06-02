@@ -1,43 +1,49 @@
-import express from 'express';
 import config from './config/configuration.js';
+import express from 'express';
 import configureExpress from './config/server/express.config.js';
-import { sequelize } from './services/db/models/setup.db.js';
+import { createServer } from "http";
+import { sequelize } from './config/db/sequelize.config.js';
 import { devLogger } from './config/logger/logger.config.js';
-import { checkConnection } from './config/mail/nodemailer.config.js';
-import { afterSync } from './config/db/afterSync.db.js';
+import { socketManager } from './config/websocket/socket.js';
+import { afterSync } from './db/afterSync.db.js';
 
 const app = express();
+const server = createServer(app);
 configureExpress(app);
+socketManager.init(server);
 
-const connectWithRetry = () => {
-  return sequelize.authenticate()
-    .then(() => {
-      devLogger.info(`[DB-CONNECTION]: Success, on port: [${config.db.db_port}]`);
-      // return sequelize.sync({ force: true, alter: true });
-      return sequelize.sync();
-    })
-    .then(() => {
-      devLogger.info(`[DB-MODELS]: Sincronized.`);
-      afterSync();
-      process.env.USE_POSTMAN === 'true'
-        ? devLogger.warning(`[HEADERS]: desde POSTMAN`)
-        : devLogger.warning(`[HEADERS]: desde el NAVEGADOR`);
-        checkConnection;
-      // console.log(sequelize.models)
-      app.listen(process.env.PORT, () => {
-        devLogger.info(`[SERVER]: Listening on port [${process.env.PORT}]`);
-        checkConnection;
-      });
-    })
-    .catch((error) => {
-      devLogger.error('Unable to connect to the database:', error);
-      devLogger.warning('Retrying in 60 seconds... <maybe db down?>');
-      return new Promise((resolve) => {
-        setTimeout(resolve, 60000);
-      }).then(() => connectWithRetry());
+async function initializeDatabase() {
+  try {
+    await sequelize.authenticate();
+    devLogger.info(`[CONEXION DE LA BDD]: ✅, Conectada en puerto: [${config.db.db_port}]`);
+
+    if (process.env.ENV_MODE === 'DESARROLLO' && process.env.DB_ERASE === "1") {
+      await sequelize.drop();
+      await sequelize.sync({ force: true });
+      devLogger.info(`[ ⛔ BDD REINICIADA ⛔ ]: ✅, Reiniciada y sincronizada.`);
+    } else {
+      if (process.env.DB_ALTER === "1") {
+        await sequelize.sync({ alter: true });
+        devLogger.info(`[BDD SINCRONIZADA CON ALTER]: ✅, Se ajustaron esquemas automáticamente.`);
+      } else {
+        await sequelize.sync();
+        devLogger.info(`[BDD SINCRONIZADA]: ✅, Sincronizada sin alterar estructura.`);
+      }
+    }
+    afterSync();
+
+    server.listen(process.env.PORT, () => {
+      devLogger.info(`[SERVIDOR Y WEBSOCKETS]: ✅, Escuchando en el puerto : [${process.env.PORT}]`);
     });
-};
+  } catch (error) {
+    devLogger.error('Error conectando con la base de datos:', error);
+    devLogger.warning('Reintentando en 60 segundos...');
+    setTimeout(initializeDatabase, 60000);
+  }
+}
 
-connectWithRetry();
+initializeDatabase();
+
+
 
 

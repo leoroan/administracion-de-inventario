@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import cors from 'cors'
 import helmet from 'helmet'
 import express from 'express'
@@ -7,31 +10,22 @@ import cookieParser from 'cookie-parser'
 import { addLogger } from '../../middlewares/logger.middleware.js'
 import errorHandler from '../../middlewares/errorHandler.middleware.js'
 import initializePassport from '../auth/passport.config.js'
-import EmpleadoExtendRouter from '../../routes/empleado.router.js'
-import MarcaExtendRouter from '../../routes/marca.router.js'
-import ModeloExtendRouter from '../../routes/modelo.router.js'
-import SessionExtendRouter from '../../routes/session.router.js'
-import EdificioExtendRouter from '../../routes/edificio.router.js'
-import EquipoInformaticoExtendRouter from '../../routes/equipoInformatico.router.js'
-import OficinaExtendedRouter from '../../routes/oficina.router.js'
-import RegistroDeMantenimientoExtendRouter from '../../routes/registroDeMantenimientoDeEquipo.router.js'
-import TipoEquipoExtendRouter from '../../routes/tipoEquipo.router.js'
-import TrazabilidadExtendRouter from '../../routes/trazabilidad.router.js'
-import pdfExtendRouter from '../../routes/pdf.router.js'
+import { NotFound } from '../error/errors.js'
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const routesDir = path.resolve(__dirname, '../../routes');
 
-export default function configureExpress(app) {
+export default async function configureExpress(app) {
   initializePassport();
-
-  const allowedOrigins = [
-    process.env.FRONTEND_ORIGIN,
-  ];
+  app.use(passport.initialize());
+  const allowedOrigins = [process.env.FRONTEND_ORIGIN];
   app.use(cors({
     origin: function (origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        callback(new Error('NO PERMITIDO POR CORS'));
       }
     },
     credentials: true
@@ -39,9 +33,10 @@ export default function configureExpress(app) {
 
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
-  app.use(addLogger)
-  app.use(cookieParser('@ny1kN0wTh15?'))
+  // app.use(cookieParser('@ny1kN0wTh15?'))
+  app.use(cookieParser())
   app.use(helmet());
+  app.use(addLogger)
 
   app.use(session({
     secret: 'InvtMT@202X',
@@ -49,42 +44,32 @@ export default function configureExpress(app) {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.ENV_MODE === 'PRODUCCION', //  en producción cambiar esto a true
+      secure: process.env.ENV_MODE === 'PRODUCCION' ? true : false,
       // sameSite: "strict",
       maxAge: Number(process.env.SESSION_COOKIE_VTO)
     }
-  }))
-  app.use(passport.initialize())
-  app.use(passport.session())
+  }));
+  app.use(passport.session());
 
-  // routes
-  const empleadoRouter = new EmpleadoExtendRouter();
-  const marcaRouter = new MarcaExtendRouter();
-  const modeloRouter = new ModeloExtendRouter();
-  const sessionRouter = new SessionExtendRouter()
-  const edificioRouter = new EdificioExtendRouter();
-  const equipoInformaticoRouter = new EquipoInformaticoExtendRouter();
-  const oficinaRouter = new OficinaExtendedRouter();
-  const registroDeMantenimientoDeEquipoRouter = new RegistroDeMantenimientoExtendRouter();
-  const tipoEquipoRouter = new TipoEquipoExtendRouter();
-  const trazabilidadRouter = new TrazabilidadExtendRouter();
-  const pdfRouter = new pdfExtendRouter();
+  const routeFiles = fs.readdirSync(routesDir).filter(file => file.endsWith('.router.js'));
 
-  app.use('/api/empleados', empleadoRouter.getRouter());
-  app.use('/api/marcas', marcaRouter.getRouter());
-  app.use('/api/modelos', modeloRouter.getRouter());
-  app.use('/api/session', sessionRouter.getRouter());
-  app.use('/api/edificios', edificioRouter.getRouter());
-  app.use('/api/oficinas', oficinaRouter.getRouter());
-  app.use('/api/equipos', equipoInformaticoRouter.getRouter());
-  app.use('/api/registrosDeMantenimiento', registroDeMantenimientoDeEquipoRouter.getRouter());
-  app.use('/api/tipoEquipos', tipoEquipoRouter.getRouter());
-  app.use('/api/trazabilidad', trazabilidadRouter.getRouter());
-  app.use('/api/docs', pdfRouter.getRouter());
+  for (const file of routeFiles) {
+    const { default: RouteClass } = await import(`../../routes/${file}`);
+    const instance = new RouteClass();
 
+    // construye la ruta base a partir del nombre del archivo
+    const baseName = file.replace('.router.js', '').toLowerCase(); // "usuario"
+    const basePath = baseName === 'session' ? '/api/session' : `/api/${baseName}s`; // hack para session
+    app.use(basePath, instance.getRouter());
+  }
+
+  app.use((req, res, next) => {
+    next(new NotFound('Page not found'));
+  });
   app.use(errorHandler);
-
   app.get('/status', (req, res) => {
     res.sendStatus(200);
   });
+
+
 }
