@@ -6,6 +6,9 @@ import { Conflict, InternalServerError, Unauthorized } from '../config/error/err
 
 
 export default class sessionExtendRouter extends CustomRouter {
+  /**
+   * api:/api/session
+   */
   constructor() {
     super();
   }

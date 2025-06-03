@@ -45,7 +45,7 @@ export default async function configureExpress(app) {
     cookie: {
       httpOnly: true,
       secure: process.env.ENV_MODE === 'PRODUCCION' ? true : false,
-      // sameSite: "strict",
+      sameSite: process.env.ENV_MODE === 'PRODUCCION' ? "strict" : "lax",
       maxAge: Number(process.env.SESSION_COOKIE_VTO)
     }
   }));
