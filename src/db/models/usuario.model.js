@@ -61,7 +61,12 @@ export default class Usuario extends Model {
       ultimoIngreso: {
         type: DataTypes.DATE,
         allowNull: true
-      }
+      },
+      estado: {
+        type: DataTypes.ENUM('activo', 'inactivo', 'bloqueado'),
+        allowNull: false,
+        defaultValue: 'activo'
+      },
     },
       {
         sequelize,
