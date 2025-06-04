@@ -8,7 +8,7 @@ export default class ModeloEquipo extends Model {
         type: DataTypes.STRING,
         allowNull: false
       },
-      especificaciones: {
+      descripcion: {
         type: DataTypes.TEXT,
         allowNull: true
       },

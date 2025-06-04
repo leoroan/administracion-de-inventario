@@ -4,15 +4,19 @@ import csv from 'csv-parser';
 import { models } from "../config/db/sequelize.config.js"
 import { devLogger } from "../config/logger/logger.config.js";
 import { createHash } from "../utils/bcrypt.js";
-import { rolesPredeterminados } from './db_defaults/roles.def.js';
+import { rolesPredeterminados } from './db_defaults/rolesPredeterminados.def.js';
+import { edificiosPredeterminados } from './db_defaults/edificiosPredeterminados.def.js';
+import { oficinasPredeterminadas } from './db_defaults/oficinasPredeterminadas.def.js';
+import { marcasYmodelosPredeterminados } from './db_defaults/marcasYmodelosPredeterminados.def.js';
+import { tiposDeEquiposPredeterminados } from './db_defaults/tiposDeEquiposPredeterminados.def.js';
 
 export const afterSync = async () => {
   await addRoles();
   await addAdmin();
-  // await addEdificios();
-  // await addOficinas();
-  // await addTipos();
-  // await addMarcas();
+  await addTipos();
+  await addEdificios();
+  await addOficinas();
+  await addMarcas();
   devLogger.info('[DATOS REQUERIDOS, PRECARGADOS EN BDD]: ✅  Sincronizados.');
 }
 
@@ -40,3 +44,54 @@ const addAdmin = async () => {
 }
 
 
+const addEdificios = async () => {
+  for (const edificio of edificiosPredeterminados) {
+    await models.Edificio.findOrCreate({ where: { nombre: edificio.nombre }, defaults: edificio });
+  }
+}
+
+const addTipos = async () => {
+  for (const tipo of tiposDeEquiposPredeterminados) {
+    await models.Tipoequipo.findOrCreate({ where: { nombre: tipo.nombre }, defaults: tipo });
+  }
+}
+
+const addOficinas = async () => {
+  for (const oficina of oficinasPredeterminadas) {
+    const [oficinaCreada] = await models.Oficina.findOrCreate({ where: { nombre: oficina.nombre } });
+    for (const nombreDependencia of oficina.dependencias) {
+      await models.Oficina.findOrCreate({
+        where: {
+          nombre: nombreDependencia,
+          oficinaPadreId: oficinaCreada.id
+        }
+      });
+    }
+  }
+}
+
+
+const addMarcas = async () => {
+  for (const marca of marcasYmodelosPredeterminados) {
+    const [marcaCreada] = await models.Marca.findOrCreate({
+      where: { nombre: marca.nombre },
+      defaults: {
+        descripcion: marca.descripcion,
+      }
+    });
+
+    for (const modelo of marca.modelos) {
+      await models.Modelo.findOrCreate({
+        where: {
+          nombre: modelo.nombre,
+          marcaId: marcaCreada.id,
+          tipoequipoId: modelo.tipoequipoId
+        },
+        defaults: {
+          descripcion: modelo.descripcion,
+          tipoequipoId: modelo.tipoequipoId
+        }
+      });
+    }
+  }
+};

@@ -35,16 +35,16 @@ export default function initModels(sequelize) {
   Sesion.belongsTo(Usuario, { as: 'usuario', foreignKey: { name: 'usuarioId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
 
   // Usuario -> Oficina
-  Oficina.hasMany(Usuario, { as: 'empleados', foreignKey: { name: 'oficinaId', allowNull: false, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
-  Usuario.belongsTo(Oficina, { as: 'oficina', foreignKey: { name: 'oficinaId', allowNull: false, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
+  Oficina.hasMany(Usuario, { as: 'empleados', foreignKey: { name: 'oficinaId', allowNull: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
+  Usuario.belongsTo(Oficina, { as: 'oficina', foreignKey: { name: 'oficinaId', allowNull: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
 
   // Oficina -> Oficina (jerarquía)
   Oficina.hasMany(Oficina, { as: 'suboficinas', foreignKey: { name: 'oficinaPadreId', allowNull: true, onDelete: 'SET NULL', onUpdate: 'CASCADE' } });
   Oficina.belongsTo(Oficina, { as: 'oficinaPadre', foreignKey: { name: 'oficinaPadreId', allowNull: true, onDelete: 'SET NULL', onUpdate: 'CASCADE' } });
 
   // Edificio -> Oficina
-  Edificio.hasMany(Oficina, { as: 'oficinas', foreignKey: { name: 'edificioId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
-  Oficina.belongsTo(Edificio, { as: 'edificio', foreignKey: { name: 'edificioId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
+  Edificio.hasMany(Oficina, { as: 'oficinas', foreignKey: { name: 'edificioId', allowNull: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
+  Oficina.belongsTo(Edificio, { as: 'edificio', foreignKey: { name: 'edificioId', allowNull: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
 
   // Oficina -> Equipoinformatico
   Oficina.hasMany(Equipoinformatico, { as: 'equipos', foreignKey: { name: 'oficinaId', allowNull: false, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
@@ -67,8 +67,8 @@ export default function initModels(sequelize) {
   Modelo.belongsTo(Marca, { as: 'marca', foreignKey: { name: 'marcaId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
 
   // Tipoequipo -> Modelo
-  Tipoequipo.hasMany(Modelo, { as: 'modelos', foreignKey: { name: 'tipoequipoId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
-  Modelo.belongsTo(Tipoequipo, { as: 'tipoequipo', foreignKey: { name: 'tipoequipoId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
+  Tipoequipo.hasMany(Modelo, { as: 'modelos', foreignKey: { name: 'tipoequipoId', allowNull: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
+  Modelo.belongsTo(Tipoequipo, { as: 'tipoequipo', foreignKey: { name: 'tipoequipoId', allowNull: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
 
   // Tipoequipo -> Equipoinformatico
   Tipoequipo.hasMany(Equipoinformatico, { as: 'equipos', foreignKey: { name: 'tipoequipoId', allowNull: false, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
