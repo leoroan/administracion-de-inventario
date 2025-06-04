@@ -11,6 +11,15 @@ export default class Rol extends Model {
         type: DataTypes.INTEGER,
         allowNull: false
       },
+      descripcion: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+      },
+      permisos: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: []
+      }
     }, {
       sequelize,
       modelName: 'Rol',
