@@ -47,8 +47,8 @@ export default function initModels(sequelize) {
   Oficina.belongsTo(Edificio, { as: 'edificio', foreignKey: { name: 'edificioId', allowNull: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
 
   // Oficina -> Equipoinformatico
-  Oficina.hasMany(Equipoinformatico, { as: 'equipos', foreignKey: { name: 'oficinaId', allowNull: false, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
-  Equipoinformatico.belongsTo(Oficina, { as: 'oficina', foreignKey: { name: 'oficinaId', allowNull: false, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
+  Oficina.hasMany(Equipoinformatico, { as: 'equipos', foreignKey: { name: 'oficinaId', allowNull: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
+  Equipoinformatico.belongsTo(Oficina, { as: 'oficina', foreignKey: { name: 'oficinaId', allowNull: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
 
   // Usuario -> Equipoinformatico
   Usuario.hasMany(Equipoinformatico, { as: 'equiposAsignados', foreignKey: { name: 'empleadoId', allowNull: true, onDelete: 'SET NULL', onUpdate: 'CASCADE' } });

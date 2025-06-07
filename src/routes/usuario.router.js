@@ -15,7 +15,7 @@ export default class UsuarioExtendRouter extends CustomRouter {
   init() {
     super.init();
 
-    this.get('/', ['ADMIN', 'DIRECTOR'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.get('/', ['PUBLIC'], async (req, res, next) => {
       this.controller.findAll(req, res, next);
     });
 
@@ -27,9 +27,13 @@ export default class UsuarioExtendRouter extends CustomRouter {
       this.controller.create(req, res, next);
     });
 
-    this.put('/:id', ['ADMIN', 'DIRECTOR'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.put('/:id', ['PUBLIC'], async (req, res, next) => {
       this.controller.update(req, res, next);
     });
+
+    // this.put('/:id', ['ADMIN', 'DIRECTOR'], passport.authenticate('jwt'), async (req, res, next) => {
+    //   this.controller.update(req, res, next);
+    // });
 
     this.delete('/:id', ['ADMIN', 'DIRECTOR'], passport.authenticate('jwt'), async (req, res, next) => {
       this.controller.delete(req, res, next);
