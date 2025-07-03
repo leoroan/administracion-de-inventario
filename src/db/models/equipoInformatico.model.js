@@ -20,7 +20,7 @@ export default class EquipoInformatico extends Model {
         unique: true
       },
       estado: {
-        type: DataTypes.ENUM('activo', 'inactivo', 'mantenimiento', 'baja'),
+        type: DataTypes.ENUM('activo', 'disponible', 'mantenimiento', 'baja'),
         allowNull: false,
         defaultValue: 'activo'
       },
