@@ -1,0 +1,854 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "INVENTARIO-MT-DOC-API",
+    "description": "API documentation for the inventory management system."
+  },
+  "host": "localhost:8085",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Pega tu JWT aquí con el formato: Bearer <token>"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/edificios/": {
+      "get": {
+        "tags": [
+          "Edificios"
+        ],
+        "summary": "Obtiene todos los edificios",
+        "description": "Obtiene una lista de todos los edificios registrados en el sistema.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/edificios/{id}": {
+      "get": {
+        "tags": [
+          "Edificios"
+        ],
+        "summary": "Obtiene un edificio por ID",
+        "description": "Obtiene los detalles de un edificio específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del edificio a obtener"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Edificios"
+        ],
+        "summary": "Borrar un edificio por ID",
+        "description": "Borrar un edificio específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del edificio a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/EquipoInformaticos/": {
+      "get": {
+        "tags": [
+          "Equipos Informaticos"
+        ],
+        "summary": "Obtiene todos los equipos informáticos",
+        "description": "Obtiene una lista de todos los equipos informáticos registrados en el sistema.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/EquipoInformaticos/{id}": {
+      "get": {
+        "tags": [
+          "Equipos Informaticos"
+        ],
+        "summary": "Obtiene un equipo informático por ID",
+        "description": "Obtiene los detalles de un equipo informático específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del equipo informático a obtener"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Equipos Informaticos"
+        ],
+        "summary": "Borrar un equipo informático por ID",
+        "description": "Borrar un equipo informático específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del equipo informático a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/logs/prod-list": {
+      "get": {
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Obtiene una lista de logs de producción",
+        "description": "Obtiene una lista de logs de producción.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/logs/prod/file/{filename}": {
+      "get": {
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Obtiene un log de producción",
+        "description": "Obtiene un log de producción específico por su nombre de archivo.",
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/logs/prod/download/{filename}": {
+      "get": {
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Descarga un log de producción",
+        "description": "Descarga un log de producción específico por su nombre de archivo.",
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/marcas/": {
+      "get": {
+        "tags": [
+          "Marcas"
+        ],
+        "summary": "Obtiene todos los marcas",
+        "description": "Obtiene una lista de todos los marcas registrados en el sistema.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/marcas/{id}": {
+      "get": {
+        "tags": [
+          "Marcas"
+        ],
+        "summary": "Obtiene un marca por ID",
+        "description": "Obtiene los detalles de un marca específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del marca a obtener"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Marcas"
+        ],
+        "summary": "Borrar un marca por ID",
+        "description": "Borrar un marca específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del marca a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/modelos/": {
+      "get": {
+        "tags": [
+          "Modelos"
+        ],
+        "summary": "Obtiene todos los modelos",
+        "description": "Obtiene una lista de todos los modelos registrados en el sistema.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/modelos/{id}": {
+      "get": {
+        "tags": [
+          "Modelos"
+        ],
+        "summary": "Obtiene un modelo por ID",
+        "description": "Obtiene los detalles de un modelo específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del modelo a obtener"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Modelos"
+        ],
+        "summary": "Borrar un modelo por ID",
+        "description": "Borrar un modelo específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del modelo a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/oficinas/": {
+      "get": {
+        "tags": [
+          "Oficinas"
+        ],
+        "summary": "Obtiene todos los oficinas",
+        "description": "Obtiene una lista de todos los oficinas registrados en el sistema.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/oficinas/{id}": {
+      "get": {
+        "tags": [
+          "Oficinas"
+        ],
+        "summary": "Obtiene una oficina por ID",
+        "description": "Obtiene los detalles de una oficina específica por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina a obtener"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Oficinas"
+        ],
+        "summary": "Borrar una oficina por ID",
+        "description": "Borrar una oficina específica por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/permisos/": {
+      "get": {
+        "tags": [
+          "Permisos"
+        ],
+        "summary": "Obtiene todos los permisos",
+        "description": "Obtiene una lista de todos los permisos registrados en el sistema.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/permisos/{id}": {
+      "get": {
+        "tags": [
+          "Permisos"
+        ],
+        "summary": "Obtiene un permiso por ID",
+        "description": "Obtiene los detalles de un permiso específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del permiso a obtener"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Permisos"
+        ],
+        "summary": "Borrar un permiso por ID",
+        "description": "Borrar un permiso específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del permiso a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/permisos/restaurar/{id}": {
+      "put": {
+        "tags": [
+          "Permisos"
+        ],
+        "summary": "Restaurar un permiso por ID",
+        "description": "Restaurar un permiso específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del permiso a restaurar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/rols/": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Obtiene todos los roles",
+        "description": "Obtiene una lista de todos los roles registrados en el sistema.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/rols/{id}": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Obtiene un rol por ID",
+        "description": "Obtiene los detalles de un rol específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del rol a obtener"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Borrar un rol por ID",
+        "description": "Borrar un rol específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del rol a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/rols/restaurar/{id}": {
+      "put": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Restaurar un rol por ID",
+        "description": "Restaurar un rol específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del rol a restaurar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/tiposEquipos/": {
+      "get": {
+        "tags": [
+          "Tipos de Equipo"
+        ],
+        "summary": "Obtiene todos los tipos de equipo",
+        "description": "Obtiene una lista de todos los tipos de equipo registrados en el sistema.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/tiposEquipos/{id}": {
+      "get": {
+        "tags": [
+          "Tipos de Equipo"
+        ],
+        "summary": "Obtiene un tipo de equipo por ID",
+        "description": "Obtiene los detalles de un tipo de equipo específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del tipo de equipo a obtener"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Tipos de Equipo"
+        ],
+        "summary": "Borrar un tipo de equipo por ID",
+        "description": "Borrar un tipo de equipo específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del tipo de equipo a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/usuarios/": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtiene todos los usuarios",
+        "description": "Obtiene una lista de todos los usuarios registrados en el sistema.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtiene un usuario por ID",
+        "description": "Obtiene los detalles de un usuario específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del usuario a obtener"
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "description": "Scope para ver diferentes vistas del usuario",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "withPermisosScope",
+              "withRolScope"
+            ]
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Borrar un usuario por ID",
+        "description": "Borrar un usuario específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del usuario a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/usuarios/restaurar/{id}": {
+      "put": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Restaurar un usuario por ID",
+        "description": "Restaurar un usuario específico por su ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del usuario a restaurar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  }
+}

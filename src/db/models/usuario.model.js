@@ -26,11 +26,6 @@ export default class Usuario extends Model {
         allowNull: true,
         unique: true,
       },
-      telefono: {
-        type: DataTypes.STRING(255),
-        allowNull: true,
-        defaultValue: "SIN REGISTRAR"
-      },
       dni: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -62,16 +57,18 @@ export default class Usuario extends Model {
         type: DataTypes.DATE,
         allowNull: true
       },
-      estado: {
-        type: DataTypes.ENUM('activo', 'inactivo', 'bloqueado'),
+      emailVerificado: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: 'activo'
-      },
+        defaultValue: false
+      }
     },
       {
         sequelize,
-        timestamps: true,
-        paranoid: true,
+        modelName: 'Usuario',
+        tableName: 'usuarios',
+        timestamps: true, // Habilita timestamps (createdAt, updatedAt)
+        paranoid: true, // Habilita eliminación suave (soft delete)
       }
     );
   }

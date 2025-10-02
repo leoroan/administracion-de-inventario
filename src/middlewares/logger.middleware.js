@@ -8,8 +8,8 @@ export const addLogger = (req, res, next) => {
   if (res) {
     const originalSend = res.send
     res.send = function (body) {
-      const responseBody = body instanceof Buffer ? 'Buffer' : body
-      const { payload, ...rest } = JSON.parse(responseBody);;
+      const responseBody = body instanceof Buffer ? 'Buffer' : body      
+      const { payload, ...rest } = JSON.parse(responseBody);
 
       const logInfo = {
         statusCode: res.statusCode,
@@ -26,7 +26,7 @@ export const addLogger = (req, res, next) => {
     url,
     query: Object.keys(query).length ? query : 'Empty',
     params: Object.keys(params).length ? params : 'Empty',
-    body: Object.keys(body).length ? body : 'Empty'
+    body: (body && Object.keys(body).length) ? body : 'Empty'
   }
 
   const filteredEmptysLogInfo = Object.fromEntries(

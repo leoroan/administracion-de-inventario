@@ -41,6 +41,15 @@ export default class GenericController {
     }
   }
 
+  async findOrCreate(req, res, next) {
+    try {
+      const [record, created] = await this.service.findOrCreate(req.body);
+      return res.sendSuccess({ record, created });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async update(req, res, next) {
     try {
       await this.service.update(req.params.id, req.body);
@@ -63,6 +72,15 @@ export default class GenericController {
     try {
       const total = await this.service.countRegisters();
       return res.sendSuccess(total)
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async restore(req, res, next) {
+    try {
+      const result = await this.service.restore(req.params.id);
+      res.sendSuccess(result);
     } catch (error) {
       next(error);
     }

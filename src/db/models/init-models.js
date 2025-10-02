@@ -3,7 +3,7 @@ const DataTypes = _sequelize.DataTypes;
 
 import _Usuario from "./usuario.model.js";
 import _Rol from "./rol.model.js";
-import _Sesion from "./session.model.js";
+import _Permiso from "./permiso.model.js";
 import _Oficina from "./oficina.model.js";
 import _Edificio from "./edificio.model.js";
 import _Equipoinformatico from "./equipoinformatico.model.js";
@@ -11,12 +11,12 @@ import _Registromantenimiento from "./registromantenimiento.model.js";
 import _Trazabilidad from "./trazabilidad.model.js";
 import _Modelo from "./modeloEquipo.model.js";
 import _Marca from "./marca.model.js";
-import _Tipoequipo from "./tipoequipo.model.js";
+import _Tipoequipo from "./tipoequipo.model.js"
 
 export default function initModels(sequelize) {
   const Usuario = _Usuario.init(sequelize, DataTypes);
   const Rol = _Rol.init(sequelize, DataTypes);
-  const Sesion = _Sesion.init(sequelize, DataTypes);
+  const Permiso = _Permiso.init(sequelize, DataTypes);
   const Edificio = _Edificio.init(sequelize, DataTypes);
   const Equipoinformatico = _Equipoinformatico.init(sequelize, DataTypes);
   const Registromantenimiento = _Registromantenimiento.init(sequelize, DataTypes);
@@ -27,12 +27,22 @@ export default function initModels(sequelize) {
   const Oficina = _Oficina.init(sequelize, DataTypes);
 
   // Usuario -> Rol
-  Rol.hasMany(Usuario, { as: 'usuarios', foreignKey: { name: 'rolId', allowNull: false, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
   Usuario.belongsTo(Rol, { as: 'rolPrincipal', foreignKey: { name: 'rolId', allowNull: false, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
+  Rol.hasMany(Usuario, { as: 'usuarios', foreignKey: { name: 'rolId', allowNull: false, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
 
-  // Usuario -> Sesion
-  Usuario.hasMany(Sesion, { as: 'sesiones', foreignKey: { name: 'usuarioId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
-  Sesion.belongsTo(Usuario, { as: 'usuario', foreignKey: { name: 'usuarioId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
+  // Usuario -> Permiso 
+  Usuario.belongsToMany(Permiso, { through: 'UsuarioPermiso', as: 'permisos', foreignKey: 'usuarioId', otherKey: 'permisoId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+  Permiso.belongsToMany(Usuario, { through: 'UsuarioPermiso', as: 'usuarios', foreignKey: 'permisoId', otherKey: 'usuarioId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+
+  // tip para : Asignar permiso individual
+  // const user = await models.Usuario.findByPk(5);
+  // const permiso = await models.Permiso.findOne({ where: { accion: 'usuario.update.rol' } });
+  // await user.addPermiso(permiso);
+
+  // // Obtener todos los permisos de un usuario (rol + directos)
+  // const permisosRol = await user.rolPrincipal.getPermisos();
+  // const permisosDirectos = await user.getPermisos();
+  // const permisosTotales = [...permisosRol.map(p => p.accion), ...permisosDirectos.map(p => p.accion)];
 
   // Usuario -> Oficina
   Oficina.hasMany(Usuario, { as: 'empleados', foreignKey: { name: 'oficinaId', allowNull: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
@@ -81,7 +91,7 @@ export default function initModels(sequelize) {
   return {
     Usuario,
     Rol,
-    Sesion,
+    Permiso,
     Oficina,
     Edificio,
     Equipoinformatico,

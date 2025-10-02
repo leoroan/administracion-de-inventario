@@ -11,23 +11,35 @@ import { addLogger } from '../../middlewares/logger.middleware.js'
 import errorHandler from '../../middlewares/errorHandler.middleware.js'
 import initializePassport from '../auth/passport.config.js'
 import { NotFound } from '../error/errors.js'
+import swaggerUi from 'swagger-ui-express'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const routesDir = path.resolve(__dirname, '../../routes');
 
+const swaggerPath = path.resolve(__dirname, '../swagger/swagger-output.json');
+let swaggerFile = null;
+if (fs.existsSync(swaggerPath)) {
+  swaggerFile = JSON.parse(fs.readFileSync(swaggerPath, 'utf8'));
+}
+
 export default async function configureExpress(app) {
   initializePassport();
   app.use(passport.initialize());
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
   const allowedOrigins = [process.env.FRONTEND_ORIGIN];
+
   app.use(cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('NO PERMITIDO POR CORS'));
-      }
-    },
+    origin: process.env.ENV_MODE === 'DESARROLLO'
+      ? '*'
+      : function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('NO PERMITIDO POR CORS'));
+        }
+      },
     credentials: true
   }));
 
@@ -45,7 +57,7 @@ export default async function configureExpress(app) {
     cookie: {
       httpOnly: true,
       secure: process.env.ENV_MODE === 'PRODUCCION' ? true : false,
-      sameSite: process.env.ENV_MODE === 'PRODUCCION' ? "strict" : "lax",
+      // sameSite: "strict",
       maxAge: Number(process.env.SESSION_COOKIE_VTO)
     }
   }));
@@ -57,16 +69,18 @@ export default async function configureExpress(app) {
     const { default: RouteClass } = await import(`../../routes/${file}`);
     const instance = new RouteClass();
 
-    // construye la ruta base a partir del nombre del archivo
-    const baseName = file.replace('.router.js', '').toLowerCase(); // "usuario"
-    const basePath = baseName === 'session' ? '/api/session' : `/api/${baseName}s`; // hack para session
+    const baseName = file.replace('.router.js', '').toLowerCase();
+    const basePath = baseName === 'session' ? '/api/session' : `/api/${baseName}s`;
+
     app.use(basePath, instance.getRouter());
   }
 
   app.use((req, res, next) => {
     next(new NotFound('Page not found'));
   });
+
   app.use(errorHandler);
+
   app.get('/status', (req, res) => {
     res.sendStatus(200);
   });

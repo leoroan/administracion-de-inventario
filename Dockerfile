@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:lts-alpine
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY . .
@@ -7,5 +7,3 @@ RUN npm install --omit=dev
 EXPOSE 8082
 
 CMD ["npm", "start"]
-
-# docker run -p 3000:8082 be-back-tst &S

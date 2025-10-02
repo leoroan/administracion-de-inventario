@@ -1,4 +1,4 @@
-import { SequelizeError } from "../../../config/error/errors.js";
+import { NotFound, SequelizeError } from "../../../config/error/errors.js";
 
 export default class GenericDAO {
   constructor(model) {
@@ -18,9 +18,29 @@ export default class GenericDAO {
     }
   }
 
+  async findOne(data, scope) {
+    return await this.model.scope(scope).findOne(data);
+  }
+
   async findById(id, scope) {
     scope = Array.isArray(scope) ? scope : scope.split(',');
     return await this.model.scope(scope).findByPk(id)
+  }
+
+  async findOrCreate(options = {}) {
+    let transaction;
+    try {
+      transaction = await this.model.sequelize.transaction();
+      const [instance, created] = await this.model.findOrCreate({
+        ...options,
+        transaction,
+      });
+      await transaction.commit();
+      return [instance, created];
+    } catch (error) {
+      if (transaction) await transaction.rollback();
+      throw new Error(`Error en findOrCreate: ${error.message}`);
+    }
   }
 
 
@@ -58,7 +78,19 @@ export default class GenericDAO {
   async countRegisters() {
     return await this.model.count();
   }
-  async findOne(data, scope) {
-    return await this.model.scope(scope).findOne(data);
+
+  async restore(id) {
+    let transaction;
+    try {
+      transaction = await this.model.sequelize.transaction();
+      const record = await this.model.findByPk(id, { paranoid: false });
+      if (!record) throw new NotFound(`${this.model.name} no encontrado`);
+      await record.restore({ transaction });
+      await transaction.commit();
+      return record;
+    } catch (error) {
+      if (transaction) await transaction.rollback();
+      throw SequelizeError.handleSequelizeError(error, `Error restaurando ${this.model.name}`);
+    }
   }
 }

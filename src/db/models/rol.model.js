@@ -5,21 +5,14 @@ export default class Rol extends Model {
   static init(sequelize, DataTypes) {
     return super.init({
       nombre: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(25),
+        allowNull: false,
+        unique: true,
       },
-      nivel: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      descripcion: {
-        type: DataTypes.STRING(255),
-        allowNull: true
-      },
-      permisos: {
+      defaultPermisos: {
         type: DataTypes.JSON,
         allowNull: true,
-        defaultValue: []
-      }
+      },
     }, {
       sequelize,
       modelName: 'Rol',

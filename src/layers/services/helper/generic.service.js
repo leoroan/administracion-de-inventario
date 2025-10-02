@@ -10,6 +10,10 @@ export default class GenericService {
     return await this.dao.create(data);
   }
 
+  async findOne(options, scope = 'defaultScope') {
+    return await this.dao.findOne(options, scope);
+  }
+
   async findById(id, scope = 'defaultScope') {
     if (!id) {
       throw new BadRequest('El ID es obligatorio');
@@ -32,36 +36,71 @@ export default class GenericService {
     return record;
   }
 
+  async findAll(queryParams = {}) {
+    const {
+      page = 1,
+      limit = 10,
+      order = 'id',
+      direction = 'ASC',
+      scope = 'defaultScope',
+      ...filters
+    } = queryParams;
 
-  async findAll(params) {
-    const page = parseInt(params.page) || 1;
-    const limit = parseInt(params.limit) || 10;
-    const offset = (page - 1) * limit;
-    const scope = params.scope || 'defaultScope';
-    const filters = { ...params };
-    delete filters.page;
-    delete filters.limit;
-    delete filters.scope;
+    const offset = (parseInt(page) - 1) * limit;
 
     const where = {};
 
-    for (const [key, value] of Object.entries(filters)) {
-      if (key.endsWith('__eq')) {
-        const field = key.replace('__eq', '');
-        where[field] = { [Op.eq]: value };
-      } else if (key.endsWith('__like')) {
-        const field = key.replace('__like', '');
-        where[field] = { [Op.like]: `%${value}%` };
-      } else if (key.endsWith('__null')) {
-        const field = key.replace('__null', '');
-        where[field] = value === 'true' ? { [Op.is]: null } : { [Op.not]: null };
+    // filtros simples y con operadores
+    for (const key in filters) {
+      if (filters[key] === undefined || filters[key] === '') continue;
+      if (!key.includes('__')) {
+        where[key] = filters[key];
       } else {
-        where[key] = { [Op.like]: `%${value}%` };
+        const [field, operator] = key.split('__');
+        const opMap = {
+          gt: Op.gt, lt: Op.lt, gte: Op.gte, lte: Op.lte,
+          like: Op.like, ilike: Op.iLike, ne: Op.ne,
+          in: Op.in, notIn: Op.notIn, between: Op.between, notBetween: Op.notBetween,
+          contains: Op.contains, startsWith: Op.startsWith, endsWith: Op.endsWith,
+        };
+        if (opMap[operator]) {
+          where[field] = where[field] || {};
+          where[field][opMap[operator]] = filters[key];
+        }
       }
     }
 
-    return await this.dao.findAll({ offset, limit, where }, scope);
+    const options = {
+      where,
+      limit: parseInt(limit),
+      offset,
+      order: [[order, direction.toUpperCase()]],
+      distinct: true, // importante si hay includes
+    };
+
+    try {
+      const results = await this.dao.findAll(options, scope);
+      return {
+        data: results.rows,
+        pagination: {
+          total: results.count,
+          pages: Math.ceil(results.count / limit),
+          current: parseInt(page),
+          limit: parseInt(limit),
+        },
+      };
+    } catch (error) {
+      throw new NotFound(`Error al buscar registros: ${error.message}`);
+    }
   }
+
+  async findOrCreate(options = {}) {
+    if (!options.where) {
+      throw new BadRequest("El where es obligatorio");
+    }
+    return this.dao.findOrCreate(options);
+  }
+
   async update(id, data) {
     const oldRecord = await this.findById(id);
     const updated = await this.dao.update(oldRecord, data);
@@ -77,9 +116,15 @@ export default class GenericService {
       throw new NotFound(`${this.dao.model.name} con ID ${id} no encontrado para eliminar`);
     }
     return deleted;
+
   }
 
   async countRegisters() {
     return await this.dao.countRegisters();
   }
+
+  async restore(id) {
+    return await this.dao.restore({ where: { id } });
+  }
+
 }

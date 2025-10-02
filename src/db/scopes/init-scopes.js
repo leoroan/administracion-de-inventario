@@ -5,4 +5,6 @@ import usuarioScope from "./usuario.scope.js";
 export default function initScopes() {
   models.Usuario.addScope('defaultScope', usuarioScope.defaultScope, { override: true });
   models.Usuario.addScope('loginScope', usuarioScope.loginScope);
+  models.Usuario.addScope('withPermisosScope', usuarioScope.withPermisosScope);
+  models.Usuario.addScope('withRolScope', usuarioScope.withRolScope);
 }

@@ -1,14 +1,10 @@
 import passport from 'passport';
-import { generateJWToken } from "../utils/jwt.js";
 import CustomRouter from "./custom/custom.router.js";
+import { generateJWToken } from "../utils/jwt.js";
 import { devLogger } from '../config/logger/logger.config.js';
 import { Conflict, InternalServerError, Unauthorized } from '../config/error/errors.js';
 
-
 export default class sessionExtendRouter extends CustomRouter {
-  /**
-   * api:/api/session
-   */
   constructor() {
     super();
   }
@@ -16,21 +12,8 @@ export default class sessionExtendRouter extends CustomRouter {
   init() {
     super.init();
 
-    this.post('/register', ["DIRECTOR", "ADMIN"], passport.authenticate('jwt'), (req, res, next) => {
-      passport.authenticate('register', (err, user, info) => {
-        if (err) {
-          devLogger.debug("Error en Passport Authenticate:", err);
-          return next(new Unauthorized('Error en la creación de nuevo usuario registrado', { details: err.message }));
-        }
-        if (!user) {
-          return next(new Conflict(info.message));
-        }
-        return res.sendSuccess({ message: 'Usuario registrado correctamente' });
-      })(req, res, next);
-    });
-
-    // LOGIN
-    this.post('/login', ['PUBLIC'], async (req, res, next) => {
+    this.post('/login', [], async (req, res, next) => {
+      // #swagger.ignore = true
       passport.authenticate('login', async (err, user, info) => {
         if (err) {
           devLogger.debug("Error en Passport Authenticate:", err);
@@ -46,9 +29,9 @@ export default class sessionExtendRouter extends CustomRouter {
             return next(new InternalServerError('Error al iniciar sesión', { details: err.message }));
           }
           try {
-            const { id, username, nombre, apellido, email, rol } = user;
-            const access_token = generateJWToken({ id, username, nombre, apellido, email, rol });
+            const access_token = generateJWToken(user);
             res.cookie('jwtCookieToken', access_token, { httpOnly: true });
+
             return res.sendSuccess({ token: access_token });
           } catch (error) {
             devLogger.debug('Error al intentar loggearse:', error);
@@ -58,8 +41,8 @@ export default class sessionExtendRouter extends CustomRouter {
       })(req, res, next);
     });
 
-    // LOGOUT
-    this.post('/logout', ['PUBLIC'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/logout', [], async (req, res, next) => {
+      // #swagger.ignore = true
       try {
         if (!req.user) {
           return next(new Unauthorized('No hay ningún usuario autenticado conectado.'));
@@ -77,6 +60,25 @@ export default class sessionExtendRouter extends CustomRouter {
         devLogger.debug('Error al cerrar sesión:', error);
         return next(error);
       }
+    });
+
+    this.post('/register', ['session.create.register'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.ignore = true
+      passport.authenticate('register', (err, user, info) => {
+        if (err) {
+          devLogger.debug("Error en Passport Authenticate:", err);
+          return next(new Unauthorized('Error en la creación de nuevo usuario registrado', { details: err.message }));
+        }
+        if (!user) {
+          return next(new Conflict(info.message));
+        }
+        const { usuario, emailFailed } = user;
+        const mensajeBase = "Usuario registrado correctamente";
+        const mensaje = emailFailed
+          ? `${mensajeBase}, pero no se pudo enviar el email de verificación. Por favor, reenvíelo desde su perfil.`
+          : mensajeBase;
+        return res.sendSuccess({ message: mensaje });
+      })(req, res, next);
     });
   }
 }

@@ -5,15 +5,7 @@
  - [sqids](https://sqids.org/javascript) 
 
 
-# Especificaciones del Proyecto: Nueva Página Web de la VTV
-
----
-
-## Tecnologías Principales
-- **Backend:** Node.js y Express + Sequelize(mysql)
-- **Base de Datos:** MySQL
-- **Email:** NodeMailer
-- **Contenedores:** Docker
+# Especificaciones del Proyecto: Nueva Página Web de soporte-mintrp
 
 ---
 

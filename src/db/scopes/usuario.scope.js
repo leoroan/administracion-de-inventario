@@ -1,6 +1,10 @@
 export default {
   defaultScope: {
-    attributes: ['id', 'username', 'nombre', 'apellido', 'email', 'bloqueado', 'ultimoIngreso', 'rolId', 'oficinaId'],
+    attributes: ['id', 'nombre', 'apellido', 'username', 'email', 'dni', 'bloqueado', 'ultimoIngreso', 'updatedAt', 'emailVerificado'],
+  },
+
+  loginScope: {
+    attributes: ['id', 'dni', 'username', 'nombre', 'apellido', 'email', 'bloqueado', 'ultimoIngreso', 'password', 'emailVerificado', 'cantidadIntentosLoggin', 'bloqueoExpiration'],
     include: [
       {
         association: 'rolPrincipal',
@@ -9,8 +13,9 @@ export default {
       },
     ],
   },
-  loginScope: {
-    attributes: ['id', 'username', 'nombre', 'apellido', 'email', 'bloqueado', 'ultimoIngreso', 'password'],
+
+  withRolScope: {
+    attributes: ['id', 'nombre', 'apellido', 'username', 'email', 'dni', 'bloqueado', 'ultimoIngreso', 'updatedAt'],
     include: [
       {
         association: 'rolPrincipal',
@@ -18,6 +23,24 @@ export default {
         attributes: ['id', 'nombre'],
       },
     ],
+  },
 
+  withPermisosScope: {
+    attributes: ['id', 'nombre', 'apellido', 'username', 'email', 'dni', 'bloqueado', 'ultimoIngreso', 'updatedAt'],
+    include: [
+      {
+        association: 'rolPrincipal',
+        as: 'rolPrincipal',
+        attributes: ['id', 'nombre'],
+      },
+      {
+        association: 'permisos',
+        as: 'permisos',
+        attributes: ['accion', 'descripcion'],
+        through: { attributes: [] }
+      }
+    ],
   },
 };
+
+

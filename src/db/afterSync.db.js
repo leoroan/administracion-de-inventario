@@ -1,48 +1,120 @@
-import fs from 'fs';
-import path from 'path';
-import csv from 'csv-parser';
-import { models } from "../config/db/sequelize.config.js"
+// db/afterSync.js
+import { models } from "../config/db/sequelize.config.js";
 import { devLogger } from "../config/logger/logger.config.js";
 import { createHash } from "../utils/bcrypt.js";
-import { rolesPredeterminados } from './db_defaults/rolesPredeterminados.def.js';
+import { rolesPermisos } from "../utils/rolesPermisos.config.js";
 import { edificiosPredeterminados } from './db_defaults/edificiosPredeterminados.def.js';
 import { oficinasPredeterminadas } from './db_defaults/oficinasPredeterminadas.def.js';
 import { marcasYmodelosPredeterminados } from './db_defaults/marcasYmodelosPredeterminados.def.js';
 import { tiposDeEquiposPredeterminados } from './db_defaults/tiposDeEquiposPredeterminados.def.js';
 
 export const afterSync = async () => {
-  await addRoles();
-  await addAdmin();
-  await addTipos();
-  await addEdificios();
-  await addOficinas();
-  await addMarcas();
-  devLogger.info('[DATOS REQUERIDOS, PRECARGADOS EN BDD]: ✅  Sincronizados.');
-}
+  try {
+    await addRoles();
+    await addPermisos();
+    const adminUser = await addAdmin();
+    await assignAllPermisosToAdmin(adminUser);
+    await addTipos();
+    await addEdificios();
+    await addOficinas();
+    await addMarcas();
+
+    devLogger.info('✅ [DATOS PRECARGADOS] Roles, permisos y admin listos');
+  } catch (err) {
+    devLogger.error("💥 [afterSync] Error precargando datos:", err);
+    throw err;
+  }
+};
+
+// -------------------- Funciones auxiliares --------------------
 
 const addRoles = async () => {
-  for (const rol of rolesPredeterminados) {
-    await models.Rol.findOrCreate({ where: { nombre: rol.nombre }, defaults: rol });
+  const roleNames = Object.keys(rolesPermisos);
+
+  for (const nombre of roleNames) {
+    const defaultPermisos = rolesPermisos[nombre];
+    await models.Rol.findOrCreate({
+      where: { nombre },
+      defaults: { nombre, defaultPermisos },
+    });
   }
-}
+};
+
+const addPermisos = async () => {
+  const manualResources = ["Log", "Session", "Health"];
+  const extraPermisos = {
+    Usuario: ["update.restore"],
+    Session: ["create.register"],
+    Log: ["read.list", "read.file", "read.download"],
+  };
+  const accionesBase = ["create", "read", "update", "delete"];
+
+  const modelNames = Object.keys(models).filter(
+    (m) => ![].includes(m)
+  );
+  const allResources = [...modelNames, ...manualResources];
+
+  for (const resource of allResources) {
+    for (const accion of accionesBase) {
+      const permKey = `${resource.toLowerCase()}.${accion}`;
+      
+      await models.Permiso.findOrCreate({
+        where: { accion: permKey },
+        defaults: {
+          accion: permKey,
+          descripcion: `Permiso para ${accion.toUpperCase()} en ${resource}`,
+        },
+      });
+    }
+    if (extraPermisos[resource]) {
+      for (const extra of extraPermisos[resource]) {
+        const permKey = `${resource.toLowerCase()}.${extra}`;
+        await models.Permiso.findOrCreate({
+          where: { accion: permKey },
+          defaults: {
+            accion: permKey,
+            descripcion: `Permiso para ${extra.replace(/\./g, " ").toUpperCase()} en ${resource}`,
+          },
+        });
+      }
+    }
+  }
+};
 
 const addAdmin = async () => {
-  const [rolAdmin] = await models.Rol.findOrCreate({ where: { nombre: 'ADMIN' }, defaults: { nivel: 1 } });
-  await models.Usuario.findOrCreate({
-    where: { nombre: 'Administrador' },
+  const [rolAdmin] = await models.Rol.findOrCreate({ where: { nombre: "ADMIN" } });
+
+  const [adminUser] = await models.Usuario.findOrCreate({
+    where: { username: process.env.ADMIN_USER },
     defaults: {
       username: process.env.ADMIN_USER,
       password: createHash(process.env.ADMIN_PASS),
       email: process.env.ADMIN_EMAIL,
-      nombre: 'Administrador',
-      apellido: 'General',
-      dni: '00000000',
-      rolId: rolAdmin.dataValues.id
-    }
+      nombre: process.env.ADMIN_USER,
+      apellido: "admin-User",
+      dni: "00000000",
+      rolId: rolAdmin.id,
+      emailVerificado: true,
+    },
   });
-  devLogger.info('[USUARIO DEV]:✅ :[' + process.env.ADMIN_USER + ']');
-}
 
+  devLogger.info(`✅ [USUARIO ADMIN] username: \x1b[32m[${process.env.ADMIN_USER}]\x1b[0m`);
+  return adminUser;
+};
+
+const assignAllPermisosToAdmin = async (adminUser) => {
+  if (!adminUser) return;
+
+  const allPerms = await models.Permiso.findAll();
+
+  const CHUNK_SIZE = 50;
+  for (let i = 0; i < allPerms.length; i += CHUNK_SIZE) {
+    const chunk = allPerms.slice(i, i + CHUNK_SIZE);
+    await adminUser.addPermisos(chunk);
+  }
+
+  // devLogger.info(`✅ [ADMIN PERMISOS] Asignados ${allPerms.length} permisos`);
+};
 
 const addEdificios = async () => {
   for (const edificio of edificiosPredeterminados) {
@@ -94,4 +166,4 @@ const addMarcas = async () => {
       });
     }
   }
-};
+}

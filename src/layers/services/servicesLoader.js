@@ -1,16 +1,8 @@
-// import { models } from "../../config/db/sequelize.config.js";
-
-// import UsuarioDAO from "../../layers/daos/usuario.dao.js";
-// import UsuarioService from "../services/usuario.service.js";
-
-// // the service
-// const usuarioDAO = new UsuarioDAO(models.Usuario);
-// export const usuarioService = new UsuarioService(usuarioDAO)
-
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import { models } from '../../config/db/sequelize.config.js';
+import { devLogger } from '../../config/logger/logger.config.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -42,7 +34,7 @@ const load = async () => {
     const model = models[modelName];
 
     if (!model) {
-      console.warn(`⚠️ Modelo ${modelName} no encontrado en Sequelize. Saltando ${base}`);
+      devLogger.info(`⚠️ Modelo ${modelName} no encontrado en Sequelize. Saltando ${base}`);
       continue;
     }
 
@@ -50,9 +42,13 @@ const load = async () => {
     const service = new ServiceClass(dao);
 
     serviceInstances[`${base}Service`] = service;
+    
   }
+  // devLogger.info('✅ Servicios cargados:', serviceInstances);
 };
 
-await load();
+(async () => {
+  await load();
+})();
 
 export default serviceInstances;

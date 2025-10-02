@@ -1,8 +1,8 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import jwtStrategy from 'passport-jwt';
-import { models } from "../../config/db/sequelize.config.js";
-import { createHash, isValidPassword } from '../../utils/bcrypt.js';
+import serviceInstances from '../../layers/services/servicesLoader.js';
+import { isValidPassword } from '../../utils/bcrypt.js';
 import { PRIVATE_KEY } from '../../utils/jwt.js';
 import { devLogger } from '../logger/logger.config.js';
 import { Op } from 'sequelize';
@@ -24,45 +24,76 @@ const initializePassport = () => {
     }
   ));
 
-  passport.use('register', new localStrategy({ passReqToCallback: true },
-    async (req, username, password, done) => {
-      const { nombre, apellido, email } = req.body;
+  passport.use("register", new localStrategy({ passReqToCallback: true }, async (req, username, password, done) => {
+    const { nombre, apellido, email, dni } = req.body;
+
+    try {
+      const exist = await serviceInstances.usuarioService.findOne({
+        where: { [Op.or]: [{ email }, { username }] },
+      });
+      if (exist)
+        return done(null, false, { message: "Nombre de usuario o correo ya existentes!" });
+
+      const userData = {
+        username,
+        password,
+        nombre,
+        apellido,
+        email,
+        dni,
+      };
+      const usuario = await serviceInstances.usuarioService.create(userData);
+      await serviceInstances.usuarioService.generateVerificationToken(usuario);
+
+      let emailError = null;
       try {
-        const exist = await models.Usuario.findOne({ where: { [Op.or]: [{ email: email }, { username: username }] } });
-        if (exist) return done(null, false, { message: 'Nombre de usuario o direccion de correo electronico ya existentes!' });
-        const [rolDefault] = await models.Rol.findOrCreate({ where: { nombre: 'ADMINISTRATIVO' } });
-        const user = { username, password: createHash(password), nombre, apellido, email, rolId: rolDefault.dataValues.id }
-        const result = await models.Usuario.create(user);
-        return done(null, result)
-      } catch (error) {
-        return done(error);
+        await serviceInstances.usuarioService.sendVerificationEmail(usuario);
+      } catch (err) {
+        emailError = err;
       }
+
+      return done(null, { usuario, emailFailed: !!emailError });
+    } catch (error) {
+      return done(error);
     }
-  ))
+  }));
 
   passport.use('login', new localStrategy({ passReqToCallback: true, usernameField: 'username' },
     async (req, username, password, done) => {
       try {
-        const user = await models.Usuario.scope('loginScope').findOne({ where: { [Op.or]: [{ email: username }, { username: username }] } });
+        const user = await serviceInstances.usuarioService.findOne(
+          { where: { [Op.or]: [{ email: username }, { username: username }] } },
+          'loginScope'
+        );
+
         if (!user) {
           devLogger.debug("No existe un usuario con este nombre de usuario: " + username);
           return done(null, false);
         }
+
+        if (!user.emailVerificado) {
+          return done(null, false, { message: 'Debes verificar tu correo antes de poder iniciar sesión.' });
+        }
+
         if (!isValidPassword(user.dataValues, password)) {
           devLogger.debug("Credenciales invalidas para el usuario: " + username);
           return done(null, false);
         }
+        if (user.bloqueado) {
+          return done(null, false, { message: 'Usuario bloqueado' });
+        }
         await user.update({ cantidadIntentosLoggin: 1, ultimoIngreso: new Date().toISOString() });
         const userDTO = {
-          id: user.dataValues.id,
-          username: user.dataValues.username,
-          nombre: user.dataValues.nombre,
-          apellido: user.dataValues.apellido,
-          email: user.dataValues.email,
-          rol: user.dataValues.rolPrincipal.dataValues.nombre,
-          bloqueado: user.dataValues.bloqueado,
-          ultimoIngreso: user.dataValues.ultimoIngreso
+          id: user.id,
+          username: user.username,
+          nombre: user.nombre,
+          apellido: user.apellido,
+          email: user.email,
+          rol: user.rolPrincipal.nombre,
+          bloqueado: user.bloqueado,
+          ultimoIngreso: user.ultimoIngreso
         };
+
         return done(null, userDTO);
       } catch (error) {
         return done(error);
@@ -79,7 +110,7 @@ const initializePassport = () => {
 
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await models.Usuario.findByPk(id);
+      const user = await serviceInstances.usuarioService.findById(id);
       if (!user) {
         return done(new Error('Usuario no encontrado'));
       }

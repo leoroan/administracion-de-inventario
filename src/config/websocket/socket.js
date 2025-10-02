@@ -1,7 +1,5 @@
 import { Server } from "socket.io";
 import { devLogger } from "../logger/logger.config.js";
-import { taskManager } from "../taskManager/taskManager.js";
-
 class SocketManager {
   constructor() {
     this.io = null;
@@ -24,7 +22,6 @@ class SocketManager {
 
       socket.on("cancel", (taskId) => {
         devLogger.debug(`Solicitud de cancelación recibida para taskId: ${taskId}`);
-        taskManager.cancelTask(taskId);  // Llama a cancelTask en el TaskManager
         this.emitToTask(taskId, "task-canceled", { taskId });  // Emite que la tarea fue cancelada
       });
 

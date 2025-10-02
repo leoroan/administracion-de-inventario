@@ -15,6 +15,13 @@ const sequelize = new Sequelize(database, username, password, {
   port: port || 3306,
   dialect: dialect,
   timezone: '-03:00',
+  define: {
+    timestamps: true,
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt',
+    paranoid: true
+  },
   logging: false,
   dialectOptions: {
     dateStrings: true
