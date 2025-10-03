@@ -15,6 +15,9 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
   init() {
     super.init();
 
+    // const service = getService('equipoinformaticoService');
+    // this.controller = new EquipoInformaticoController(service);
+
     this.get('/', ['equipoinformatico.read'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Equipos Informaticos']
       // #swagger.path = '/EquipoInformaticos/' 
@@ -25,8 +28,6 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
             "bearerAuth": []
         }] 
       */
-      console.log("servicesLoader:", services);
-      console.log("equipoinformaticoService directo:", services.equipoinformaticoService);
 
       this.controller.findAll(req, res, next);
     });

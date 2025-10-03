@@ -1,7 +1,7 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import jwtStrategy from 'passport-jwt';
-import serviceInstances from '../../layers/services/servicesLoader.js';
+import services from '../../layers/services/servicesLoader.js';
 import { isValidPassword } from '../../utils/bcrypt.js';
 import { PRIVATE_KEY } from '../../utils/jwt.js';
 import { devLogger } from '../logger/logger.config.js';
@@ -28,7 +28,7 @@ const initializePassport = () => {
     const { nombre, apellido, email, dni } = req.body;
 
     try {
-      const exist = await serviceInstances.usuarioService.findOne({
+      const exist = await services.usuarioService.findOne({
         where: { [Op.or]: [{ email }, { username }] },
       });
       if (exist)
@@ -42,12 +42,12 @@ const initializePassport = () => {
         email,
         dni,
       };
-      const usuario = await serviceInstances.usuarioService.create(userData);
-      await serviceInstances.usuarioService.generateVerificationToken(usuario);
+      const usuario = await services.usuarioService.create(userData);
+      await services.usuarioService.generateVerificationToken(usuario);
 
       let emailError = null;
       try {
-        await serviceInstances.usuarioService.sendVerificationEmail(usuario);
+        await services.usuarioService.sendVerificationEmail(usuario);
       } catch (err) {
         emailError = err;
       }
@@ -61,7 +61,7 @@ const initializePassport = () => {
   passport.use('login', new localStrategy({ passReqToCallback: true, usernameField: 'username' },
     async (req, username, password, done) => {
       try {
-        const user = await serviceInstances.usuarioService.findOne(
+        const user = await services.usuarioService.findOne(
           { where: { [Op.or]: [{ email: username }, { username: username }] } },
           'loginScope'
         );
@@ -110,7 +110,7 @@ const initializePassport = () => {
 
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await serviceInstances.usuarioService.findById(id);
+      const user = await services.usuarioService.findById(id);
       if (!user) {
         return done(new Error('Usuario no encontrado'));
       }

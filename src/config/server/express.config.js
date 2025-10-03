@@ -12,6 +12,7 @@ import errorHandler from '../../middlewares/errorHandler.middleware.js'
 import initializePassport from '../auth/passport.config.js'
 import { NotFound } from '../error/errors.js'
 import swaggerUi from 'swagger-ui-express'
+import { loadServices } from '../../layers/services/servicesLoader.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,6 +65,8 @@ export default async function configureExpress(app) {
   app.use(passport.session());
 
   const routeFiles = fs.readdirSync(routesDir).filter(file => file.endsWith('.router.js'));
+
+  await loadServices();
 
   for (const file of routeFiles) {
     const { default: RouteClass } = await import(`../../routes/${file}`);

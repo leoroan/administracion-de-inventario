@@ -6,7 +6,6 @@ import { sequelize } from './config/db/sequelize.config.js';
 import { devLogger } from './config/logger/logger.config.js';
 import { socketManager } from './config/websocket/socket.js';
 import { afterSync } from './db/afterSync.db.js';
-import serviceInstances from './layers/services/servicesLoader.js';
 
 const app = express();
 const server = createServer(app);
