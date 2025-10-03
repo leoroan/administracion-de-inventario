@@ -1,14 +1,14 @@
 import GenericService from './helper/generic.service.js';
-import { models } from '../../config/db/sequelize.config.js';
 import { createHash } from '../../utils/bcrypt.js';
 import { BadRequest, NotFound } from '../../config/error/errors.js';
 import { verificarUsuarioTemplate } from '../../emails/templates/varificar.usuario.js';
 import emailSenderService from '../../emails/helper/emailSender.service.js';
-import serviceInstances from '../../layers/services/servicesLoader.js';
+import services from '../../layers/services/servicesLoader.js';
 
 const CHUNK_SIZE = 50;
 const CANT_HORAS_EXPIRATION_REGISTER = parseInt(process.env.CANT_HORAS_EXPIRATION_REGISTER) || 24;
 const frontEndUrl = process.env.FRONTEND_ORIGIN;
+const rolDefaultName = process.env.ROL_DEFAULT_NAME || "ADMINISTRATIVO";
 
 export default class UsuarioService extends GenericService {
   constructor(dao) {
@@ -23,8 +23,8 @@ export default class UsuarioService extends GenericService {
     }
 
     if (!userData.rolId) {
-      const [rolDefault] = await serviceInstances.rolService.findOrCreate({
-        where: { nombre: "ADMINISTRATIVO" },
+      const [rolDefault] = await services.rolService.findOrCreate({
+        where: { nombre: rolDefaultName },
       });
       userData.rolId = rolDefault.id;
     }
@@ -64,7 +64,7 @@ export default class UsuarioService extends GenericService {
     const defaultPerms = rol.defaultPermisos || [];
     if (!defaultPerms.length) return;
 
-    const allPerms = await models.Permiso.findAll();
+    const allPerms = await services.permisoService.findAll();
     let permisosAsignar = [];
 
     if (defaultPerms.includes("*")) {
@@ -114,10 +114,35 @@ export default class UsuarioService extends GenericService {
   async asignarOficina(idUsuario, idOficina) {
     const usuario = await this.dao.findById(idUsuario);
     if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
-    const oficina = await models.Oficina.findByPk(idOficina);
+    const oficina = await services.oficinaService.findById(idOficina);
     if (!oficina) throw new NotFound(`Oficina con ID ${idOficina} no encontrada`);
     await usuario.setOficina(oficina);
     return usuario;
   }
 
+  async agregarEquipoAsignado(idUsuario, idEquipo) {
+    const usuario = await this.dao.findById(idUsuario);
+    if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
+    const equipo = await services.equipoinformaticoService.findById(idEquipo);
+    if (!equipo) throw new NotFound(`Equipo con ID ${idEquipo} no encontrado`);
+    await usuario.addEquipoAsignado(equipo);
+    return usuario;
+  }
+
+  async agregarEquiposAsignados(idUsuario, idsEquipos) {
+    const usuario = await this.dao.findById(idUsuario);
+    if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
+    if (!Array.isArray(idsEquipos)) {
+      throw new BadRequest('los ids de equipos deben ser un array');
+    }
+    if (idsEquipos.length === 0) {
+      throw new BadRequest('El array de equipos no puede estar vacío');
+    }
+    const equipos = await services.equipoinformaticoService.findAll({
+      where: { id: idsEquipos }
+    });
+    if (!equipos.length) throw new NotFound(`No se encontraron equipos con los IDs proporcionados`);
+    await usuario.addEquiposAsignados(equipos);
+    return usuario;
+  }
 }
