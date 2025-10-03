@@ -1,5 +1,4 @@
 import GenericController from "./helper/generic.controller.js";
-import generateVerificationToken from "../../layers/services/usuario.service.js";
 export default class UsuarioController extends GenericController {
   constructor(service) {
     super(service);
@@ -30,8 +29,12 @@ export default class UsuarioController extends GenericController {
       if (!user) return res.sendSuccess("Usuario no encontrado");
       if (user.emailVerificado) return res.sendSuccess("Email ya verificado");
       const updatedUser = await this.service.generateVerificationToken(user);
-      await this.service.sendVerificationEmail(updatedUser);
-      res.sendSuccess("Email de verificación reenviado");
+      try {
+        await this.service.sendVerificationEmail(updatedUser);
+        return res.sendSuccess("Email de verificación reenviado");
+      } catch (err) {
+        return res.sendSuccess(`Error al enviar el email: ${err.message}`);
+      }
     } catch (error) {
       next(error);
     }

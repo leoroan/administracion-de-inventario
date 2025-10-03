@@ -41,6 +41,28 @@ export default {
       }
     ],
   },
+
+  withOficinaScope: {
+    attributes: ['id', 'nombre', 'apellido', 'username', 'email', 'dni', 'bloqueado', 'ultimoIngreso', 'updatedAt'],
+    include: [
+      {
+        association: 'oficina',
+        as: 'oficina',
+        attributes: ['id', 'nombre']
+      }
+    ]
+  },
+
+  withEquipoInformaticoScope: {
+    attributes: ['id', 'nombre', 'apellido', 'username', 'email', 'dni', 'bloqueado', 'ultimoIngreso', 'updatedAt'],
+    include: [
+      {
+        association: 'equiposAsignados',
+        as: 'equiposAsignados',
+        attributes: ['id', 'mt', 'numeroDeSerie', 'estado', 'updatedAt'],
+      }
+    ]
+  },
 };
 
 

@@ -85,7 +85,7 @@ export default class UsuarioService extends GenericService {
     }
   };
 
-  async generateVerificationToken(user) {
+  async generateVerificationToken(user) {    
     if (!user) throw new NotFound("Usuario no definido o no encontrado");
     const token = createHash(user.email + Date.now().toString());
     const tokenExpiration = new Date(Date.now() + 1000 * 60 * 60 * CANT_HORAS_EXPIRATION_REGISTER);
@@ -109,6 +109,15 @@ export default class UsuarioService extends GenericService {
       verificacionTemplate,
       process.env.EMPRESA_NOMBRE
     );
+  }
+
+  async asignarOficina(idUsuario, idOficina) {
+    const usuario = await this.dao.findById(idUsuario);
+    if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
+    const oficina = await models.Oficina.findByPk(idOficina);
+    if (!oficina) throw new NotFound(`Oficina con ID ${idOficina} no encontrada`);
+    await usuario.setOficina(oficina);
+    return usuario;
   }
 
 }
