@@ -19,8 +19,10 @@ export default class sessionExtendRouter extends CustomRouter {
           devLogger.debug("Error en Passport Authenticate:", err);
           return next(new InternalServerError('Error en autenticación', { details: err.message }));
         }
+
         if (!user) {
-          return next(new Unauthorized('Usuario o contraseña incorrectos.'));
+          const msg = info?.message || 'Usuario o contraseña incorrectos.';
+          return next(new Unauthorized(msg));
         }
 
         req.logIn(user, async (err) => {
@@ -31,7 +33,6 @@ export default class sessionExtendRouter extends CustomRouter {
           try {
             const access_token = generateJWToken(user);
             res.cookie('jwtCookieToken', access_token, { httpOnly: true });
-
             return res.sendSuccess({ token: access_token });
           } catch (error) {
             devLogger.debug('Error al intentar loggearse:', error);

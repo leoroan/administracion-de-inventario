@@ -70,7 +70,7 @@ const initializePassport = () => {
           devLogger.debug("No existe un usuario con este nombre de usuario: " + username);
           return done(null, false);
         }
-
+        
         if (!user.emailVerificado) {
           return done(null, false, { message: 'Debes verificar tu correo antes de poder iniciar sesión.' });
         }

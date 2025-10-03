@@ -21,17 +21,14 @@ export default class EquipoInformatico extends Model {
       },
       estado: {
         type: DataTypes.ENUM('activo', 'disponible', 'mantenimiento', 'baja'),
-        allowNull: false,
-        defaultValue: 'activo'
+        defaultValue: 'disponible'
       },
       disponibilidad:{
         type: DataTypes.ENUM('asignado', 'no disponible', 'disponible'),
-        allowNull: false,
         defaultValue: 'disponible'
       },
       observaciones: {
         type: DataTypes.TEXT,
-        allowNull: true,
         defaultValue: 'SIN OBSERVACIONES'
       },
       remitoNro: {

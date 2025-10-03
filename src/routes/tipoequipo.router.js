@@ -15,7 +15,7 @@ export default class TipoEquipoExtendRouter extends CustomRouter {
   init() {
     super.init();
 
-    this.get('/', ['tipoEquipo.read'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.get('/', ['tipoequipo.read'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Tipos de Equipo']
       // #swagger.path = '/tiposEquipos/' 
       // #swagger.summary = 'Obtiene todos los tipos de equipo'
@@ -28,7 +28,7 @@ export default class TipoEquipoExtendRouter extends CustomRouter {
       this.controller.findAll(req, res, next);
     });
 
-    this.get('/:id', ['tipoEquipo.read'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.get('/:id', ['tipoequipo.read'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Tipos de Equipo']
       // #swagger.path = '/tiposEquipos/{id}' 
       // #swagger.summary = 'Obtiene un tipo de equipo por ID'
@@ -46,17 +46,17 @@ export default class TipoEquipoExtendRouter extends CustomRouter {
       this.controller.findById(req, res, next);
     });
 
-    this.post('/nuevo', ['tipoEquipo.create'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/nuevo', ['tipoequipo.create'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.ignore = true
       this.controller.create(req, res, next);
     });
 
-    this.put('/:id', ['tipoEquipo.update'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.put('/:id', ['tipoequipo.update'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.ignore = true
       this.controller.update(req, res, next);
     });
 
-    this.delete('/:id', ['tipoEquipo.delete'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.delete('/:id', ['tipoequipo.delete'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Tipos de Equipo']
       // #swagger.path = '/tiposEquipos/{id}' 
       // #swagger.method = 'delete'

@@ -25,6 +25,9 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
             "bearerAuth": []
         }] 
       */
+      console.log("servicesLoader:", services);
+      console.log("equipoinformaticoService directo:", services.equipoinformaticoService);
+
       this.controller.findAll(req, res, next);
     });
 

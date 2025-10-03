@@ -71,7 +71,7 @@ export default async function configureExpress(app) {
 
     const baseName = file.replace('.router.js', '').toLowerCase();
     const basePath = baseName === 'session' ? '/api/session' : `/api/${baseName}s`;
-
+    
     app.use(basePath, instance.getRouter());
   }
 
