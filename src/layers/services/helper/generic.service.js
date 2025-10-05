@@ -50,24 +50,30 @@ export default class GenericService {
 
     const where = {};
 
-    // filtros simples y con operadores
+    const opMap = {
+      gt: Op.gt, lt: Op.lt, gte: Op.gte, lte: Op.lte,
+      like: Op.like, ilike: Op.like,
+      ne: Op.ne, in: Op.in, notIn: Op.notIn,
+      between: Op.between, notBetween: Op.notBetween,
+      contains: Op.substring, startsWith: Op.startsWith, endsWith: Op.endsWith,
+    };
+
+    const orFilters = [];
     for (const key in filters) {
-      if (filters[key] === undefined || filters[key] === '') continue;
-      if (!key.includes('__')) {
-        where[key] = filters[key];
+      if (!key.includes('__')) continue;
+      const [field, operator] = key.split('__');
+      const value = filters[key];
+
+      // detecta si hay varios campos distintos con el mismo valor
+      if (Object.values(filters).filter(v => v === value).length > 1) {
+        orFilters.push({ [field]: { [Op.like]: value } });
       } else {
-        const [field, operator] = key.split('__');
-        const opMap = {
-          gt: Op.gt, lt: Op.lt, gte: Op.gte, lte: Op.lte,
-          like: Op.like, ilike: Op.iLike, ne: Op.ne,
-          in: Op.in, notIn: Op.notIn, between: Op.between, notBetween: Op.notBetween,
-          contains: Op.contains, startsWith: Op.startsWith, endsWith: Op.endsWith,
-        };
-        if (opMap[operator]) {
-          where[field] = where[field] || {};
-          where[field][opMap[operator]] = filters[key];
-        }
+        where[field] = { [Op.like]: value };
       }
+    }
+
+    if (orFilters.length) {
+      where[Op.or] = orFilters;
     }
 
     const options = {
@@ -75,7 +81,7 @@ export default class GenericService {
       limit: parseInt(limit),
       offset,
       order: [[order, direction.toUpperCase()]],
-      distinct: true, // importante si hay includes
+      distinct: true,
     };
 
     try {

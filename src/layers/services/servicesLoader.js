@@ -39,7 +39,7 @@ export async function loadServices() {
     services[`${base}Service`] = new ServiceClass(new DAOClass(model));
   }
 
-  loaded = true;console.log('Servicios cargados:', Object.keys(services));
+  // loaded = true;console.log('Servicios cargados:', Object.keys(services));
   
   return services;
 }
