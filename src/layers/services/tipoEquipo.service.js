@@ -20,9 +20,8 @@ export default class TipoEquipoService extends GenericService {
   }
 
   async asignarEquipos(tipoEquipoId, equiposIds) {
-    const tipoEquipo = await this.dao.findByPk(tipoEquipoId);
-    if (!tipoEquipo) {
-      throw new NotFound('TipoEquipo no encontrado');
+    if (!tipoEquipoId) {
+      throw new BadRequest('Debe indicar un id de tipoEquipo');
     }
     if (!Array.isArray(equiposIds)) {
       throw new BadRequest('los ids de equipos deben ser un array');
@@ -30,10 +29,16 @@ export default class TipoEquipoService extends GenericService {
     if (equiposIds.length === 0) {
       throw new BadRequest('El array de equipos no puede estar vacío');
     }
+    const tipoEquipo = await this.dao.findByPk(tipoEquipoId);
+    if (!tipoEquipo) {
+      throw new NotFound('TipoEquipo no encontrado');
+    }
     const equipos = await services.equipoinformaticoService.findAll({
       where: { id: equiposIds }
     });
-    if (equipos.length !== equiposIds.length) {
+    const encontrados = equipos.map(u => u.id);
+    const faltantes = equiposIds.filter(id => !encontrados.includes(id));
+    if (faltantes.length !== equiposIds.length) {
       throw new BadRequest('Uno o más equipos no existen');
     }
     await tipoEquipo.setEquipos(equipos);

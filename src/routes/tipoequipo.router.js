@@ -75,5 +75,51 @@ export default class TipoEquipoExtendRouter extends CustomRouter {
       */
       this.controller.delete(req, res, next);
     });
+
+    this.post('/:tipoEquipoId/asignar-equipo/:equipoId', ['tipoequipo.create.asignarEquipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Tipos de Equipo']
+      // #swagger.path = '/tiposEquipos/asignar-equipo/{tipoEquipoId}/{equipoId}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Asigna un equipo a un tipo de equipo'
+      // #swagger.description = 'Asigna un equipo específico a un tipo de equipo usando sus IDs en la URL.'
+      /* #swagger.parameters['tipoEquipoId'] = {
+      in: 'path',
+      description: 'ID del tipo de equipo al que se asignará el equipo',
+      required: true,
+      type: 'string'
+       }
+       #swagger.parameters['equipoId'] = {
+      in: 'path',
+      description: 'ID del equipo a asignar',
+      required: true,
+      type: 'string'
+       }
+       #swagger.security = [{
+      "bearerAuth": []
+       }]
+      */
+      this.controller.asignarEquipo(req, res, next);
+    });
+
+    this.post('/asignar-equipos', ['tipoequipo.create.asignarEquipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Tipos de Equipo']
+      // #swagger.path = '/tiposEquipos/asignar-equipos'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Asigna varios equipos a un tipo de equipo'
+      // #swagger.description = 'Asigna varios equipos a un tipo de equipo usando sus IDs enviados en el body.'
+      // #swagger.parameters['body'] = {
+      //   in: 'body',
+      //   description: 'Objeto con idOficina y idsEquipos',
+      //   required: true,
+      //   schema: { 
+      //     idOficina: { type: 'string', description: 'ID de la oficina a la que se asignarán los equipos' },
+      //     idsEquipos: { type: 'array', items: { type: 'string' }, description: 'Array de IDs de los equipos a asignar' }
+      //   }
+      // }
+      // #swagger.security = [{
+      //   "bearerAuth": []
+      // }]
+      this.controller.asignarEquipos(req, res, next);
+    });
   }
 }

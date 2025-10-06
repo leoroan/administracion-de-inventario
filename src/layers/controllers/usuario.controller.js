@@ -39,4 +39,34 @@ export default class UsuarioController extends GenericController {
       next(error);
     }
   }
+
+  async asignarOficina(req, res, next) {
+    try {
+      const { idUsuario, idOficina } = req.params;
+      const result = await this.service.asignarOficina(idUsuario, idOficina);
+      res.sendSuccess(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async agregarEquipoAsignado(req, res, next) {
+    try {
+      const { idUsuario, idEquipo } = req.params;
+      const result = await this.service.agregarEquipoAsignado(idUsuario, idEquipo);
+      res.sendSuccess(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async agregarEquiposAsignados(req, res, next) {
+    try {
+      const { idUsuario, idsEquipos } = req.body;
+      const result = await this.service.agregarEquiposAsignados(idUsuario, idsEquipos);
+      res.sendSuccess(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

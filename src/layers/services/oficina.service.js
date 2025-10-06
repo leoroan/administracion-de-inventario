@@ -21,21 +21,26 @@ export default class OficinaService extends GenericService {
   }
 
   async agregarEmpleados(idOficina, idsEmpleados) {
+    if (!idOficina) {
+      throw new BadRequest('Debe indicar un id de oficina');
+    }
+    if (!Array.isArray(idsEmpleados)) {
+      throw new BadRequest('Los ids de empleados deben ser un array');
+    }
+    if (idsEmpleados.length === 0) {
+      throw new BadRequest('El array de empleados no puede estar vacío');
+    }
     const oficina = await this.dao.findById(idOficina);
     if (!oficina) {
       throw new NotFound('Oficina no encontrada');
     }
-    if (!Array.isArray(idsEmpleados)) {
-      throw new Error('los ids de empleados deben ser un array');
-    }
-    if (idsEmpleados.length === 0) {
-      throw new Error('El array de empleados no puede estar vacío');
-    }
     const usuarios = await services.usuarioService.findAll({
-      where: { id: idsEmpleados }
+      where: { id: idsEmpleados },
     });
-    if (usuarios.length !== idsEmpleados.length) {
-      throw new NotFound('Uno o más usuarios no encontrados');
+    const encontrados = usuarios.map(u => u.id);
+    const faltantes = idsEmpleados.filter(id => !encontrados.includes(id));
+    if (faltantes.length) {
+      throw new NotFound(`Usuarios no encontrados: ${faltantes.join(', ')}`);
     }
     await oficina.addEmpleados(usuarios);
     return usuarios;
@@ -94,9 +99,8 @@ export default class OficinaService extends GenericService {
   }
 
   async agregarEquipos(idOficina, idsEquipos) {
-    const oficina = await this.dao.findById(idOficina);
-    if (!oficina) {
-      throw new NotFound('Oficina no encontrada');
+    if (!idOficina) {
+      throw new BadRequest('Debe indicar un id de oficina');
     }
     if (!Array.isArray(idsEquipos)) {
       throw new BadRequest('los ids de equipos deben ser un array');
@@ -104,11 +108,17 @@ export default class OficinaService extends GenericService {
     if (idsEquipos.length === 0) {
       throw new BadRequest('El array de equipos no puede estar vacío');
     }
+    const oficina = await this.dao.findById(idOficina);
+    if (!oficina) {
+      throw new NotFound('Oficina no encontrada');
+    }
     const equipos = await services.equipoinformaticoService.findAll({
       where: { id: idsEquipos }
     });
-    if (equipos.length !== idsEquipos.length) {
-      throw new NotFound('Uno o más equipos informáticos no encontrados');
+    const encontrados = equipos.map(u => u.id);
+    const faltantes = idsEquipos.filter(id => !encontrados.includes(id));
+    if (faltantes.length) {
+      throw new NotFound(`Equipos no encontrados: ${faltantes.join(', ')}`);
     }
     await oficina.addEquipos(equipos);
     return equipos;

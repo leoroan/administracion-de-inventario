@@ -75,5 +75,168 @@ export default class OficinaExtendRouter extends CustomRouter {
       */
       this.controller.delete(req, res, next);
     });
+
+    this.post('/:idOficina/empleado/:idEmpleado', ['oficina.create.asignarEmpleado'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/{idOficina}/empleado/{idEmpleado}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agregar un empleado a una oficina'
+      // #swagger.description = 'Agrega un empleado específico a una oficina.'
+      /* #swagger.parameters['idOficina'] = { 
+          in: 'path',
+          description: 'ID de la oficina',
+          required: true,
+          type: 'string'
+        }
+        #swagger.parameters['idEmpleado'] = { 
+          in: 'path',
+          description: 'ID del empleado a agregar',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.agregarEmpleado(req, res, next);
+    });
+
+    this.post('/empleados', ['oficina.create.asignarEmpleado'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/empleados'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agregar múltiples empleados a una oficina'
+      // #swagger.description = 'Agrega varios empleados a una oficina.'
+      /* #swagger.parameters['body'] = {
+          in: 'body',
+          description: 'Objeto con idOficina y idsEmpleados',
+          required: true,
+          schema: { idOficina: 'string', idsEmpleados: ['string'] }
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.agregarEmpleados(req, res, next);
+    });
+
+    this.post('/:idOficinaPadre/suboficina/:idOficinaHija', ['oficina.create.asignarOficina'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/{idOficinaPadre}/suboficina/{idOficinaHija}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agregar una suboficina a una oficina'
+      // #swagger.description = 'Agrega una suboficina a una oficina padre.'
+      /* #swagger.parameters['idOficinaPadre'] = { 
+          in: 'path',
+          description: 'ID de la oficina padre',
+          required: true,
+          type: 'string'
+        }
+        #swagger.parameters['idOficinaHija'] = { 
+          in: 'path',
+          description: 'ID de la oficina hija',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.agregarSubOficina(req, res, next);
+    });
+
+    this.post('/:idOficinaHija/oficinapadre/:idOficinaPadre', ['oficina.create.asignarOficina'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/{idOficinaHija}/oficinapadre/{idOficinaPadre}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agregar una oficina padre a una oficina hija'
+      // #swagger.description = 'Asigna una oficina padre a una oficina hija.'
+      /* #swagger.parameters['idOficinaHija'] = { 
+          in: 'path',
+          description: 'ID de la oficina hija',
+          required: true,
+          type: 'string'
+        }
+        #swagger.parameters['idOficinaPadre'] = { 
+          in: 'path',
+          description: 'ID de la oficina padre',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.agregarOficinaPadre(req, res, next);
+    });
+
+    this.post('/:idOficina/edificio/:idEdificio', ['oficina.create.asignarEdificio'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/{idOficina}/edificio/{idEdificio}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Asignar un edificio a una oficina'
+      // #swagger.description = 'Asigna un edificio a una oficina.'
+      /* #swagger.parameters['idOficina'] = { 
+          in: 'path',
+          description: 'ID de la oficina',
+          required: true,
+          type: 'string'
+        }
+        #swagger.parameters['idEdificio'] = { 
+          in: 'path',
+          description: 'ID del edificio',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.asignarEdificio(req, res, next);
+    });
+
+    this.post('/:idOficina/equipo/:idEquipo', ['oficina.create.asignarEquipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/{idOficina}/equipo/{idEquipo}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agregar un equipo a una oficina'
+      // #swagger.description = 'Agrega un equipo específico a una oficina.'
+      /* #swagger.parameters['idOficina'] = { 
+          in: 'path',
+          description: 'ID de la oficina',
+          required: true,
+          type: 'string'
+        }
+        #swagger.parameters['idEquipo'] = { 
+          in: 'path',
+          description: 'ID del equipo a agregar',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.agregarEquipo(req, res, next);
+    });
+
+    this.post('/equipos', ['oficina.create.asignarEquipos'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/equipos'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agregar múltiples equipos a una oficina'
+      // #swagger.description = 'Agrega varios equipos a una oficina.'
+      /* #swagger.parameters['body'] = {
+          in: 'body',
+          description: 'Objeto con idOficina y idsEquipos',
+          required: true,
+          schema: { idOficina: 'string', idsEquipos: ['string'] }
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.agregarEquipos(req, res, next);
+    });
   }
 }

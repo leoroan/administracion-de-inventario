@@ -43,9 +43,12 @@ const addRoles = async () => {
 const addPermisos = async () => {
   const manualResources = ["Log", "Session", "Health"];
   const extraPermisos = {
-    Usuario: ["update.restore"],
+    Usuario: ["update.restore", "create.oficina", "create.equipo"],
     Session: ["create.register"],
     Log: ["read.list", "read.file", "read.download"],
+    Tipoequipo: ["create.asignarEquipo"],
+    Rol: ["update.restore"],
+    Oficina: ["create.asignarEmpleado", "create.asignarOficina", "create.asignarEdificio", "create.asignarEquipo"]
   };
   const accionesBase = ["create", "read", "update", "delete"];
 
@@ -57,7 +60,7 @@ const addPermisos = async () => {
   for (const resource of allResources) {
     for (const accion of accionesBase) {
       const permKey = `${resource.toLowerCase()}.${accion}`;
-      
+
       await models.Permiso.findOrCreate({
         where: { accion: permKey },
         defaults: {
@@ -106,14 +109,13 @@ const assignAllPermisosToAdmin = async (adminUser) => {
   if (!adminUser) return;
 
   const allPerms = await models.Permiso.findAll();
+  await adminUser.setPermisos([]); // limpia todas las relaciones
 
   const CHUNK_SIZE = 50;
   for (let i = 0; i < allPerms.length; i += CHUNK_SIZE) {
     const chunk = allPerms.slice(i, i + CHUNK_SIZE);
     await adminUser.addPermisos(chunk);
   }
-
-  // devLogger.info(`✅ [ADMIN PERMISOS] Asignados ${allPerms.length} permisos`);
 };
 
 const addEdificios = async () => {

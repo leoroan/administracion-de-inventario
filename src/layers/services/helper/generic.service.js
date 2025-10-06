@@ -47,32 +47,55 @@ export default class GenericService {
     } = queryParams;
 
     const offset = (parseInt(page) - 1) * limit;
-
     const where = {};
 
+    // Mapeo de operadores válidos (sin iLike, porque es PostgreSQL-only)
     const opMap = {
-      gt: Op.gt, lt: Op.lt, gte: Op.gte, lte: Op.lte,
-      like: Op.like, ilike: Op.like,
-      ne: Op.ne, in: Op.in, notIn: Op.notIn,
-      between: Op.between, notBetween: Op.notBetween,
-      contains: Op.substring, startsWith: Op.startsWith, endsWith: Op.endsWith,
+      gt: Op.gt,
+      lt: Op.lt,
+      gte: Op.gte,
+      lte: Op.lte,
+      like: Op.like,
+      ilike: Op.like, // 👈 MySQL no distingue mayúsculas/minúsculas por defecto
+      ne: Op.ne,
+      in: Op.in,
+      notIn: Op.notIn,
+      between: Op.between,
+      notBetween: Op.notBetween,
+      contains: Op.substring,
+      startsWith: Op.startsWith,
+      endsWith: Op.endsWith,
     };
 
     const orFilters = [];
-    for (const key in filters) {
-      if (!key.includes('__')) continue;
-      const [field, operator] = key.split('__');
-      const value = filters[key];
 
-      // detecta si hay varios campos distintos con el mismo valor
-      if (Object.values(filters).filter(v => v === value).length > 1) {
-        orFilters.push({ [field]: { [Op.like]: value } });
+    for (const key in filters) {
+      const value = filters[key];
+      if (value === undefined || value === '') continue;
+
+      if (!key.includes('__')) {
+        // Filtro simple (igualdad)
+        where[key] = value;
+        continue;
+      }
+
+      const [field, operator] = key.split('__');
+      const op = opMap[operator];
+      if (!op) continue;
+
+      // Ver si hay varios filtros distintos con el mismo valor -> usar OR
+      const sameValueKeys = Object.entries(filters).filter(([k, v]) => v === value && k !== key);
+      if (sameValueKeys.length > 0) {
+        orFilters.push({ [field]: { [op]: value } });
       } else {
-        where[field] = { [Op.like]: value };
+        if (!where[field]) where[field] = {};
+        where[field][op] = value;
       }
     }
 
-    if (orFilters.length) {
+    if (orFilters.length > 0) {
+      // Si ya había condiciones en where, las combinamos con AND
+      // Sequelize combina correctamente { ...where, [Op.or]: orFilters }
       where[Op.or] = orFilters;
     }
 
@@ -86,6 +109,7 @@ export default class GenericService {
 
     try {
       const results = await this.dao.findAll(options, scope);
+
       return {
         data: results.rows,
         pagination: {

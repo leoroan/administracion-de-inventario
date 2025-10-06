@@ -85,7 +85,7 @@ export default class UsuarioService extends GenericService {
     }
   };
 
-  async generateVerificationToken(user) {    
+  async generateVerificationToken(user) {
     if (!user) throw new NotFound("Usuario no definido o no encontrado");
     const token = createHash(user.email + Date.now().toString());
     const tokenExpiration = new Date(Date.now() + 1000 * 60 * 60 * CANT_HORAS_EXPIRATION_REGISTER);
@@ -130,19 +130,25 @@ export default class UsuarioService extends GenericService {
   }
 
   async agregarEquiposAsignados(idUsuario, idsEquipos) {
-    const usuario = await this.dao.findById(idUsuario);
-    if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
+    if (!idUsuario) {
+      throw new BadRequest('Debe indicar un id de usuario');
+    }
     if (!Array.isArray(idsEquipos)) {
       throw new BadRequest('los ids de equipos deben ser un array');
     }
     if (idsEquipos.length === 0) {
       throw new BadRequest('El array de equipos no puede estar vacío');
     }
+    const usuario = await this.dao.findById(idUsuario);
+    if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
     const equipos = await services.equipoinformaticoService.findAll({
       where: { id: idsEquipos }
     });
-    if (!equipos.length) throw new NotFound(`No se encontraron equipos con los IDs proporcionados`);
-    await usuario.addEquiposAsignados(equipos);
+    const encontrados = equipos.map(u => u.id);
+    const faltantes = idsEquipos.filter(id => !encontrados.includes(id));
+    if (faltantes.length) {
+      throw new NotFound(`Equipos no encontrados: ${faltantes.join(', ')}`);
+    } await usuario.addEquiposAsignados(equipos);
     return usuario;
   }
 }

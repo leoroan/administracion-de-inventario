@@ -738,6 +738,76 @@
         ]
       }
     },
+    "/tiposEquipos/asignar-equipo": {
+      "post": {
+        "tags": [
+          "Tipos de Equipo"
+        ],
+        "summary": "Asigna un equipo a un tipo de equipo",
+        "description": "Asigna un equipo específico a un tipo de equipo usando sus IDs.",
+        "parameters": [
+          {
+            "name": "tipoEquipoId",
+            "in": "query",
+            "description": "ID del tipo de equipo al que se asignará el equipo",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "equipoId",
+            "in": "query",
+            "description": "ID del equipo a asignar",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/tiposEquipos/asignar-equipos": {
+      "post": {
+        "tags": [
+          "Tipos de Equipo"
+        ],
+        "summary": "Asigna varios equipos a un tipo de equipo",
+        "description": "Asigna varios equipos a un tipo de equipo usando sus IDs.",
+        "parameters": [
+          {
+            "name": "tipoEquipoId",
+            "in": "query",
+            "description": "ID del tipo de equipo al que se asignarán los equipos",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "equiposIds",
+            "in": "query",
+            "description": "IDs de los equipos a asignar (puede ser un array o string separado por comas)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/usuarios/": {
       "get": {
         "tags": [
@@ -848,6 +918,246 @@
             "bearerAuth": []
           }
         ]
+      }
+    },
+    "/usuarios/asignar-oficina": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Asigna una oficina a un usuario",
+        "description": "Asigna una oficina específica a un usuario.",
+        "parameters": [
+          {
+            "name": "idUsuario",
+            "in": "body",
+            "description": "ID del usuario al que se le asignará la oficina",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "idOficina",
+            "in": "body",
+            "description": "ID de la oficina a asignar",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "description": "Scope para ver diferentes vistas del usuario",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "withRolScope",
+              "withPermisosScope",
+              "withOficinaScope",
+              "withEquipoInformaticoScope"
+            ]
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idUsuario": {
+                    "type": "string",
+                    "description": "ID del usuario"
+                  },
+                  "idOficina": {
+                    "type": "string",
+                    "description": "ID de la oficina"
+                  }
+                },
+                "required": [
+                  "idUsuario",
+                  "idOficina"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/agregar-equipo": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Agrega un equipo a un usuario",
+        "description": "Agrega un equipo específico a la lista de equipos asignados de un usuario.",
+        "parameters": [
+          {
+            "name": "idUsuario",
+            "in": "body",
+            "description": "ID del usuario al que se le agregará el equipo",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "idEquipo",
+            "in": "body",
+            "description": "ID del equipo a agregar",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "description": "Scope para ver diferentes vistas del usuario",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "withRolScope",
+              "withPermisosScope",
+              "withOficinaScope",
+              "withEquipoInformaticoScope"
+            ]
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idUsuario": {
+                    "type": "string",
+                    "description": "ID del usuario"
+                  },
+                  "idEquipo": {
+                    "type": "string",
+                    "description": "ID del equipo"
+                  }
+                },
+                "required": [
+                  "idUsuario",
+                  "idEquipo"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/agregar-equipos": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Agrega varios equipos a un usuario",
+        "description": "Agrega varios equipos a la lista de equipos asignados de un usuario.",
+        "parameters": [
+          {
+            "name": "idUsuario",
+            "in": "body",
+            "description": "ID del usuario al que se le agregarán los equipos",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "idsEquipos",
+            "in": "body",
+            "description": "IDs de los equipos a agregar",
+            "required": true,
+            "items": {
+              "type": "string"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "description": "Scope para ver diferentes vistas del usuario",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "withRolScope",
+              "withPermisosScope",
+              "withOficinaScope",
+              "withEquipoInformaticoScope"
+            ]
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "idUsuario": {
+                    "type": "string",
+                    "description": "ID del usuario"
+                  },
+                  "idsEquipos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "IDs de los equipos"
+                  }
+                },
+                "required": [
+                  "idUsuario",
+                  "idsEquipos"
+                ]
+              }
+            }
+          }
+        }
       }
     }
   }

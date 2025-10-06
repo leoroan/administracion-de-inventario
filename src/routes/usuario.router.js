@@ -114,5 +114,77 @@ export default class UsuarioExtendRouter extends CustomRouter {
       // #swagger.ignore = true
       this.controller.resendVerification(req, res, next);
     });
+
+    this.post('/:idUsuario/asignar-oficina/:idOficina', ['usuario.create.oficina'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Usuarios']
+      // #swagger.path = '/usuarios/{idUsuario}/asignar-oficina/{idOficina}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Asigna una oficina a un usuario'
+      // #swagger.description = 'Asigna una oficina específica a un usuario usando los IDs en la URL.'
+      /* #swagger.parameters['idUsuario'] = {
+        in: 'path',
+        description: 'ID del usuario',
+        required: true,
+        type: 'string'
+      } */
+      /* #swagger.parameters['idOficina'] = {
+        in: 'path',
+        description: 'ID de la oficina',
+        required: true,
+        type: 'string'
+      } */
+      /* 
+      #swagger.security = [{
+      "bearerAuth": []
+      }] 
+      */
+      this.controller.asignarOficina(req, res, next);
+    });
+
+    this.post('/:idUsuario/agregar-equipo/:idEquipo', ['usuario.create.equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Usuarios']
+      // #swagger.path = '/usuarios/{idUsuario}/agregar-equipo/{idEquipo}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agrega un equipo a un usuario'
+      // #swagger.description = 'Agrega un equipo específico a la lista de equipos asignados de un usuario.'
+      /* #swagger.parameters['idUsuario'] = {
+        in: 'path',
+        description: 'ID del usuario',
+        required: true,
+        type: 'string'
+      } */
+      /* #swagger.parameters['idEquipo'] = {
+        in: 'path',
+        description: 'ID del equipo',
+        required: true,
+        type: 'string'
+      } */
+      /* 
+      #swagger.security = [{
+        "bearerAuth": []
+      }] 
+      */
+      this.controller.agregarEquipoAsignado(req, res, next);
+    }
+    );
+
+    this.post('/agregar-equipos', ['usuario.create.equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Usuarios']
+      // #swagger.path = '/usuarios/agregar-equipos'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agrega varios equipos a un usuario'
+      // #swagger.description = 'Agrega varios equipos a la lista de equipos asignados de un usuario.'
+      /* #swagger.parameters['body'] = {
+          in: 'body',
+          description: 'Objeto con idUsuario y idsEquipos',
+          required: true,
+          schema: { idUsuario: 'string', idsEquipos: ['string'] }
+        }
+        #swagger.security = [{
+        "bearerAuth": []
+        }] 
+      */
+      this.controller.agregarEquiposAsignados(req, res, next);
+    });
   }
 }
