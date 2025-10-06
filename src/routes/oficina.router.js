@@ -76,7 +76,7 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.delete(req, res, next);
     });
 
-    this.post('/:idOficina/empleado/:idEmpleado', ['oficina.create.asignarEmpleado'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idOficina/empleado/:idEmpleado', ['oficina.create.asignar.Empleado'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
       // #swagger.path = '/oficinas/{idOficina}/empleado/{idEmpleado}'
       // #swagger.method = 'post'
@@ -101,7 +101,7 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.agregarEmpleado(req, res, next);
     });
 
-    this.post('/empleados', ['oficina.create.asignarEmpleado'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/empleados', ['oficina.create.asignar.Empleado'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
       // #swagger.path = '/oficinas/empleados'
       // #swagger.method = 'post'
@@ -120,7 +120,7 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.agregarEmpleados(req, res, next);
     });
 
-    this.post('/:idOficinaPadre/suboficina/:idOficinaHija', ['oficina.create.asignarOficina'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idOficinaPadre/suboficina/:idOficinaHija', ['oficina.create.asignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
       // #swagger.path = '/oficinas/{idOficinaPadre}/suboficina/{idOficinaHija}'
       // #swagger.method = 'post'
@@ -145,7 +145,7 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.agregarSubOficina(req, res, next);
     });
 
-    this.post('/:idOficinaHija/oficinapadre/:idOficinaPadre', ['oficina.create.asignarOficina'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idOficinaHija/oficinapadre/:idOficinaPadre', ['oficina.create.asignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
       // #swagger.path = '/oficinas/{idOficinaHija}/oficinapadre/{idOficinaPadre}'
       // #swagger.method = 'post'
@@ -170,7 +170,7 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.agregarOficinaPadre(req, res, next);
     });
 
-    this.post('/:idOficina/edificio/:idEdificio', ['oficina.create.asignarEdificio'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idOficina/edificio/:idEdificio', ['oficina.create.asignar.Edificio'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
       // #swagger.path = '/oficinas/{idOficina}/edificio/{idEdificio}'
       // #swagger.method = 'post'
@@ -195,7 +195,7 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.asignarEdificio(req, res, next);
     });
 
-    this.post('/:idOficina/equipo/:idEquipo', ['oficina.create.asignarEquipo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idOficina/equipo/:idEquipo', ['oficina.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
       // #swagger.path = '/oficinas/{idOficina}/equipo/{idEquipo}'
       // #swagger.method = 'post'
@@ -220,7 +220,7 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.agregarEquipo(req, res, next);
     });
 
-    this.post('/equipos', ['oficina.create.asignarEquipos'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/equipos', ['oficina.create.asignar.Equipos'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
       // #swagger.path = '/oficinas/equipos'
       // #swagger.method = 'post'

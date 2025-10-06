@@ -75,5 +75,55 @@ export default class ModeloExtendRouter extends CustomRouter {
       */
       this.controller.delete(req, res, next);
     });
+
+    this.post('/:modeloId/asignarMarca/:marcaId', ['modelo.create.asignar.Marca'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Modelos']
+      // #swagger.path = '/modelos/{modeloId}/asignarMarca/{marcaId}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agregar una marca a un modelo'
+      // #swagger.description = 'Agrega una marca específica a un modelo por sus IDs.'
+      /* #swagger.parameters['modeloId'] = { 
+          in: 'path',
+          description: 'ID del modelo al que se agregará la marca',
+          required: true,
+          type: 'string'
+        }
+        #swagger.parameters['marcaId'] = { 
+          in: 'path',
+          description: 'ID de la marca a agregar',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.agregarMarca(req, res, next);
+    });
+
+    this.post('/:modeloId/asignarEquipo/:equipoId', ['modelo.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Modelos']
+      // #swagger.path = '/modelos/{modeloId}/asignarEquipo/{equipoId}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agregar un equipo a un modelo'
+      // #swagger.description = 'Agrega un equipo específico a un modelo por sus IDs.'
+      /* #swagger.parameters['modeloId'] = { 
+          in: 'path',
+          description: 'ID del modelo al que se agregará el equipo',
+          required: true,
+          type: 'string'
+        }
+        #swagger.parameters['equipoId'] = { 
+          in: 'path',
+          description: 'ID del equipo a agregar',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.agregarEquipo(req, res, next);
+    });
   }
 }

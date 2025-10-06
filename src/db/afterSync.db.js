@@ -43,12 +43,14 @@ const addRoles = async () => {
 const addPermisos = async () => {
   const manualResources = ["Log", "Session", "Health"];
   const extraPermisos = {
-    Usuario: ["update.restore", "create.oficina", "create.equipo"],
+    Usuario: ["update.restore", "create.asignar.Oficina", "create.asignar.Equipo"],
     Session: ["create.register"],
     Log: ["read.list", "read.file", "read.download"],
-    Tipoequipo: ["create.asignarEquipo"],
+    Tipoequipo: ["create.asignar.Equipo"],
     Rol: ["update.restore"],
-    Oficina: ["create.asignarEmpleado", "create.asignarOficina", "create.asignarEdificio", "create.asignarEquipo"]
+    Oficina: ["create.asignar.Empleado", "create.asignar.Oficina", "create.asignar.Edificio", "create.asignar.Equipo"],
+    Modelo: ["create.asignar.Marca", "create.asignar.Equipo"],
+    Marca: ["create.asignar.Modelo"],
   };
   const accionesBase = ["create", "read", "update", "delete"];
 

@@ -115,7 +115,7 @@ export default class UsuarioExtendRouter extends CustomRouter {
       this.controller.resendVerification(req, res, next);
     });
 
-    this.post('/:idUsuario/asignar-oficina/:idOficina', ['usuario.create.oficina'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idUsuario/asignar-oficina/:idOficina', ['usuario.create.asignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Usuarios']
       // #swagger.path = '/usuarios/{idUsuario}/asignar-oficina/{idOficina}'
       // #swagger.method = 'post'
@@ -141,7 +141,7 @@ export default class UsuarioExtendRouter extends CustomRouter {
       this.controller.asignarOficina(req, res, next);
     });
 
-    this.post('/:idUsuario/agregar-equipo/:idEquipo', ['usuario.create.equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idUsuario/agregar-equipo/:idEquipo', ['usuario.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Usuarios']
       // #swagger.path = '/usuarios/{idUsuario}/agregar-equipo/{idEquipo}'
       // #swagger.method = 'post'
@@ -168,7 +168,7 @@ export default class UsuarioExtendRouter extends CustomRouter {
     }
     );
 
-    this.post('/agregar-equipos', ['usuario.create.equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/agregar-equipos', ['usuario.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Usuarios']
       // #swagger.path = '/usuarios/agregar-equipos'
       // #swagger.method = 'post'

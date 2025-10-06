@@ -390,6 +390,76 @@
         ]
       }
     },
+    "/modelos/{modeloId}/asignarMarca/{marcaId}": {
+      "post": {
+        "tags": [
+          "Modelos"
+        ],
+        "summary": "Agregar una marca a un modelo",
+        "description": "Agrega una marca específica a un modelo por sus IDs.",
+        "parameters": [
+          {
+            "name": "modeloId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del modelo al que se agregará la marca"
+          },
+          {
+            "name": "marcaId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la marca a agregar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/modelos/{modeloId}/asignarEquipo/{equipoId}": {
+      "post": {
+        "tags": [
+          "Modelos"
+        ],
+        "summary": "Agregar un equipo a un modelo",
+        "description": "Agrega un equipo específico a un modelo por sus IDs.",
+        "parameters": [
+          {
+            "name": "modeloId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del modelo al que se agregará el equipo"
+          },
+          {
+            "name": "equipoId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del equipo a agregar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/oficinas/": {
       "get": {
         "tags": [
@@ -449,6 +519,271 @@
             "required": true,
             "type": "string",
             "description": "ID de la oficina a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/oficinas/{idOficina}/empleado/{idEmpleado}": {
+      "post": {
+        "tags": [
+          "Oficinas"
+        ],
+        "summary": "Agregar un empleado a una oficina",
+        "description": "Agrega un empleado específico a una oficina.",
+        "parameters": [
+          {
+            "name": "idOficina",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina"
+          },
+          {
+            "name": "idEmpleado",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del empleado a agregar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/oficinas/empleados": {
+      "post": {
+        "tags": [
+          "Oficinas"
+        ],
+        "summary": "Agregar múltiples empleados a una oficina",
+        "description": "Agrega varios empleados a una oficina.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Objeto con idOficina y idsEmpleados",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "idOficina": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "idsEmpleados": {
+                  "type": "array",
+                  "example": [
+                    "string"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/oficinas/{idOficinaPadre}/suboficina/{idOficinaHija}": {
+      "post": {
+        "tags": [
+          "Oficinas"
+        ],
+        "summary": "Agregar una suboficina a una oficina",
+        "description": "Agrega una suboficina a una oficina padre.",
+        "parameters": [
+          {
+            "name": "idOficinaPadre",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina padre"
+          },
+          {
+            "name": "idOficinaHija",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina hija"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/oficinas/{idOficinaHija}/oficinapadre/{idOficinaPadre}": {
+      "post": {
+        "tags": [
+          "Oficinas"
+        ],
+        "summary": "Agregar una oficina padre a una oficina hija",
+        "description": "Asigna una oficina padre a una oficina hija.",
+        "parameters": [
+          {
+            "name": "idOficinaHija",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina hija"
+          },
+          {
+            "name": "idOficinaPadre",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina padre"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/oficinas/{idOficina}/edificio/{idEdificio}": {
+      "post": {
+        "tags": [
+          "Oficinas"
+        ],
+        "summary": "Asignar un edificio a una oficina",
+        "description": "Asigna un edificio a una oficina.",
+        "parameters": [
+          {
+            "name": "idOficina",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina"
+          },
+          {
+            "name": "idEdificio",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del edificio"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/oficinas/{idOficina}/equipo/{idEquipo}": {
+      "post": {
+        "tags": [
+          "Oficinas"
+        ],
+        "summary": "Agregar un equipo a una oficina",
+        "description": "Agrega un equipo específico a una oficina.",
+        "parameters": [
+          {
+            "name": "idOficina",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina"
+          },
+          {
+            "name": "idEquipo",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del equipo a agregar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/oficinas/equipos": {
+      "post": {
+        "tags": [
+          "Oficinas"
+        ],
+        "summary": "Agregar múltiples equipos a una oficina",
+        "description": "Agrega varios equipos a una oficina.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Objeto con idOficina y idsEquipos",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "idOficina": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "idsEquipos": {
+                  "type": "array",
+                  "example": [
+                    "string"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -738,27 +1073,27 @@
         ]
       }
     },
-    "/tiposEquipos/asignar-equipo": {
+    "/tiposEquipos/asignar-equipo/{tipoEquipoId}/{equipoId}": {
       "post": {
         "tags": [
           "Tipos de Equipo"
         ],
         "summary": "Asigna un equipo a un tipo de equipo",
-        "description": "Asigna un equipo específico a un tipo de equipo usando sus IDs.",
+        "description": "Asigna un equipo específico a un tipo de equipo usando sus IDs en la URL.",
         "parameters": [
           {
             "name": "tipoEquipoId",
-            "in": "query",
-            "description": "ID del tipo de equipo al que se asignará el equipo",
+            "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "ID del tipo de equipo al que se asignará el equipo"
           },
           {
             "name": "equipoId",
-            "in": "query",
-            "description": "ID del equipo a asignar",
+            "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "ID del equipo a asignar"
           }
         ],
         "responses": {
@@ -779,33 +1114,12 @@
           "Tipos de Equipo"
         ],
         "summary": "Asigna varios equipos a un tipo de equipo",
-        "description": "Asigna varios equipos a un tipo de equipo usando sus IDs.",
-        "parameters": [
-          {
-            "name": "tipoEquipoId",
-            "in": "query",
-            "description": "ID del tipo de equipo al que se asignarán los equipos",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "equiposIds",
-            "in": "query",
-            "description": "IDs de los equipos a asignar (puede ser un array o string separado por comas)",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "description": "Asigna varios equipos a un tipo de equipo usando sus IDs enviados en el body.",
         "responses": {
           "default": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/usuarios/": {
@@ -920,46 +1234,27 @@
         ]
       }
     },
-    "/usuarios/asignar-oficina": {
+    "/usuarios/{idUsuario}/asignar-oficina/{idOficina}": {
       "post": {
         "tags": [
           "Usuarios"
         ],
         "summary": "Asigna una oficina a un usuario",
-        "description": "Asigna una oficina específica a un usuario.",
+        "description": "Asigna una oficina específica a un usuario usando los IDs en la URL.",
         "parameters": [
           {
             "name": "idUsuario",
-            "in": "body",
-            "description": "ID del usuario al que se le asignará la oficina",
+            "in": "path",
             "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
+            "type": "string",
+            "description": "ID del usuario"
           },
           {
             "name": "idOficina",
-            "in": "body",
-            "description": "ID de la oficina a asignar",
+            "in": "path",
             "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          {
-            "name": "scope",
-            "in": "query",
-            "description": "Scope para ver diferentes vistas del usuario",
-            "required": false,
             "type": "string",
-            "enum": [
-              "withRolScope",
-              "withPermisosScope",
-              "withOficinaScope",
-              "withEquipoInformaticoScope"
-            ]
+            "description": "ID de la oficina"
           }
         ],
         "responses": {
@@ -971,34 +1266,10 @@
           {
             "bearerAuth": []
           }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "idUsuario": {
-                    "type": "string",
-                    "description": "ID del usuario"
-                  },
-                  "idOficina": {
-                    "type": "string",
-                    "description": "ID de la oficina"
-                  }
-                },
-                "required": [
-                  "idUsuario",
-                  "idOficina"
-                ]
-              }
-            }
-          }
-        }
+        ]
       }
     },
-    "/usuarios/agregar-equipo": {
+    "/usuarios/{idUsuario}/agregar-equipo/{idEquipo}": {
       "post": {
         "tags": [
           "Usuarios"
@@ -1008,36 +1279,17 @@
         "parameters": [
           {
             "name": "idUsuario",
-            "in": "body",
-            "description": "ID del usuario al que se le agregará el equipo",
+            "in": "path",
             "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
+            "type": "string",
+            "description": "ID del usuario"
           },
           {
             "name": "idEquipo",
-            "in": "body",
-            "description": "ID del equipo a agregar",
+            "in": "path",
             "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          {
-            "name": "scope",
-            "in": "query",
-            "description": "Scope para ver diferentes vistas del usuario",
-            "required": false,
             "type": "string",
-            "enum": [
-              "withRolScope",
-              "withPermisosScope",
-              "withOficinaScope",
-              "withEquipoInformaticoScope"
-            ]
+            "description": "ID del equipo"
           }
         ],
         "responses": {
@@ -1049,31 +1301,7 @@
           {
             "bearerAuth": []
           }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "idUsuario": {
-                    "type": "string",
-                    "description": "ID del usuario"
-                  },
-                  "idEquipo": {
-                    "type": "string",
-                    "description": "ID del equipo"
-                  }
-                },
-                "required": [
-                  "idUsuario",
-                  "idEquipo"
-                ]
-              }
-            }
-          }
-        }
+        ]
       }
     },
     "/usuarios/agregar-equipos": {
@@ -1085,40 +1313,28 @@
         "description": "Agrega varios equipos a la lista de equipos asignados de un usuario.",
         "parameters": [
           {
-            "name": "idUsuario",
+            "name": "body",
             "in": "body",
-            "description": "ID del usuario al que se le agregarán los equipos",
+            "description": "Objeto con idUsuario y idsEquipos",
             "required": true,
             "schema": {
               "type": "object",
-              "properties": {}
+              "properties": {
+                "idUsuario": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "idsEquipos": {
+                  "type": "array",
+                  "example": [
+                    "string"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
             }
-          },
-          {
-            "name": "idsEquipos",
-            "in": "body",
-            "description": "IDs de los equipos a agregar",
-            "required": true,
-            "items": {
-              "type": "string"
-            },
-            "schema": {
-              "type": "object",
-              "properties": {}
-            }
-          },
-          {
-            "name": "scope",
-            "in": "query",
-            "description": "Scope para ver diferentes vistas del usuario",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "withRolScope",
-              "withPermisosScope",
-              "withOficinaScope",
-              "withEquipoInformaticoScope"
-            ]
           }
         ],
         "responses": {
@@ -1130,34 +1346,7 @@
           {
             "bearerAuth": []
           }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "idUsuario": {
-                    "type": "string",
-                    "description": "ID del usuario"
-                  },
-                  "idsEquipos": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "IDs de los equipos"
-                  }
-                },
-                "required": [
-                  "idUsuario",
-                  "idsEquipos"
-                ]
-              }
-            }
-          }
-        }
+        ]
       }
     }
   }

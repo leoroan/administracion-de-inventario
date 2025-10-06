@@ -76,7 +76,7 @@ export default class TipoEquipoExtendRouter extends CustomRouter {
       this.controller.delete(req, res, next);
     });
 
-    this.post('/:tipoEquipoId/asignar-equipo/:equipoId', ['tipoequipo.create.asignarEquipo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:tipoEquipoId/asignar-equipo/:equipoId', ['tipoequipo.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Tipos de Equipo']
       // #swagger.path = '/tiposEquipos/asignar-equipo/{tipoEquipoId}/{equipoId}'
       // #swagger.method = 'post'
@@ -101,7 +101,7 @@ export default class TipoEquipoExtendRouter extends CustomRouter {
       this.controller.asignarEquipo(req, res, next);
     });
 
-    this.post('/asignar-equipos', ['tipoequipo.create.asignarEquipo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/asignar-equipos', ['tipoequipo.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Tipos de Equipo']
       // #swagger.path = '/tiposEquipos/asignar-equipos'
       // #swagger.method = 'post'
