@@ -107,15 +107,13 @@ export default class TipoEquipoExtendRouter extends CustomRouter {
       // #swagger.method = 'post'
       // #swagger.summary = 'Asigna varios equipos a un tipo de equipo'
       // #swagger.description = 'Asigna varios equipos a un tipo de equipo usando sus IDs enviados en el body.'
-      // #swagger.parameters['body'] = {
-      //   in: 'body',
-      //   description: 'Objeto con idOficina y idsEquipos',
-      //   required: true,
-      //   schema: { 
-      //     idOficina: { type: 'string', description: 'ID de la oficina a la que se asignarán los equipos' },
-      //     idsEquipos: { type: 'array', items: { type: 'string' }, description: 'Array de IDs de los equipos a asignar' }
-      //   }
-      // }
+      /* #swagger.parameters['body'] = {
+          in: 'body',
+          description: 'Objeto con idTipoEquipo y idsEquipos',
+          required: true,
+          schema: { idTipoEquipo: 'string', idsEquipos: ['string'] }
+        }
+      */
       // #swagger.security = [{
       //   "bearerAuth": []
       // }]

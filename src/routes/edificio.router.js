@@ -75,5 +75,31 @@ export default class EdificioExtendRouter extends CustomRouter {
       */
       this.controller.delete(req, res, next);
     });
+
+    this.post('/:edificioId/asignarOficina/:oficinaId', ['edificio.create.asignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Edificios']
+      // #swagger.path = '/edificios/{edificioId}/asignarOficina/{oficinaId}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Agregar una oficina a un edificio'
+      // #swagger.description = 'Agrega una oficina existente a un edificio específico.'
+      /* #swagger.parameters['edificioId'] = { 
+          in: 'path',
+          description: 'ID del edificio al que se agregará la oficina',
+          required: true,
+          type: 'string'
+        } */
+      /* #swagger.parameters['oficinaId'] = { 
+          in: 'path',
+          description: 'ID de la oficina a agregar',
+          required: true,
+          type: 'string'
+        } */
+      /* 
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.agregarOficina(req, res, next);
+    });
   }
 }

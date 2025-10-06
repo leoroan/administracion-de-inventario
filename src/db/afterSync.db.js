@@ -51,6 +51,8 @@ const addPermisos = async () => {
     Oficina: ["create.asignar.Empleado", "create.asignar.Oficina", "create.asignar.Edificio", "create.asignar.Equipo"],
     Modelo: ["create.asignar.Marca", "create.asignar.Equipo"],
     Marca: ["create.asignar.Modelo"],
+    EquipoInformatico: ["create.asignar.Oficina", "create.asignar.Tipoequipo", "create.asignar.Modelo", "create.asignar.Usuario", "create.agregar.Mantenimiento"],
+    Edificio: ["create.asignar.Oficina"],
   };
   const accionesBase = ["create", "read", "update", "delete"];
 

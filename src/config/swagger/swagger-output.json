@@ -98,6 +98,41 @@
         ]
       }
     },
+    "/edificios/{edificioId}/asignarOficina/{oficinaId}": {
+      "post": {
+        "tags": [
+          "Edificios"
+        ],
+        "summary": "Agregar una oficina a un edificio",
+        "description": "Agrega una oficina existente a un edificio específico.",
+        "parameters": [
+          {
+            "name": "edificioId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del edificio al que se agregará la oficina"
+          },
+          {
+            "name": "oficinaId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina a agregar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/EquipoInformaticos/": {
       "get": {
         "tags": [
@@ -157,6 +192,184 @@
             "required": true,
             "type": "string",
             "description": "ID del equipo informático a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/EquipoInformaticos/{equipoId}/oficina/{oficinaId}": {
+      "post": {
+        "tags": [
+          "Equipos Informaticos"
+        ],
+        "summary": "Asigna una oficina a un equipo informático",
+        "description": "Asigna una oficina específica a un equipo informático.",
+        "parameters": [
+          {
+            "name": "equipoId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del equipo informático"
+          },
+          {
+            "name": "oficinaId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la oficina a asignar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/EquipoInformaticos/{equipoId}/empleado/{empleadoId}": {
+      "post": {
+        "tags": [
+          "Equipos Informaticos"
+        ],
+        "summary": "Agrega un empleado a un equipo informático",
+        "description": "Agrega un empleado asignado a un equipo informático.",
+        "parameters": [
+          {
+            "name": "equipoId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del equipo informático"
+          },
+          {
+            "name": "empleadoId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del empleado a asignar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/EquipoInformaticos/{equipoId}/mantenimiento": {
+      "post": {
+        "tags": [
+          "Equipos Informaticos"
+        ],
+        "summary": "Agrega un registro de mantenimiento a un equipo informático",
+        "description": "Agrega un registro de mantenimiento a un equipo informático específico. El cuerpo debe contener los datos del mantenimiento.",
+        "parameters": [
+          {
+            "name": "equipoId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del equipo informático"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Mantenimiento"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/EquipoInformaticos/{equipoId}/asignarTipo/{tipoId}": {
+      "post": {
+        "tags": [
+          "Equipos Informaticos"
+        ],
+        "summary": "Asigna un tipo de equipo a un equipo informático",
+        "description": "Asigna un tipo de equipo específico a un equipo informático.",
+        "parameters": [
+          {
+            "name": "equipoId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del equipo informático"
+          },
+          {
+            "name": "tipoId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del tipo de equipo a asignar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/EquipoInformaticos/{equipoId}/modelo/{modeloId}": {
+      "post": {
+        "tags": [
+          "Equipos Informaticos"
+        ],
+        "summary": "Asigna un modelo a un equipo informático",
+        "description": "Asigna un modelo específico a un equipo informático.",
+        "parameters": [
+          {
+            "name": "equipoId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del equipo informático"
+          },
+          {
+            "name": "modeloId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del modelo a asignar"
           }
         ],
         "responses": {
@@ -303,6 +516,86 @@
             "required": true,
             "type": "string",
             "description": "ID del marca a borrar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/marcas/{marcaId}/asignarModelo/{modeloId}": {
+      "post": {
+        "tags": [
+          "Marcas"
+        ],
+        "summary": "Agregar un modelo a una marca",
+        "description": "Agrega un modelo específico a una marca usando sus IDs.",
+        "parameters": [
+          {
+            "name": "marcaId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la marca"
+          },
+          {
+            "name": "modeloId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del modelo a agregar"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/marcas/agregar-modelos": {
+      "post": {
+        "tags": [
+          "Marcas"
+        ],
+        "summary": "Agregar varios modelos a una marca",
+        "description": "Agrega varios modelos a una marca usando un array de IDs de modelos.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Objeto con idOficina y idsEquipos",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "idOficina": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "idsEquipos": {
+                  "type": "array",
+                  "example": [
+                    "string"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -1115,6 +1408,32 @@
         ],
         "summary": "Asigna varios equipos a un tipo de equipo",
         "description": "Asigna varios equipos a un tipo de equipo usando sus IDs enviados en el body.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Objeto con idTipoEquipo y idsEquipos",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "idTipoEquipo": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "idsEquipos": {
+                  "type": "array",
+                  "example": [
+                    "string"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "default": {
             "description": ""
