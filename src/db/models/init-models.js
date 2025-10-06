@@ -34,16 +34,6 @@ export default function initModels(sequelize) {
   Usuario.belongsToMany(Permiso, { through: 'UsuarioPermiso', as: 'permisos', foreignKey: 'usuarioId', otherKey: 'permisoId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
   Permiso.belongsToMany(Usuario, { through: 'UsuarioPermiso', as: 'usuarios', foreignKey: 'permisoId', otherKey: 'usuarioId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
-  // tip para : Asignar permiso individual
-  // const user = await models.Usuario.findByPk(5);
-  // const permiso = await models.Permiso.findOne({ where: { accion: 'usuario.update.rol' } });
-  // await user.addPermiso(permiso);
-
-  // // Obtener todos los permisos de un usuario (rol + directos)
-  // const permisosRol = await user.rolPrincipal.getPermisos();
-  // const permisosDirectos = await user.getPermisos();
-  // const permisosTotales = [...permisosRol.map(p => p.accion), ...permisosDirectos.map(p => p.accion)];
-
   // Usuario -> Oficina
   Oficina.hasMany(Usuario, { as: 'empleados', foreignKey: { name: 'oficinaId', allowNull: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });
   Usuario.belongsTo(Oficina, { as: 'oficina', foreignKey: { name: 'oficinaId', allowNull: true, onDelete: 'RESTRICT', onUpdate: 'CASCADE' } });

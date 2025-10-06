@@ -15,6 +15,9 @@ export default function initScopes() {
   models.Usuario.addScope('loginScope', usuarioScope.loginScope);
   models.Usuario.addScope('withPermisosScope', usuarioScope.withPermisosScope);
   models.Usuario.addScope('withRolScope', usuarioScope.withRolScope);
+  models.Usuario.addScope('withOficinaScope', usuarioScope.withOficinaScope);
+  models.Usuario.addScope('withEquipoInformaticoScope', usuarioScope.withEquipoInformaticoScope);
+
 
   //scopes de oficina
   models.Oficina.addScope('defaultScope', oficinaScope.defaultScope, { override: true });
