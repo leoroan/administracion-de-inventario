@@ -14,6 +14,16 @@ export default class MarcaController extends GenericController {
     }
   }
 
+  async removerModelo(req, res, next) {
+    try {
+      const { marcaId, modeloId } = req.params;
+      const result = await this.service.removerModelo(marcaId, modeloId);
+      res.sendSuccess(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   async agregarModelos(req, res, next) {
     try {
       const { marcaId, idsModelos } = req.body;

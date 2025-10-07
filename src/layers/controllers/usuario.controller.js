@@ -50,10 +50,30 @@ export default class UsuarioController extends GenericController {
     }
   }
 
+  async desasignarOficina(req, res, next) {
+    try {
+      const { idUsuario } = req.params;
+      const result = await this.service.desasignarOficina(idUsuario);
+      res.sendSuccess(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async agregarEquipoAsignado(req, res, next) {
     try {
       const { idUsuario, idEquipo } = req.params;
       const result = await this.service.agregarEquipoAsignado(idUsuario, idEquipo);
+      res.sendSuccess(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async desasignarEquipo(req, res, next) {
+    try {
+      const { idUsuario, idEquipo } = req.params;
+      const result = await this.service.desasignarEquipo(idUsuario, idEquipo);
       res.sendSuccess(result);
     } catch (error) {
       next(error);

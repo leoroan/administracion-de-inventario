@@ -13,4 +13,14 @@ export default class EdificioController extends GenericController {
       next(error);
     }
   }
+
+  async removerOficina(req, res, next) {
+    try {
+      const { edificioId, oficinaId } = req.params;
+      const result = await this.service.removerOficina(edificioId, oficinaId);
+      res.sendSuccess(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

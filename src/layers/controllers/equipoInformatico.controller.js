@@ -14,10 +14,30 @@ export default class EquipoInformaticoController extends GenericController {
     }
   }
 
+  async removerOficina(req, res, next) {
+    try {
+      const { equipoId } = req.params;
+      const result = await this.service.removerOficina(equipoId);
+      res.sendSuccess(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async agregarEmpleadoAsignado(req, res, next) {
     try {
       const { equipoId, empleadoId } = req.params;
       const result = await this.service.agregarEmpleadoAsignado(equipoId, empleadoId);
+      res.sendSuccess(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async removerEmpleadoAsignado(req, res, next) {
+    try {
+      const { equipoId } = req.params;
+      const result = await this.service.removerEmpleadoAsignado(equipoId);
       res.sendSuccess(result);
     } catch (error) {
       next(error);
@@ -29,6 +49,16 @@ export default class EquipoInformaticoController extends GenericController {
       const { equipoId } = req.params;
       const registroData = req.body;
       const result = await this.service.agregarRegistroMantenimiento(equipoId, registroData);
+      res.sendSuccess(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async removerRegistroMantenimiento(req, res, next) {
+    try {
+      const { equipoId, registroId } = req.params;
+      const result = await this.service.removerRegistroMantenimiento(equipoId, registroId);
       res.sendSuccess(result);
     } catch (error) {
       next(error);

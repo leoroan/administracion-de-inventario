@@ -14,6 +14,16 @@ export default class TipoEquipoController extends GenericController {
     }
   }
 
+  async desasignarEquipo(req, res, next) {
+    try {
+      const { tipoEquipoId, equipoId } = req.params;
+      const equipo = await this.service.desasignarEquipo(tipoEquipoId, equipoId);
+      res.sendSuccess(equipo);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async asignarEquipos(req, res, next) {
     try {
       const { tipoEquipoId, equiposIds } = req.body;
