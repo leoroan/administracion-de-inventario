@@ -22,7 +22,7 @@ export default class GenericDAO {
     return await this.model.scope(scope).findOne(data);
   }
 
-  async findById(id, scope) {
+  async findById( id, scope = 'defaultScope') {
     scope = Array.isArray(scope) ? scope : scope.split(',');
     return await this.model.scope(scope).findByPk(id)
   }
@@ -44,8 +44,12 @@ export default class GenericDAO {
   }
 
 
-  async findAll(data, scope) {
+  async findAndCountAll(data, scope) {
     return await this.model.scope(scope).findAndCountAll(data);
+  }
+
+  async findAllPlain(data, scope) {
+    return await this.model.scope(scope).findAll(data);
   }
 
   async update(oldRecord, data) {

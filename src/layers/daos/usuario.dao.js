@@ -5,7 +5,7 @@ export default class UsuarioDAO extends GenericDAO {
     super(aModel);
   }
 
-  async findById(id, scope) {
+  async findById(id, scope = 'defaultScope') {
     scope = Array.isArray(scope) ? scope : scope.split(',');
     return await this.model.scope(scope).findByPk(id, { paranoid: false })
   }

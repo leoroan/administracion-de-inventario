@@ -64,7 +64,7 @@ export default class UsuarioService extends GenericService {
     const defaultPerms = rol.defaultPermisos || [];
     if (!defaultPerms.length) return;
 
-    const allPerms = await services.permisoService.findAll();
+    const allPerms = await services.permisoService.findAllPlain();
     let permisosAsignar = [];
 
     if (defaultPerms.includes("*")) {
@@ -127,12 +127,24 @@ export default class UsuarioService extends GenericService {
     return usuario;
   }
 
-  async agregarEquipoAsignado(idUsuario, idEquipo) {
+  async agregarEquipoAsignado(idUsuario, idEquipo, user) {
+    if (!user) throw new BadRequest('Esta accion requiere un usuario autenticado');
     const usuario = await this.dao.findById(idUsuario);
     if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
     const equipo = await services.equipoinformaticoService.findById(idEquipo);
     if (!equipo) throw new NotFound(`Equipo con ID ${idEquipo} no encontrado`);
-    await usuario.addEquipoAsignado(equipo);
+
+    await usuario.addEquiposAsignado(equipo);
+
+    await services.trazabilidadService.registrarTrazabilidad({
+      accion: 'Asignación de equipo a un usuario',
+      descripcion: `Se asignó el equipo "${equipo.mt}", nro de serie ${equipo.numeroDeSerie} al usuario "${usuario.nombre}", "${usuario.apellido}".`,
+      equipoId: equipo.id,
+      usuarioAsignado: usuario.nombre + ' ' + usuario.apellido,
+      oficina: equipo.oficina?.nombre || 'Desconocida al momento de la asignación',
+      edificioId: equipo.oficina?.edificioId || 'Desconocido al momento de la asignación'
+    }, user);
+
     return usuario;
   }
 
@@ -164,7 +176,8 @@ export default class UsuarioService extends GenericService {
     const faltantes = idsEquipos.filter(id => !encontrados.includes(id));
     if (faltantes.length) {
       throw new NotFound(`Equipos no encontrados: ${faltantes.join(', ')}`);
-    } await usuario.addEquiposAsignados(equipos);
+    }
+    await usuario.addEquiposAsignados(equipos);
     return usuario;
   }
 }

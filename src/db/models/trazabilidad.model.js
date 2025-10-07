@@ -4,21 +4,33 @@ const { Model } = _sequelize;
 export default class Trazabilidad extends Model {
   static init(sequelize, DataTypes) {
     return super.init({
-      fecha: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
       descripcion: {
         type: DataTypes.TEXT,
         allowNull: false
       },
       accion: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
       },
       realizadoPor: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+      },
+      equipoId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      usuarioAsignado: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      oficina: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      edificioId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
       }
     }, {
       sequelize,

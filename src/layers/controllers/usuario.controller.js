@@ -63,7 +63,7 @@ export default class UsuarioController extends GenericController {
   async agregarEquipoAsignado(req, res, next) {
     try {
       const { idUsuario, idEquipo } = req.params;
-      const result = await this.service.agregarEquipoAsignado(idUsuario, idEquipo);
+      const result = await this.service.agregarEquipoAsignado(idUsuario, idEquipo, req.user);
       res.sendSuccess(result);
     } catch (error) {
       next(error);

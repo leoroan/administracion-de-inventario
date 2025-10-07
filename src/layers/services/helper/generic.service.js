@@ -36,6 +36,29 @@ export default class GenericService {
     return record;
   }
 
+  async findAllPlain(queryParams = {}) {
+    const {
+      scope = 'defaultScope',
+      ...filters
+    } = queryParams;
+
+    const where = {};
+
+    for (const key in filters) {
+      const value = filters[key];
+      if (value === undefined || value === '') continue;
+
+      where[key] = value;
+    }
+
+    try {
+      const results = await this.dao.findAllPlain({ where }, scope);
+      return results;
+    } catch (error) {
+      throw new NotFound(`Error al buscar registros: ${error.message}`);
+    }
+  }
+
   async findAll(queryParams = {}) {
     const {
       page = 1,
@@ -43,6 +66,7 @@ export default class GenericService {
       order = 'id',
       direction = 'ASC',
       scope = 'defaultScope',
+      noPagination = false,
       ...filters
     } = queryParams;
 
@@ -55,7 +79,7 @@ export default class GenericService {
       gte: Op.gte,
       lte: Op.lte,
       like: Op.like,
-      ilike: Op.like, 
+      ilike: Op.like,
       ne: Op.ne,
       in: Op.in,
       notIn: Op.notIn,
@@ -93,29 +117,43 @@ export default class GenericService {
     if (orFilters.length > 0) {
       where[Op.or] = orFilters;
     }
-
-    const options = {
-      where,
-      limit: parseInt(limit),
-      offset,
-      order: [[order, direction.toUpperCase()]],
-      distinct: true,
-    };
-
-    try {
-      const results = await this.dao.findAll(options, scope);
-
-      return {
-        data: results.rows,
-        pagination: {
-          total: results.count,
-          pages: Math.ceil(results.count / limit),
-          current: parseInt(page),
-          limit: parseInt(limit),
-        },
+    if (noPagination) {
+      const options = {
+        where,
+        order: [[order, direction.toUpperCase()]],
+        distinct: true,
       };
-    } catch (error) {
-      throw new NotFound(`Error al buscar registros: ${error.message}`);
+
+      try {
+        const results = await this.dao.findAndCountAll(options, scope);
+        return results;
+      } catch (error) {
+        throw new NotFound(`Error al buscar registros: ${error.message}`);
+      }
+    } else {
+      const options = {
+        where,
+        limit: parseInt(limit),
+        offset,
+        order: [[order, direction.toUpperCase()]],
+        distinct: true,
+      };
+
+      try {
+        const results = await this.dao.findAndCountAll(options, scope);
+
+        return {
+          data: results.rows,
+          pagination: {
+            total: results.count,
+            pages: Math.ceil(results.count / limit),
+            current: parseInt(page),
+            limit: parseInt(limit),
+          },
+        };
+      } catch (error) {
+        throw new NotFound(`Error al buscar registros: ${error.message}`);
+      }
     }
   }
 
