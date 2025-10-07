@@ -76,9 +76,9 @@ export default class TipoEquipoExtendRouter extends CustomRouter {
       this.controller.delete(req, res, next);
     });
 
-    this.post('/:tipoEquipoId/asignar-equipo/:equipoId', ['tipoequipo.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:tipoEquipoId/asignarEquipo/:equipoId', ['tipoequipo.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Tipos de Equipo']
-      // #swagger.path = '/tiposEquipos/asignar-equipo/{tipoEquipoId}/{equipoId}'
+      // #swagger.path = '/tiposEquipos/{tipoEquipoId}/asignarEquipo/{equipoId}'
       // #swagger.method = 'post'
       // #swagger.summary = 'Asigna un equipo a un tipo de equipo'
       // #swagger.description = 'Asigna un equipo específico a un tipo de equipo usando sus IDs en la URL.'
@@ -101,9 +101,34 @@ export default class TipoEquipoExtendRouter extends CustomRouter {
       this.controller.asignarEquipo(req, res, next);
     });
 
-    this.post('/asignar-equipos', ['tipoequipo.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:tipoEquipoId/desAsignarEquipo/:equipoId', ['tipoequipo.create.desasignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Tipos de Equipo']
-      // #swagger.path = '/tiposEquipos/asignar-equipos'
+      // #swagger.path = '/tiposEquipos/{tipoEquipoId}/desAsignarEquipo/{equipoId}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Desasigna un equipo de un tipo de equipo'
+      // #swagger.description = 'Desasigna un equipo específico de un tipo de equipo usando sus IDs en la URL.'
+      /* #swagger.parameters['tipoEquipoId'] = {
+      in: 'path',
+      description: 'ID del tipo de equipo al que se asignará el equipo',
+      required: true,
+      type: 'string'
+       }
+       #swagger.parameters['equipoId'] = {
+      in: 'path',
+      description: 'ID del equipo a asignar',
+      required: true,
+      type: 'string'
+       }
+       #swagger.security = [{
+      "bearerAuth": []
+       }]
+      */
+      this.controller.desasignarEquipo(req, res, next);
+    });
+
+    this.post('/asignarEquipos', ['tipoequipo.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Tipos de Equipo']
+      // #swagger.path = '/tiposEquipos/asignarEquipos'
       // #swagger.method = 'post'
       // #swagger.summary = 'Asigna varios equipos a un tipo de equipo'
       // #swagger.description = 'Asigna varios equipos a un tipo de equipo usando sus IDs enviados en el body.'

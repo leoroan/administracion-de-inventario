@@ -30,7 +30,7 @@ export default class OficinaService extends GenericService {
       throw new NotFound('Usuario no encontrado');
     }
     await oficina.removeEmpleado(usuario);
-    return usuario;
+    return oficina;
   }
 
   async agregarEmpleados(idOficina, idsEmpleados) {
@@ -93,7 +93,7 @@ export default class OficinaService extends GenericService {
       throw new NotFound('Oficina hija no encontrada');
     }
     await oficinaPadre.removeSuboficina(oficinaHija);
-    return oficinaHija;
+    return oficinaPadre;
   }
 
   async agregarOficinaPadre(idOficinaHija, idOficinaPadre) {
@@ -163,7 +163,7 @@ export default class OficinaService extends GenericService {
       throw new NotFound('Equipo informático no encontrado');
     }
     await oficina.removeEquipo(equipo);
-    return equipo;
+    return oficina;
   }
 
   async agregarEquipos(idOficina, idsEquipos) {

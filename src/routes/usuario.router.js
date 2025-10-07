@@ -115,9 +115,9 @@ export default class UsuarioExtendRouter extends CustomRouter {
       this.controller.resendVerification(req, res, next);
     });
 
-    this.post('/:idUsuario/asignar-oficina/:idOficina', ['usuario.create.asignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idUsuario/asignarOficina/:idOficina', ['usuario.create.asignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Usuarios']
-      // #swagger.path = '/usuarios/{idUsuario}/asignar-oficina/{idOficina}'
+      // #swagger.path = '/usuarios/{idUsuario}/asignarOficina/{idOficina}'
       // #swagger.method = 'post'
       // #swagger.summary = 'Asigna una oficina a un usuario'
       // #swagger.description = 'Asigna una oficina específica a un usuario usando los IDs en la URL.'
@@ -141,9 +141,28 @@ export default class UsuarioExtendRouter extends CustomRouter {
       this.controller.asignarOficina(req, res, next);
     });
 
-    this.post('/:idUsuario/agregar-equipo/:idEquipo', ['usuario.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idUsuario/desAsignarOficina', ['usuario.create.desasignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Usuarios']
-      // #swagger.path = '/usuarios/{idUsuario}/agregar-equipo/{idEquipo}'
+      // #swagger.path = '/usuarios/{idUsuario}/desAsignarOficina'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Desasigna una oficina de un usuario'
+      // #swagger.description = 'Desasigna una oficina específica de un usuario usando los IDs en la URL.'
+      /* #swagger.parameters['idUsuario'] = {
+        in: 'path',
+        description: 'ID del usuario',
+        required: true,
+        type: 'string'
+      } 
+        #swagger.security = [{
+        "bearerAuth": []
+      }] 
+      */
+      this.controller.desasignarOficina(req, res, next);
+    });
+
+    this.post('/:idUsuario/agregarEquipo/:idEquipo', ['usuario.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Usuarios']
+      // #swagger.path = '/usuarios/{idUsuario}/agregarEquipo/{idEquipo}'
       // #swagger.method = 'post'
       // #swagger.summary = 'Agrega un equipo a un usuario'
       // #swagger.description = 'Agrega un equipo específico a la lista de equipos asignados de un usuario.'
@@ -165,12 +184,37 @@ export default class UsuarioExtendRouter extends CustomRouter {
       }] 
       */
       this.controller.agregarEquipoAsignado(req, res, next);
-    }
-    );
+    });
 
-    this.post('/agregar-equipos', ['usuario.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idUsuario/desAsignarEquipo/:idEquipo', ['usuario.create.desasignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Usuarios']
-      // #swagger.path = '/usuarios/agregar-equipos'
+      // #swagger.path = '/usuarios/{idUsuario}/desAsignarEquipo/{idEquipo}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Desasigna un equipo de un usuario'
+      // #swagger.description = 'Desasigna un equipo específico de la lista de equipos asignados de un usuario.'
+      /* #swagger.parameters['idUsuario'] = {
+        in: 'path',
+        description: 'ID del usuario',
+        required: true,
+        type: 'string'
+      } */
+      /* #swagger.parameters['idEquipo'] = {
+        in: 'path',
+        description: 'ID del equipo',
+        required: true,
+        type: 'string'
+      } */
+      /* 
+      #swagger.security = [{
+        "bearerAuth": []
+      }] 
+      */
+      this.controller.agregarEquipoAsignado(req, res, next);
+    });
+
+    this.post('/agregarEquipos', ['usuario.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Usuarios']
+      // #swagger.path = '/usuarios/agregarEquipos'
       // #swagger.method = 'post'
       // #swagger.summary = 'Agrega varios equipos a un usuario'
       // #swagger.description = 'Agrega varios equipos a la lista de equipos asignados de un usuario.'
@@ -186,5 +230,9 @@ export default class UsuarioExtendRouter extends CustomRouter {
       */
       this.controller.agregarEquiposAsignados(req, res, next);
     });
+
+
+
+
   }
 }

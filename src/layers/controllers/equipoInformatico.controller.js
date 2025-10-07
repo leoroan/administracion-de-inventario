@@ -46,8 +46,7 @@ export default class EquipoInformaticoController extends GenericController {
 
   async agregarRegistroMantenimiento(req, res, next) {
     try {
-      const { equipoId } = req.params;
-      const registroData = req.body;
+      const { registroData, equipoId } = req.body;
       const result = await this.service.agregarRegistroMantenimiento(equipoId, registroData);
       res.sendSuccess(result);
     } catch (error) {

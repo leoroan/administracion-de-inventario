@@ -105,9 +105,28 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
       this.controller.asignarOficina(req, res, next);
     });
 
-    this.post('/:equipoId/empleado/:empleadoId', ['equipoinformatico.create.asignar.Usuario'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:equipoId/desAsignarOficina', ['equipoinformatico.create.desasignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Equipos Informaticos']
-      // #swagger.path = '/EquipoInformaticos/{equipoId}/empleado/{empleadoId}'
+      // #swagger.path = '/EquipoInformaticos/{equipoId}/oficina/{oficinaId}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Desasigna una oficina de un equipo informático'
+      // #swagger.description = 'Desasigna una oficina específica de un equipo informático.'
+      /* #swagger.parameters['equipoId'] = { 
+          in: 'path',
+          description: 'ID del equipo informático',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.removerOficina(req, res, next);
+    });
+
+    this.post('/:equipoId/asignarEmpleado/:empleadoId', ['equipoinformatico.create.asignar.Usuario'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Equipos Informaticos']
+      // #swagger.path = '/EquipoInformaticos/{equipoId}/asignarEmpleado/{empleadoId}'
       // #swagger.method = 'post'
       // #swagger.summary = 'Agrega un empleado a un equipo informático'
       // #swagger.description = 'Agrega un empleado asignado a un equipo informático.'
@@ -130,34 +149,89 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
       this.controller.agregarEmpleadoAsignado(req, res, next);
     });
 
-    this.post('/:equipoId/mantenimiento', ['equipoinformatico.create.agregar.Mantenimiento'], passport.authenticate('jwt'), async (req, res, next) => {
-      /*
-      #swagger.tags = ['Equipos Informaticos']
-      #swagger.path = '/EquipoInformaticos/{equipoId}/mantenimiento'
-      #swagger.method = 'post'
-      #swagger.summary = 'Agrega un registro de mantenimiento a un equipo informático'
-      #swagger.description = 'Agrega un registro de mantenimiento a un equipo informático específico. El cuerpo debe contener los datos del mantenimiento.'
-      #swagger.parameters['equipoId'] = { 
+    this.post('/:equipoId/desAsignarEmpleado', ['equipoinformatico.create.desasignar.Usuario'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Equipos Informaticos']
+      // #swagger.path = '/EquipoInformaticos/{equipoId}/desAsignarEmpleado'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Desasigna un empleado de un equipo informático'
+      // #swagger.description = 'Desasigna un empleado específico de un equipo informático.'
+      /* #swagger.parameters['equipoId'] = { 
           in: 'path',
           description: 'ID del equipo informático',
-          required: true,   
+          required: true,
           type: 'string'
-      }
-      #swagger.requestBody = {
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.removerEmpleadoAsignado(req, res, next);
+    });
+
+    this.post('/agregarMantenimiento', ['equipoinformatico.create.asignar.Mantenimiento'], passport.authenticate('jwt'), async (req, res, next) => {
+      /* 
+      #swagger.tags = ['Equipos Informaticos']
+      #swagger.path = '/EquipoInformaticos/agregarMantenimiento'
+      #swagger.method = 'post'
+      #swagger.summary = 'Agrega un registro de mantenimiento a uno o varios equipos informáticos'
+      #swagger.description = 'Agrega un registro de mantenimiento a uno o varios equipos informáticos. El cuerpo debe contener el idUsuario y un array de idsEquipos.'
+      #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'Objeto con la data de registro  y equipoId',
         required: true,
-        content: {
-          "application/json": {
-            schema: {
-              $ref: "#/components/schemas/Mantenimiento"
+        schema: {
+          type: 'object',
+          properties: {
+            registroData: {
+              type: 'object',
+              description: 'Datos del registro de mantenimiento',
+              properties: {
+                descripcion: { type: 'string' },
+                fecha: { type: 'string', format: 'date-time' },
+                realizadoPor: { type: 'string' }
+              },
+              required: ['descripcion', 'fecha', 'realizadoPor']
+            },
+            equipoId: {
+              type: ['string', 'array'],
+              description: 'ID del equipo informático',
+              items: { type: 'string' }
             }
-          }
+          },
+          required: ['registroData', 'equipoId']
         }
       }
       #swagger.security = [{
         "bearerAuth": []
       }]
-    */
-      this.controller.service.agregarRegistroMantenimiento(req, res, next);
+      */
+      this.controller.agregarRegistroMantenimiento(req, res, next);
+    });
+
+    this.post('/:equipoId/removerMantenimiento/:registroId', ['equipoinformatico.create.desasignar.Mantenimiento'], passport.authenticate('jwt'), async (req, res, next) => {
+      /* 
+      #swagger.tags = ['Equipos Informaticos']
+      #swagger.path = '/EquipoInformaticos/{equipoId}/removerMantenimiento/{registroId}'
+      #swagger.method = 'post'
+      #swagger.summary = 'Remueve un registro de mantenimiento de un equipo informático'
+      #swagger.description = 'Remueve un registro de mantenimiento específico de un equipo informático.'
+      #swagger.parameters['equipoId'] = { 
+        in: 'path',
+        description: 'ID del equipo informático',
+        required: true,
+        type: 'string'
+      }
+      #swagger.parameters['registroId'] = { 
+        in: 'path',
+        description: 'ID del registro de mantenimiento a remover',
+        required: true,
+        type: 'string'
+      }
+      #swagger.security = [{
+        "bearerAuth": []
+      }]
+      */
+      this.controller.removerRegistroMantenimiento(req, res, next);
     });
 
     this.post('/:equipoId/asignarTipo/:tipoId', ['equipoinformatico.create.asignar.Tipoequipo'], passport.authenticate('jwt'), async (req, res, next) => {
@@ -185,9 +259,9 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
       this.controller.asignarTipoequipo(req, res, next);
     });
 
-    this.post('/:equipoId/modelo/:modeloId', ['equipoinformatico.create.asignar.Modelo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:equipoId/asignarModelo/:modeloId', ['equipoinformatico.create.asignar.Modelo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Equipos Informaticos']
-      // #swagger.path = '/EquipoInformaticos/{equipoId}/modelo/{modeloId}'
+      // #swagger.path = '/EquipoInformaticos/{equipoId}/asignarModelo/{modeloId}'
       // #swagger.method = 'post'
       // #swagger.summary = 'Asigna un modelo a un equipo informático'
       // #swagger.description = 'Asigna un modelo específico a un equipo informático.'

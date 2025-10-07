@@ -43,16 +43,16 @@ const addRoles = async () => {
 const addPermisos = async () => {
   const manualResources = ["Log", "Session", "Health"];
   const extraPermisos = {
-    Usuario: ["update.restore", "create.asignar.Oficina", "create.asignar.Equipo"],
+    Usuario: ["update.restore", "create.asignar.Oficina", "create.desasignar.Oficina", "create.asignar.Equipo", "create.desasignar.Equipo"],
     Session: ["create.register"],
     Log: ["read.list", "read.file", "read.download"],
-    Tipoequipo: ["create.asignar.Equipo"],
+    Tipoequipo: ["create.asignar.Equipo", "create.desasignar.Equipo"],
     Rol: ["update.restore"],
-    Oficina: ["create.asignar.Empleado", "create.asignar.Oficina", "create.asignar.Edificio", "create.asignar.Equipo"],
+    Oficina: ["create.asignar.Empleado", "create.desasignar.Empleado", "create.asignar.Oficina", "create.desasignar.Oficina", "create.asignar.Edificio", "create.desasignar.Edificio", "create.asignar.Equipo", "create.desasignar.Equipo"],
     Modelo: ["create.asignar.Marca", "create.asignar.Equipo"],
-    Marca: ["create.asignar.Modelo"],
+    Marca: ["create.asignar.Modelo", "create.desasignar.Modelo"],
     EquipoInformatico: ["create.asignar.Oficina", "create.asignar.Tipoequipo", "create.asignar.Modelo", "create.asignar.Usuario", "create.agregar.Mantenimiento"],
-    Edificio: ["create.asignar.Oficina"],
+    Edificio: ["create.asignar.Oficina", "create.desasignar.Oficina"],
   };
   const accionesBase = ["create", "read", "update", "delete"];
 

@@ -101,6 +101,31 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.agregarEmpleado(req, res, next);
     });
 
+    this.post('/:idOficina/removerEmpleado/:idEmpleado', ['oficina.create.desasignar.Empleado'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/{idOficina}/removerEmpleado/{idEmpleado}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Remover un empleado de una oficina'
+      // #swagger.description = 'Remueve un empleado específico de una oficina.'
+      /* #swagger.parameters['idOficina'] = { 
+          in: 'path',
+          description: 'ID de la oficina',
+          required: true,
+          type: 'string'
+        }
+        #swagger.parameters['idEmpleado'] = { 
+          in: 'path',
+          description: 'ID del empleado a agregar',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.removerEmpleado(req, res, next);
+    });
+
     this.post('/empleados', ['oficina.create.asignar.Empleado'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
       // #swagger.path = '/oficinas/empleados'
@@ -120,9 +145,9 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.agregarEmpleados(req, res, next);
     });
 
-    this.post('/:idOficinaPadre/suboficina/:idOficinaHija', ['oficina.create.asignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idOficinaPadre/agregarSuboficina/:idOficinaHija', ['oficina.create.asignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
-      // #swagger.path = '/oficinas/{idOficinaPadre}/suboficina/{idOficinaHija}'
+      // #swagger.path = '/oficinas/{idOficinaPadre}/agregarSuboficina/{idOficinaHija}'
       // #swagger.method = 'post'
       // #swagger.summary = 'Agregar una suboficina a una oficina'
       // #swagger.description = 'Agrega una suboficina a una oficina padre.'
@@ -145,9 +170,34 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.agregarSubOficina(req, res, next);
     });
 
-    this.post('/:idOficinaHija/oficinapadre/:idOficinaPadre', ['oficina.create.asignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idOficinaPadre/removerSuboficina/:idOficinaHija', ['oficina.create.desasignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
-      // #swagger.path = '/oficinas/{idOficinaHija}/oficinapadre/{idOficinaPadre}'
+      // #swagger.path = '/oficinas/{idOficinaPadre}/removerSuboficina/{idOficinaHija}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Remover una suboficina de una oficina'
+      // #swagger.description = 'Remueve una suboficina de una oficina padre.'
+      /* #swagger.parameters['idOficinaPadre'] = { 
+          in: 'path',
+          description: 'ID de la oficina padre',
+          required: true,
+          type: 'string'
+        }
+        #swagger.parameters['idOficinaHija'] = { 
+          in: 'path',
+          description: 'ID de la oficina hija',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.removerSubOficina(req, res, next);
+    });
+
+    this.post('/:idOficinaHija/agregarOficinaPadre/:idOficinaPadre', ['oficina.create.asignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/{idOficinaHija}/agregarOficinaPadre/{idOficinaPadre}'
       // #swagger.method = 'post'
       // #swagger.summary = 'Agregar una oficina padre a una oficina hija'
       // #swagger.description = 'Asigna una oficina padre a una oficina hija.'
@@ -170,9 +220,28 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.agregarOficinaPadre(req, res, next);
     });
 
-    this.post('/:idOficina/edificio/:idEdificio', ['oficina.create.asignar.Edificio'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idOficinaHija/removerOficinaPadre', ['oficina.create.desasignar.Oficina'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
-      // #swagger.path = '/oficinas/{idOficina}/edificio/{idEdificio}'
+      // #swagger.path = '/oficinas/{idOficinaHija}/removerOficinaPadre'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Remover una oficina padre de una oficina hija'
+      // #swagger.description = 'Remueve una oficina padre de una oficina hija.'
+      /* #swagger.parameters['idOficinaHija'] = { 
+          in: 'path',
+          description: 'ID de la oficina hija',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.removerOficinaPadre(req, res, next);
+    });
+
+    this.post('/:idOficina/asignarEdificio/:idEdificio', ['oficina.create.asignar.Edificio'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/{idOficina}/asignarEdificio/{idEdificio}'
       // #swagger.method = 'post'
       // #swagger.summary = 'Asignar un edificio a una oficina'
       // #swagger.description = 'Asigna un edificio a una oficina.'
@@ -195,9 +264,28 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.asignarEdificio(req, res, next);
     });
 
-    this.post('/:idOficina/equipo/:idEquipo', ['oficina.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idOficina/removerEdificio', ['oficina.create.desasignar.Edificio'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
-      // #swagger.path = '/oficinas/{idOficina}/equipo/{idEquipo}'
+      // #swagger.path = '/oficinas/{idOficina}/removerEdificio/{idEdificio}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Remover un edificio de una oficina'
+      // #swagger.description = 'Remueve un edificio de una oficina.'
+      /* #swagger.parameters['idOficina'] = { 
+          in: 'path',
+          description: 'ID de la oficina',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.removerEdificio(req, res, next);
+    });
+
+    this.post('/:idOficina/asignarEquipo/:idEquipo', ['oficina.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/{idOficina}/asignarEquipo/{idEquipo}'
       // #swagger.method = 'post'
       // #swagger.summary = 'Agregar un equipo a una oficina'
       // #swagger.description = 'Agrega un equipo específico a una oficina.'
@@ -220,9 +308,34 @@ export default class OficinaExtendRouter extends CustomRouter {
       this.controller.agregarEquipo(req, res, next);
     });
 
-    this.post('/equipos', ['oficina.create.asignar.Equipos'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:idOficina/removerEquipo/:idEquipo', ['oficina.create.desasignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Oficinas']
-      // #swagger.path = '/oficinas/equipos'
+      // #swagger.path = '/oficinas/{idOficina}/removerEquipo/{idEquipo}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Remover un equipo de una oficina'
+      // #swagger.description = 'Remueve un equipo específico de una oficina.'
+      /* #swagger.parameters['idOficina'] = { 
+          in: 'path',
+          description: 'ID de la oficina',
+          required: true,
+          type: 'string'
+        }
+        #swagger.parameters['idEquipo'] = { 
+          in: 'path',
+          description: 'ID del equipo a agregar',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.removerEquipo(req, res, next);
+    });
+
+    this.post('/asignarEquipos', ['oficina.create.asignar.Equipos'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/asignarEquipos'
       // #swagger.method = 'post'
       // #swagger.summary = 'Agregar múltiples equipos a una oficina'
       // #swagger.description = 'Agrega varios equipos a una oficina.'
@@ -237,6 +350,25 @@ export default class OficinaExtendRouter extends CustomRouter {
         }] 
       */
       this.controller.agregarEquipos(req, res, next);
+    });
+
+    this.post('/:idOficina/removerEquipos', ['oficina.create.desasignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Oficinas']
+      // #swagger.path = '/oficinas/{idOficina}/removerEquipos'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Remover múltiples equipos de una oficina'
+      // #swagger.description = 'Remueve varios equipos de una oficina.'
+      /* #swagger.parameters['body'] = {
+          in: 'path',
+          description: 'ID de la oficina',
+          required: true,
+          type: 'string'
+        }
+        #swagger.security = [{
+            "bearerAuth": []
+        }] 
+      */
+      this.controller.removerEquipos(req, res, next);
     });
   }
 }

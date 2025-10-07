@@ -101,9 +101,34 @@ export default class MarcaExtendRouter extends CustomRouter {
       this.controller.agregarModelo(req, res, next);
     });
 
-    this.post('/agregar-modelos', ['marca.create.asignar.Modelo'], passport.authenticate('jwt'), async (req, res, next) => {
+    this.post('/:marcaId/desAsignarModelo/:modeloId', ['marca.create.desasignar.Modelo'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Marcas']
-      // #swagger.path = '/marcas/agregar-modelos'
+      // #swagger.path = '/marcas/{marcaId}/desasignarModelo/{modeloId}'
+      // #swagger.method = 'post'
+      // #swagger.summary = 'Desasignar un modelo de una marca'
+      // #swagger.description = 'Desasigna un modelo específico de una marca usando sus IDs.'
+      /* #swagger.parameters['marcaId'] = { 
+        in: 'path',
+        description: 'ID de la marca',
+        required: true,
+        type: 'string'
+       }
+       #swagger.parameters['modeloId'] = { 
+        in: 'path',
+        description: 'ID del modelo a agregar',
+        required: true,
+        type: 'string'
+       }
+       #swagger.security = [{
+        "bearerAuth": []
+       }]
+      */
+      this.controller.removerModelo(req, res, next);
+    });
+
+    this.post('/agregarModelos', ['marca.create.asignar.Modelo'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.tags = ['Marcas']
+      // #swagger.path = '/marcas/agregarModelos'
       // #swagger.method = 'post'
       // #swagger.summary = 'Agregar varios modelos a una marca'
       // #swagger.description = 'Agrega varios modelos a una marca usando un array de IDs de modelos.'

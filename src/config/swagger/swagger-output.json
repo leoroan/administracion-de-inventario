@@ -1553,7 +1553,7 @@
         ]
       }
     },
-    "/usuarios/{idUsuario}/asignar-oficina/{idOficina}": {
+    "/usuarios/{idUsuario}/asignarOficina/{idOficina}": {
       "post": {
         "tags": [
           "Usuarios"
@@ -1588,7 +1588,33 @@
         ]
       }
     },
-    "/usuarios/{idUsuario}/agregar-equipo/{idEquipo}": {
+    "/usuarios/{idUsuario}/desAsignarOficina' */ /* #swagger.method = 'post' */ /* #swagger.summary = 'Desasigna una oficina de un usuario' */ /* #swagger.description = 'Desasigna una oficina específica de un usuario usando los IDs en la URL.' */ /* #swagger.parameters[": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "idUsuario",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/usuarios/{idUsuario}/agregarEquipo/{idEquipo}": {
       "post": {
         "tags": [
           "Usuarios"
@@ -1623,7 +1649,7 @@
         ]
       }
     },
-    "/usuarios/agregar-equipos": {
+    "/usuarios/agregarEquipos": {
       "post": {
         "tags": [
           "Usuarios"
