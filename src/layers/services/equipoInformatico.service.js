@@ -18,6 +18,15 @@ export default class EquipoInformaticoService extends GenericService {
     return equipo;
   }
 
+  async removerOficina(equipoId) {
+    const equipo = await this.dao.findById(equipoId);
+    if (!equipo) {
+      throw new NotFound('Equipo no encontrado');
+    }
+    await equipo.setOficina(null);
+    return equipo;
+  }
+
   async agregarEmpleadoAsignado(equipoId, empleadoId) {
     const equipo = await this.dao.findById(equipoId);
     if (!equipo) {
@@ -31,6 +40,15 @@ export default class EquipoInformaticoService extends GenericService {
     return equipo;
   }
 
+  async removerEmpleadoAsignado(equipoId) {
+    const equipo = await this.dao.findById(equipoId);
+    if (!equipo) {
+      throw new NotFound('Equipo no encontrado');
+    }
+    await equipo.setEmpleadoAsignado(null);
+    return equipo;
+  }
+
   async agregarRegistroMantenimiento(equipoId, registroData) {
     const equipo = await this.dao.findById(equipoId);
     if (!equipo) {
@@ -38,6 +56,19 @@ export default class EquipoInformaticoService extends GenericService {
     }
     await equipo.createRegistroMantenimiento(registroData);
     return registroData;
+  }
+
+  async removerRegistroMantenimiento(equipoId, registroId) {
+    const equipo = await this.dao.findById(equipoId);
+    if (!equipo) {
+      throw new NotFound('Equipo no encontrado');
+    }
+    const registro = await services.registroMantenimientoService.findById(registroId);
+    if (!registro) {
+      throw new NotFound(`Registro de mantenimiento con ID ${registroId} no encontrado`);
+    }
+    await services.registroMantenimientoService.delete(registro);
+    return equipo;
   }
 
   async asignarTipoequipo(equipoId, tipoId) {

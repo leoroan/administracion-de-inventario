@@ -20,6 +20,19 @@ export default class OficinaService extends GenericService {
     return usuario;
   }
 
+  async removerEmpleado(idOficina, idEmpleado) {
+    const oficina = await this.dao.findById(idOficina);
+    if (!oficina) {
+      throw new NotFound('Oficina no encontrada');
+    }
+    const usuario = await services.usuarioService.findById(idEmpleado);
+    if (!usuario) {
+      throw new NotFound('Usuario no encontrado');
+    }
+    await oficina.removeEmpleado(usuario);
+    return usuario;
+  }
+
   async agregarEmpleados(idOficina, idsEmpleados) {
     if (!idOficina) {
       throw new BadRequest('Debe indicar un id de oficina');
@@ -46,6 +59,17 @@ export default class OficinaService extends GenericService {
     return usuarios;
   }
 
+  async removerEmpleados(idOficina) {
+    if (!idOficina) {
+      throw new BadRequest('Debe indicar un id de oficina');
+    }
+    const oficina = await this.dao.findById(idOficina);
+    if (!oficina) {
+      throw new NotFound('Oficina no encontrada');
+    }
+    return oficina.setEmpleados([]);
+  }
+
   async agregarSubOficina(idOficinaPadre, idOficinaHija) {
     const oficinaPadre = await this.dao.findById(idOficinaPadre);
     if (!oficinaPadre) {
@@ -56,6 +80,19 @@ export default class OficinaService extends GenericService {
       throw new NotFound('Oficina hija no encontrada');
     }
     await oficinaPadre.addSuboficina(oficinaHija);
+    return oficinaHija;
+  }
+
+  async removerSubOficina(idOficinaPadre, idOficinaHija) {
+    const oficinaPadre = await this.dao.findById(idOficinaPadre);
+    if (!oficinaPadre) {
+      throw new NotFound('Oficina padre no encontrada');
+    }
+    const oficinaHija = await this.dao.findById(idOficinaHija);
+    if (!oficinaHija) {
+      throw new NotFound('Oficina hija no encontrada');
+    }
+    await oficinaPadre.removeSuboficina(oficinaHija);
     return oficinaHija;
   }
 
@@ -72,6 +109,15 @@ export default class OficinaService extends GenericService {
     return oficinaPadre;
   }
 
+  async removerOficinaPadre(idOficinaHija) {
+    const oficinaHija = await this.dao.findById(idOficinaHija);
+    if (!oficinaHija) {
+      throw new NotFound('Oficina hija no encontrada');
+    }
+    await oficinaHija.setOficinaPadre(null);
+    return oficinaHija;
+  }
+
   async asignarEdificio(idOficina, idEdificio) {
     const oficina = await this.dao.findById(idOficina);
     if (!oficina) {
@@ -85,6 +131,15 @@ export default class OficinaService extends GenericService {
     return oficina;
   }
 
+  async removerEdificio(idOficina) {
+    const oficina = await this.dao.findById(idOficina);
+    if (!oficina) {
+      throw new NotFound('Oficina no encontrada');
+    }
+    await oficina.setEdificio(null);
+    return oficina;
+  }
+
   async agregarEquipo(idOficina, idEquipo) {
     const oficina = await this.dao.findById(idOficina);
     if (!oficina) {
@@ -95,6 +150,19 @@ export default class OficinaService extends GenericService {
       throw new NotFound('Equipo informático no encontrado');
     }
     await oficina.addEquipo(equipo);
+    return equipo;
+  }
+
+  async removerEquipo(idOficina, idEquipo) {
+    const oficina = await this.dao.findById(idOficina);
+    if (!oficina) {
+      throw new NotFound('Oficina no encontrada');
+    }
+    const equipo = await services.equipoinformaticoService.findById(idEquipo);
+    if (!equipo) {
+      throw new NotFound('Equipo informático no encontrado');
+    }
+    await oficina.removeEquipo(equipo);
     return equipo;
   }
 
@@ -124,4 +192,14 @@ export default class OficinaService extends GenericService {
     return equipos;
   }
 
+  async removerEquipos(idOficina) {
+    if (!idOficina) {
+      throw new BadRequest('Debe indicar un id de oficina');
+    }
+    const oficina = await this.dao.findById(idOficina);
+    if (!oficina) {
+      throw new NotFound('Oficina no encontrada');
+    }
+    return oficina.setEquipos([]);
+  }
 }

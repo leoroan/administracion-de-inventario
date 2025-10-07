@@ -49,14 +49,13 @@ export default class GenericService {
     const offset = (parseInt(page) - 1) * limit;
     const where = {};
 
-    // Mapeo de operadores válidos (sin iLike, porque es PostgreSQL-only)
     const opMap = {
       gt: Op.gt,
       lt: Op.lt,
       gte: Op.gte,
       lte: Op.lte,
       like: Op.like,
-      ilike: Op.like, // 👈 MySQL no distingue mayúsculas/minúsculas por defecto
+      ilike: Op.like, 
       ne: Op.ne,
       in: Op.in,
       notIn: Op.notIn,
@@ -74,7 +73,6 @@ export default class GenericService {
       if (value === undefined || value === '') continue;
 
       if (!key.includes('__')) {
-        // Filtro simple (igualdad)
         where[key] = value;
         continue;
       }
@@ -83,7 +81,6 @@ export default class GenericService {
       const op = opMap[operator];
       if (!op) continue;
 
-      // Ver si hay varios filtros distintos con el mismo valor -> usar OR
       const sameValueKeys = Object.entries(filters).filter(([k, v]) => v === value && k !== key);
       if (sameValueKeys.length > 0) {
         orFilters.push({ [field]: { [op]: value } });
@@ -94,8 +91,6 @@ export default class GenericService {
     }
 
     if (orFilters.length > 0) {
-      // Si ya había condiciones en where, las combinamos con AND
-      // Sequelize combina correctamente { ...where, [Op.or]: orFilters }
       where[Op.or] = orFilters;
     }
 

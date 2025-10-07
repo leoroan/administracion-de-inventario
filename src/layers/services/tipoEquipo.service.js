@@ -19,6 +19,19 @@ export default class TipoEquipoService extends GenericService {
     return equipo;
   }
 
+  async desasignarEquipo(tipoEquipoId, equipoId) {
+    const tipoEquipo = await this.dao.findByPk(tipoEquipoId);
+    if (!tipoEquipo) {
+      throw new NotFound('TipoEquipo no encontrado');
+    }
+    const equipo = await services.equipoinformaticoService.findById(equipoId);
+    if (!equipo) {
+      throw new NotFound('Equipo no encontrado');
+    }
+    await tipoEquipo.removeEquipo(equipo);
+    return equipo;
+  }
+
   async asignarEquipos(tipoEquipoId, equiposIds) {
     if (!tipoEquipoId) {
       throw new BadRequest('Debe indicar un id de tipoEquipo');

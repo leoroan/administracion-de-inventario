@@ -15,6 +15,15 @@ export default class MarcaService extends GenericService {
     return marca;
   }
 
+  async removerModelo(marcaId, modeloId) {
+    const marca = await this.dao.findByPk(marcaId);
+    if (!marca) throw new NotFound('Marca not found');
+    const modelo = await services.modeloService.findById(modeloId);
+    if (!modelo) throw new NotFound(`Modelo con ID ${modeloId} no encontrado`);
+    await marca.removeModelo(modelo);
+    return marca;
+  }
+
   async agregarModelos(marcaId, idsModelos) {
     const marca = await this.dao.findByPk(marcaId);
     if (!marca) throw new Error('Marca not found');

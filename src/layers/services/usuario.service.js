@@ -120,12 +120,28 @@ export default class UsuarioService extends GenericService {
     return usuario;
   }
 
+  async desasignarOficina(idUsuario) {
+    const usuario = await this.dao.findById(idUsuario);
+    if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
+    await usuario.setOficina(null);
+    return usuario;
+  }
+
   async agregarEquipoAsignado(idUsuario, idEquipo) {
     const usuario = await this.dao.findById(idUsuario);
     if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
     const equipo = await services.equipoinformaticoService.findById(idEquipo);
     if (!equipo) throw new NotFound(`Equipo con ID ${idEquipo} no encontrado`);
     await usuario.addEquipoAsignado(equipo);
+    return usuario;
+  }
+
+  async desasignarEquipo(idUsuario, idEquipo) {
+    const usuario = await this.dao.findById(idUsuario);
+    if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
+    const equipo = await services.equipoinformaticoService.findById(idEquipo);
+    if (!equipo) throw new NotFound(`Equipo con ID ${idEquipo} no encontrado`);
+    await usuario.removeEquipoAsignado(equipo);
     return usuario;
   }
 

@@ -16,7 +16,20 @@ export default class EdificioService extends GenericService {
     if (!oficina) {
       throw new NotFound(`Oficina con ID ${oficinaId} no encontrada`);
     }
-    const result = await edificio.addOficina(oficinaId);
-    return result;
+    await edificio.addOficina(oficinaId);
+    return oficina;
+  }
+
+  async removerOficina(edificioId, oficinaId) {
+    const edificio = await this.dao.findById(edificioId);
+    if (!edificio) {
+      throw new NotFound('Edificio no encontrado');
+    }
+    const oficina = await services.oficinaService.findById(oficinaId);
+    if (!oficina) {
+      throw new NotFound(`Oficina con ID ${oficinaId} no encontrada`);
+    }
+    await edificio.removeOficina(oficinaId);
+    return oficina;
   }
 }
