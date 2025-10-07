@@ -6,15 +6,15 @@ export default class Trazabilidad extends Model {
     return super.init({
       descripcion: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
       accion: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       realizadoPor: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       equipoId: {
         type: DataTypes.INTEGER,

@@ -127,25 +127,14 @@ export default class UsuarioService extends GenericService {
     return usuario;
   }
 
-  async agregarEquipoAsignado(idUsuario, idEquipo, user) {
-    if (!user) throw new BadRequest('Esta accion requiere un usuario autenticado');
+  async agregarEquipoAsignado(idUsuario, idEquipo) {
     const usuario = await this.dao.findById(idUsuario);
     if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
     const equipo = await services.equipoinformaticoService.findById(idEquipo);
     if (!equipo) throw new NotFound(`Equipo con ID ${idEquipo} no encontrado`);
 
     await usuario.addEquiposAsignado(equipo);
-
-    await services.trazabilidadService.registrarTrazabilidad({
-      accion: 'Asignación de equipo a un usuario',
-      descripcion: `Se asignó el equipo "${equipo.mt}", nro de serie ${equipo.numeroDeSerie} al usuario "${usuario.nombre}", "${usuario.apellido}".`,
-      equipoId: equipo.id,
-      usuarioAsignado: usuario.nombre + ' ' + usuario.apellido,
-      oficina: equipo.oficina?.nombre || 'Desconocida al momento de la asignación',
-      edificioId: equipo.oficina?.edificioId || 'Desconocido al momento de la asignación'
-    }, user);
-
-    return usuario;
+    return { usuario, equipo };
   }
 
   async desasignarEquipo(idUsuario, idEquipo) {
@@ -153,8 +142,9 @@ export default class UsuarioService extends GenericService {
     if (!usuario) throw new NotFound(`Usuario con ID ${idUsuario} no encontrado`);
     const equipo = await services.equipoinformaticoService.findById(idEquipo);
     if (!equipo) throw new NotFound(`Equipo con ID ${idEquipo} no encontrado`);
-    await usuario.removeEquipoAsignado(equipo);
-    return usuario;
+
+    await usuario.removeEquiposAsignado(equipo);
+    return { usuario, equipo };
   }
 
   async agregarEquiposAsignados(idUsuario, idsEquipos) {

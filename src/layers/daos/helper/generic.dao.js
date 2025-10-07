@@ -1,4 +1,5 @@
 import { NotFound, SequelizeError } from "../../../config/error/errors.js";
+import { devLogger } from "../../../config/logger/logger.config.js";
 
 export default class GenericDAO {
   constructor(model) {

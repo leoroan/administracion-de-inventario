@@ -6,7 +6,7 @@ export default class GenericService {
     this.dao = dao;
   }
 
-  async create(data) {
+  async create(data) {    
     return await this.dao.create(data);
   }
 

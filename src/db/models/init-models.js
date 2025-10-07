@@ -59,8 +59,8 @@ export default function initModels(sequelize) {
   Registromantenimiento.belongsTo(Equipoinformatico, { as: 'equipo', foreignKey: { name: 'equipoId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
 
   // Equipoinformatico -> Trazabilidad
-  Equipoinformatico.hasMany(Trazabilidad, { as: 'trazabilidades', foreignKey: { name: 'equipoId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
-  Trazabilidad.belongsTo(Equipoinformatico, { as: 'equipo', foreignKey: { name: 'equipoId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
+  Equipoinformatico.hasMany(Trazabilidad, { as: 'trazabilidades', foreignKey: { name: 'equipoId', allowNull: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
+  Trazabilidad.belongsTo(Equipoinformatico, { as: 'equipo', foreignKey: { name: 'equipoId', allowNull: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });
 
   // Modelo -> Marca
   Marca.hasMany(Modelo, { as: 'modelos', foreignKey: { name: 'marcaId', allowNull: false, onDelete: 'CASCADE', onUpdate: 'CASCADE' } });

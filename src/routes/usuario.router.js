@@ -209,7 +209,7 @@ export default class UsuarioExtendRouter extends CustomRouter {
         "bearerAuth": []
       }] 
       */
-      this.controller.agregarEquipoAsignado(req, res, next);
+      this.controller.desasignarEquipo(req, res, next);
     });
 
     this.post('/agregarEquipos', ['usuario.create.asignar.Equipo'], passport.authenticate('jwt'), async (req, res, next) => {
