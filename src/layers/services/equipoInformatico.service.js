@@ -9,23 +9,48 @@ export default class EquipoInformaticoService extends GenericService {
   }
 
   async asignarOficina(equipoId, oficinaId) {
-    const equipo = await this.dao.findById(equipoId);
-    if (!equipo) {
-      throw new NotFound('Equipo no encontrado');
+    const t = await sequelize.transaction();
+    try {
+      const oficina = await services.oficinaService.findById(oficinaId);
+      if (!oficina) throw new NotFound('Oficina no encontrada');
+      const equipo = await this.dao.findById(equipoId);
+      if (!equipo) throw new NotFound('Equipo informático no encontrado');
+
+      if (equipo.empleadoId || equipo.oficinaId) {
+        throw new BadRequest(`El equipo ${equipoId} ya está asignado.`);
+      }
+      if (equipo.disponibilidad !== 'disponible') {
+        throw new BadRequest(`El equipo ${equipoId} no está disponible (disponibilidad: ${equipo.disponibilidad}).`);
+      }
+
+      await oficina.addEquipo(equipo, { transaction: t });
+      await equipo.update({ estado: 'activo', disponibilidad: 'asignado' }, { transaction: t });
+
+      await t.commit();
+      return { oficina, equipo };
+    } catch (err) {
+      await t.rollback();
+      throw err;
     }
-    const oficina = await services.oficinaService.findById(oficinaId);
-    if (!oficina) throw new NotFound(`Oficina con ID ${oficinaId} no encontrada`);
-    await equipo.setOficina(oficina);
-    return equipo;
   }
 
-  async removerOficina(equipoId) {
-    const equipo = await this.dao.findById(equipoId);
-    if (!equipo) {
-      throw new NotFound('Equipo no encontrado');
+  async removerEquipo(idOficina, idEquipo) {
+    const t = await sequelize.transaction();
+    try {
+      const oficina = await this.dao.findById(idOficina);
+      if (!oficina) throw new NotFound('Oficina no encontrada');
+      const equipo = await services.equipoinformaticoService.findById(idEquipo);
+      if (!equipo) throw new NotFound('Equipo informático no encontrado');
+
+      await oficina.removeEquipo(equipo, { transaction: t });
+      await equipo.update({ estado: 'activo', disponibilidad: 'disponible' }, { transaction: t });
+
+      await t.commit();
+      return { oficina, equipo };
+    } catch (err) {
+      await t.rollback();
+      throw err;
     }
-    await equipo.setOficina(null);
-    return equipo;
   }
 
   async agregarEmpleadoAsignado(empleadoId, equipoId) {

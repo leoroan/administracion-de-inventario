@@ -16,6 +16,9 @@ export default class EdificioService extends GenericService {
     if (!oficina) {
       throw new NotFound(`Oficina con ID ${oficinaId} no encontrada`);
     }
+    if (oficina.edificioId) {
+      throw new BadRequest(`La oficina ${oficinaId} ya está asignada.`);
+    }
     await edificio.addOficina(oficinaId);
     return oficina;
   }

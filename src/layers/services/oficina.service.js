@@ -17,6 +17,9 @@ export default class OficinaService extends GenericService {
     if (!usuario) {
       throw new NotFound('Usuario no encontrado');
     }
+    if (usuario.oficinaId) {
+      throw new BadRequest(`El usuario ${idEmpleado} ya está asignado a la oficina ${oficina.nombre}.`);
+    }
     await oficina.addEmpleado(usuario);
     return usuario;
   }
@@ -29,6 +32,9 @@ export default class OficinaService extends GenericService {
     const usuario = await services.usuarioService.findById(idEmpleado);
     if (!usuario) {
       throw new NotFound('Usuario no encontrado');
+    }
+    if (usuario.oficinaId !== oficina.id) {
+      throw new BadRequest(`El usuario ${idEmpleado} no está asignado a la oficina ${oficina.nombre}.`);
     }
     await oficina.removeEmpleado(usuario);
     return oficina;
@@ -80,6 +86,9 @@ export default class OficinaService extends GenericService {
     if (!oficinaHija) {
       throw new NotFound('Oficina hija no encontrada');
     }
+    if (oficinaHija.oficinaPadreId) {
+      throw new BadRequest('La oficina hija ya tiene una oficina padre asignada');
+    }
     await oficinaPadre.addSuboficina(oficinaHija);
     return oficinaHija;
   }
@@ -93,6 +102,9 @@ export default class OficinaService extends GenericService {
     if (!oficinaHija) {
       throw new NotFound('Oficina hija no encontrada');
     }
+    if (oficinaHija.oficinaPadreId !== oficinaPadre.id) {
+      throw new BadRequest('La oficina hija no está asignada a la oficina padre indicada');
+    }
     await oficinaPadre.removeSuboficina(oficinaHija);
     return oficinaPadre;
   }
@@ -105,6 +117,9 @@ export default class OficinaService extends GenericService {
     const oficinaPadre = await this.dao.findById(idOficinaPadre);
     if (!oficinaPadre) {
       throw new NotFound('Oficina padre no encontrada');
+    }
+    if (oficinaHija.oficinaPadreId) {
+      throw new BadRequest('La oficina hija ya tiene una oficina padre asignada');
     }
     await oficinaHija.setOficinaPadre(oficinaPadre);
     return oficinaPadre;
@@ -127,6 +142,9 @@ export default class OficinaService extends GenericService {
     const edificio = await services.edificioService.findById(idEdificio);
     if (!edificio) {
       throw new NotFound('Edificio no encontrado');
+    }
+    if (oficina.edificioId) {
+      throw new BadRequest(`La oficina ${idOficina} ya está asignada al edificio ${edificio.nombre}.`);
     }
     await oficina.setEdificio(edificio);
     return oficina;
