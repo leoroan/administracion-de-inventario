@@ -1,10 +1,10 @@
 export default {
   defaultScope: {
-    attributes: ['id', "mt", "numeroDeSerie", "numeroDePatrimonio", "estado", "disponibilidad", "observaciones", "remitoNro", 'updatedAt'],
+    attributes: ['id', "mt", "numeroDeSerie", "numeroDePatrimonio", "estado", "disponibilidad", "observaciones", "remitoNro", "empleadoId", "oficinaId", 'updatedAt'],
   },
 
   withOficinaScope: {
-    attributes: ['id', "mt", "numeroDeSerie", "numeroDePatrimonio", "estado", "disponibilidad", "observaciones", "remitoNro", 'updatedAt'],
+    attributes: ['id', "mt", "numeroDeSerie", "numeroDePatrimonio", "estado", "disponibilidad", "observaciones", "remitoNro", "empleadoId", "oficinaId", 'updatedAt'],
     include: [
       {
         association: 'oficina',
@@ -15,7 +15,7 @@ export default {
   },
 
   withUsuarioScope: {
-    attributes: ['id', "mt", "numeroDeSerie", "numeroDePatrimonio", "estado", "disponibilidad", "observaciones", "remitoNro", 'updatedAt'],
+    attributes: ['id', "mt", "numeroDeSerie", "numeroDePatrimonio", "estado", "disponibilidad", "observaciones", "remitoNro", "empleadoId", "oficinaId", 'updatedAt'],
     include: [
       {
         association: 'empleadoAsignado',
@@ -26,7 +26,7 @@ export default {
   },
 
   withRegistroMantenimientoScope: {
-    attributes: ['id', "mt", "numeroDeSerie", "numeroDePatrimonio", "estado", "disponibilidad", "observaciones", "remitoNro", 'updatedAt'],
+    attributes: ['id', "mt", "numeroDeSerie", "numeroDePatrimonio", "estado", "disponibilidad", "observaciones", "remitoNro", "empleadoId", "oficinaId", 'updatedAt'],
     include: [
       {
         association: 'registrosMantenimiento',

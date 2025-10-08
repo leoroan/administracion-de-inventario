@@ -1,6 +1,7 @@
 import GenericService from './helper/generic.service.js';
 import { BadRequest, NotFound } from '../../config/error/errors.js';
 import services from '../../layers/services/servicesLoader.js';
+import { sequelize } from '../../config/db/sequelize.config.js';
 
 export default class OficinaService extends GenericService {
   constructor(dao) {
@@ -141,29 +142,48 @@ export default class OficinaService extends GenericService {
   }
 
   async agregarEquipo(idOficina, idEquipo) {
-    const oficina = await this.dao.findById(idOficina);
-    if (!oficina) {
-      throw new NotFound('Oficina no encontrada');
+    const t = await sequelize.transaction();
+    try {
+      const oficina = await this.dao.findById(idOficina);
+      if (!oficina) throw new NotFound('Oficina no encontrada');
+      const equipo = await services.equipoinformaticoService.findById(idEquipo);
+      if (!equipo) throw new NotFound('Equipo informático no encontrado');
+
+      if (equipo.empleadoId || equipo.oficinaId) {
+        throw new BadRequest(`El equipo ${idEquipo} ya está asignado.`);
+      }
+      if (equipo.disponibilidad !== 'disponible') {
+        throw new BadRequest(`El equipo ${idEquipo} no está disponible (disponibilidad: ${equipo.disponibilidad}).`);
+      }
+
+      await oficina.addEquipo(equipo, { transaction: t });
+      await equipo.update({ estado: 'activo', disponibilidad: 'asignado' }, { transaction: t });
+
+      await t.commit();
+      return { oficina, equipo };
+    } catch (err) {
+      await t.rollback();
+      throw err;
     }
-    const equipo = await services.equipoinformaticoService.findById(idEquipo);
-    if (!equipo) {
-      throw new NotFound('Equipo informático no encontrado');
-    }
-    await oficina.addEquipo(equipo);
-    return { oficina, equipo };
   }
 
   async removerEquipo(idOficina, idEquipo) {
-    const oficina = await this.dao.findById(idOficina);
-    if (!oficina) {
-      throw new NotFound('Oficina no encontrada');
+    const t = await sequelize.transaction();
+    try {
+      const oficina = await this.dao.findById(idOficina);
+      if (!oficina) throw new NotFound('Oficina no encontrada');
+      const equipo = await services.equipoinformaticoService.findById(idEquipo);
+      if (!equipo) throw new NotFound('Equipo informático no encontrado');
+
+      await oficina.removeEquipo(equipo, { transaction: t });
+      await equipo.update({ estado: 'activo', disponibilidad: 'disponible' }, { transaction: t });
+
+      await t.commit();
+      return { oficina, equipo };
+    } catch (err) {
+      await t.rollback();
+      throw err;
     }
-    const equipo = await services.equipoinformaticoService.findById(idEquipo);
-    if (!equipo) {
-      throw new NotFound('Equipo informático no encontrado');
-    }
-    await oficina.removeEquipo(equipo);
-    return { oficina, equipo };
   }
 
   async agregarEquipos(idOficina, idsEquipos) {

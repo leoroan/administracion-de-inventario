@@ -1,6 +1,7 @@
 import GenericService from './helper/generic.service.js';
 import { BadRequest, NotFound } from '../../config/error/errors.js';
 import services from './servicesLoader.js';
+import { sequelize } from '../../config/db/sequelize.config.js';
 
 export default class EquipoInformaticoService extends GenericService {
   constructor(dao) {
@@ -27,27 +28,49 @@ export default class EquipoInformaticoService extends GenericService {
     return equipo;
   }
 
-  async agregarEmpleadoAsignado(equipoId, empleadoId) {
-    const equipo = await this.dao.findById(equipoId);
-    if (!equipo) {
-      throw new NotFound('Equipo no encontrado');
+  async agregarEmpleadoAsignado(empleadoId, equipoId) {
+    const t = await sequelize.transaction();
+    try {
+      const empleado = await services.usuarioService.findById(empleadoId);
+      if (!empleado) throw new NotFound(`Empleado con ID ${empleadoId} no encontrado`);
+      const equipo = await this.dao.findById(equipoId);
+      if (!equipo) throw new NotFound(`Equipo con ID ${equipoId} no encontrado`);
+
+      if (equipo.empleadoId || equipo.oficinaId) {
+        throw new BadRequest(`El equipo ${equipoId} ya está asignado.`);
+      }
+      if (equipo.disponibilidad !== 'disponible') {
+        throw new BadRequest(`El equipo ${equipoId} no está disponible (disponibilidad: ${equipo.disponibilidad}).`);
+      }
+
+      await empleado.addEquiposAsignado(equipo, { transaction: t });
+      await equipo.update({ estado: 'activo', disponibilidad: 'asignado' }, { transaction: t });
+
+      await t.commit();
+      return { equipo, empleado };
+    } catch (err) {
+      await t.rollback();
+      throw err;
     }
-    const empleado = await services.usuarioService.findById(empleadoId);
-    if (!empleado) {
-      throw new NotFound(`Empleado con ID ${empleadoId} no encontrado`);
-    }
-    await equipo.setEmpleadoAsignado(empleado);
-    return { equipo, empleado };
   }
 
-  async removerEmpleadoAsignado(equipoId) {
-    const equipo = await this.dao.findById(equipoId);
-    if (!equipo) {
-      throw new NotFound('Equipo no encontrado');
+  async removerEmpleadoAsignado(empleadoId, equipoId) {
+    const t = await sequelize.transaction();
+    try {
+      const empleado = await services.usuarioService.findById(empleadoId);
+      if (!empleado) throw new NotFound(`Empleado con ID ${empleadoId} no encontrado`);
+      const equipo = await this.dao.findById(equipoId);
+      if (!equipo) throw new NotFound(`Equipo con ID ${equipoId} no encontrado`);
+
+      await empleado.removeEquiposAsignado(equipo, { transaction: t });
+      await equipo.update({ estado: 'activo', disponibilidad: 'disponible' }, { transaction: t });
+
+      await t.commit();
+      return { empleado, equipo };
+    } catch (err) {
+      await t.rollback();
+      throw err;
     }
-    const empleado = await services.usuarioService.findById(equipo.empleadoId);
-    await equipo.setEmpleadoAsignado(null);
-    return { equipo, empleado };
   }
 
   async agregarRegistroMantenimiento(equipoId, registroData) {
