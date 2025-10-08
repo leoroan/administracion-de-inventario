@@ -150,7 +150,7 @@ export default class OficinaService extends GenericService {
       throw new NotFound('Equipo informático no encontrado');
     }
     await oficina.addEquipo(equipo);
-    return equipo;
+    return { oficina, equipo };
   }
 
   async removerEquipo(idOficina, idEquipo) {
@@ -163,7 +163,7 @@ export default class OficinaService extends GenericService {
       throw new NotFound('Equipo informático no encontrado');
     }
     await oficina.removeEquipo(equipo);
-    return oficina;
+    return { oficina, equipo };
   }
 
   async agregarEquipos(idOficina, idsEquipos) {

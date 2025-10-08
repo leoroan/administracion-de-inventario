@@ -32,12 +32,12 @@ export default class EquipoInformaticoService extends GenericService {
     if (!equipo) {
       throw new NotFound('Equipo no encontrado');
     }
-    const empleado = await services.empleadoService.findById(empleadoId);
+    const empleado = await services.usuarioService.findById(empleadoId);
     if (!empleado) {
       throw new NotFound(`Empleado con ID ${empleadoId} no encontrado`);
     }
     await equipo.setEmpleadoAsignado(empleado);
-    return equipo;
+    return { equipo, empleado };
   }
 
   async removerEmpleadoAsignado(equipoId) {
@@ -45,8 +45,9 @@ export default class EquipoInformaticoService extends GenericService {
     if (!equipo) {
       throw new NotFound('Equipo no encontrado');
     }
+    const empleado = await services.usuarioService.findById(equipo.empleadoId);
     await equipo.setEmpleadoAsignado(null);
-    return equipo;
+    return { equipo, empleado };
   }
 
   async agregarRegistroMantenimiento(equipoId, registroData) {

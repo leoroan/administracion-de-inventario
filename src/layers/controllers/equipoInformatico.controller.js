@@ -1,3 +1,4 @@
+import services from "../services/servicesLoader.js";
 import GenericController from "./helper/generic.controller.js";
 export default class EquipoInformaticoController extends GenericController {
   constructor(service) {
@@ -27,7 +28,8 @@ export default class EquipoInformaticoController extends GenericController {
   async agregarEmpleadoAsignado(req, res, next) {
     try {
       const { equipoId, empleadoId } = req.params;
-      const result = await this.service.agregarEmpleadoAsignado(equipoId, empleadoId);
+      const { equipo, empleado } = await this.service.agregarEmpleadoAsignado(equipoId, empleadoId);
+      const result = services.trazabilidadService.registrarTrazabilidadEquipoAusuario(empleado, equipo, req.user);
       res.sendSuccess(result);
     } catch (error) {
       next(error);
@@ -37,7 +39,8 @@ export default class EquipoInformaticoController extends GenericController {
   async removerEmpleadoAsignado(req, res, next) {
     try {
       const { equipoId } = req.params;
-      const result = await this.service.removerEmpleadoAsignado(equipoId);
+      const { equipo, empleado } = await this.service.removerEmpleadoAsignado(equipoId);
+      const result = services.trazabilidadService.registrarTrazabilidadEquipoDesasignado(empleado, equipo, req.user);
       res.sendSuccess(result);
     } catch (error) {
       next(error);

@@ -107,8 +107,9 @@ export default class OficinaController extends GenericController {
   async agregarEquipo(req, res, next) {
     try {
       const { idOficina, idEquipo } = req.params;
-      const equipo = await this.service.agregarEquipo(idOficina, idEquipo);
-      res.sendSuccess(equipo);
+      const { oficina, equipo } = await this.service.agregarEquipo(idOficina, idEquipo);
+      const result = await services.trazabilidadService.registrarTrazabilidadEquipoAoficina(oficina, equipo, req.user);
+      res.sendSuccess(result);
     } catch (err) {
       next(err);
     }
@@ -117,8 +118,9 @@ export default class OficinaController extends GenericController {
   async removerEquipo(req, res, next) {
     try {
       const { idOficina, idEquipo } = req.params;
-      const oficina = await this.service.removerEquipo(idOficina, idEquipo);
-      res.sendSuccess(oficina);
+      const { oficina, equipo } = await this.service.removerEquipo(idOficina, idEquipo);
+      const result = await services.trazabilidadService.registrarTrazabilidadEquipoDesasignadoDeOficina(oficina, equipo, req.user);
+      res.sendSuccess(result);
     } catch (err) {
       next(err);
     }
