@@ -29,6 +29,11 @@ export default class EquipoInformaticoExtendRouter extends CustomRouter {
       this.controller.findAll(req, res, next);
     });
 
+    this.get('/all-plain', ['equipoinformatico.read'], passport.authenticate('jwt'), async (req, res, next) => {
+      // #swagger.ignore = true
+      this.controller.findAllPlain(req, res, next);
+    });
+
     this.get('/:id', ['equipoinformatico.read'], passport.authenticate('jwt'), async (req, res, next) => {
       // #swagger.tags = ['Equipos Informaticos']
       // #swagger.path = '/EquipoInformaticos/{id}' 

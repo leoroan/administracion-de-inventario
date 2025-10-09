@@ -20,6 +20,7 @@ export default class GenericDAO {
   }
 
   async findOne(data, scope) {
+    scope = Array.isArray(scope) ? scope : scope.split(',');
     return await this.model.scope(scope).findOne(data);
   }
 
@@ -50,6 +51,7 @@ export default class GenericDAO {
   }
 
   async findAllPlain(data, scope) {
+    scope = Array.isArray(scope) ? scope : scope.split(',');
     return await this.model.scope(scope).findAll(data);
   }
 
